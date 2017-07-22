@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/back_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+       />
+    <ImageView
+        android:id="@+id/iv_more"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/more_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        />
+    <ImageView
+        android:id="@+id/iv_download"
+        android:src="@mipmap/download_btn"
+        android:layout_centerVertical="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_toLeftOf="@+id/iv_more"/>
+
+    <TextView
+        android:visibility="gone"
+        android:gravity="center"
+        android:id="@+id/tv_actionbar_title"
+        android:textSize="15dp"
+        android:textColor="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

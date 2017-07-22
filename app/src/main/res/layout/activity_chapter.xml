@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBlack"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.android.zhhr.ui.custom.ReaderMenuLayout
+        android:id="@+id/rl_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.android.zhhr.ui.custom.ComicReaderViewpager
+            android:id="@+id/vp_chapters"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </com.android.zhhr.ui.custom.ComicReaderViewpager>
+        <include layout="@layout/layout_reader_top"></include>
+        <include layout="@layout/layout_reader_bottom"></include>
+
+    </com.android.zhhr.ui.custom.ReaderMenuLayout>
+
+
+</RelativeLayout>
