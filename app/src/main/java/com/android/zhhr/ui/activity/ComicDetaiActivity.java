@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -284,7 +285,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             position = mComic.getChapters().size()-position-1;
             Log.d("ComicDetailActivity","position="+position);
         }
-        IntentUtil.ToComicChapter(this,comic_id,position+"",mComic.getChapters().get(position));
+        IntentUtil.ToComicChapter(this,comic_id,position, (ArrayList<String>) mComic.getChapters());
     }
 
     @Override
@@ -314,7 +315,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @OnClick(R.id.btn_read)
     public void StartRead(View view){
-        IntentUtil.ToComicChapter(this,comic_id,0+"",mComic.getChapters().get(0));
+        IntentUtil.ToComicChapter(this,comic_id,0, (ArrayList<String>) mComic.getChapters());
     }
 
 }

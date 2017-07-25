@@ -1,5 +1,7 @@
 package com.android.zhhr.ui.view;
 
+import java.util.List;
+
 /**
  * Created by 皓然 on 2017/7/20.
  */
@@ -16,9 +18,9 @@ public interface IChapterView<T> extends IBaseView{
     //弹出菜单
     void showMenu();
     //下一章
-    void nextChapter();
+    void nextChapter(T data);
     //前一章
-    void preChapter();
+    void preChapter(T data);
     //切换预览模式
     void SwitchModel(int a);
     //前一页

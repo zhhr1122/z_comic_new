@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.entity.Chapters;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -52,9 +53,24 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void setDatas(List<String> mdatas){
+    public void setDatas(Chapters chapters){
         this.mdatas.clear();
+        this.mdatas.addAll(chapters.getPrelist());
+        this.mdatas.addAll(chapters.getNowlist());
+        this.mdatas.addAll(chapters.getNextlist());
+        notifyDataSetChanged();
+    }
+
+    public void setNextDatas(List<String> mdatas){
         this.mdatas.addAll(mdatas);
+        notifyDataSetChanged();
+    }
+
+    public void setPreDatas(List<String> mdatas){
+        for(int i=0;i<mdatas.size();i++){
+            this.mdatas.add(0,mdatas.get(mdatas.size()-1-i));
+        }
+        Log.d("mdatas",this.mdatas.toString());
         notifyDataSetChanged();
     }
 

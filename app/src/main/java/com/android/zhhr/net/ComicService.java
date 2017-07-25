@@ -1,5 +1,6 @@
 package com.android.zhhr.net;
 
+import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Subject;
 
 import retrofit2.http.GET;
@@ -17,4 +18,7 @@ public interface ComicService {
 
     @GET("getChapterList/{id}/{chapter}")
     Observable<Subject> getChapters(@Path("id") String id,@Path("chapter") String chapter);
+
+    @GET("getPreNowChapterList/{id}/{chapter}")
+    Observable<Chapters> getPreNowChapterList(@Path("id") String id, @Path("chapter") String chapter);
 }
