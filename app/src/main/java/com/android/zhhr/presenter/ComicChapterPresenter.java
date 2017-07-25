@@ -63,20 +63,14 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     public void setTitle(String comic_chapter_title, int comic_size, int position,int Direct){
         String title = null;
         if(Direct == Constants.LEFT_TO_RIGHT){
-            title = comic_chapter_title+(position+1)+"/"+comic_size;
+            title = comic_chapter_title+"-"+(position+1)+"/"+comic_size;
         }else{
-            title = comic_chapter_title+(comic_size-position)+"/"+comic_size;
+            title = comic_chapter_title+"-"+(comic_size-position)+"/"+comic_size;
         }
         mView.setTitle(title);
     }
 
-    public void loadMoreData(String id, int chapter, final int poistion, int direction){
-        int new_chapter;
-        if(poistion == 0){
-            new_chapter = chapter-1;
-        }else{
-            new_chapter = chapter+1;
-        }
+    public void loadNextData(String id, int chapter, int direction){
 
         Subscriber subscriber = new Subscriber<Subject>() {
             @Override
@@ -91,14 +85,43 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
             @Override
             public void onNext(Subject result) {
-                if(poistion == 0){
-                    mView.preChapter(result);
-                }else{
-                    mView.nextChapter(result);
-                }
+                Chapters chapters = new Chapters();
+                chapters.setNextlist(result.getComiclist());
+                mView.nextChapter(chapters);
+
             }
         };
-        comicService.getChapters(id,new_chapter+"")
+        comicService.getChapters(id,(chapter+2)+"")
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+
+    }
+
+    public void loadPreData(String id, int chapter, int direction){
+
+        Subscriber subscriber = new Subscriber<Subject>() {
+            @Override
+            public void onCompleted() {
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.ShowToast("获取数据失败"+e.toString());
+            }
+
+            @Override
+            public void onNext(Subject result) {
+                Chapters chapters = new Chapters();
+                chapters.setPrelist(result.getComiclist());
+                mView.preChapter(chapters);
+
+            }
+        };
+        comicService.getChapters(id,(chapter-2)+"")
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

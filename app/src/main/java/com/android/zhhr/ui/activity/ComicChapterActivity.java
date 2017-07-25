@@ -100,10 +100,18 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                     chapter_title = comic_chapter_title.get(comic_chapters-1);
                     comic_size = mChapters.getPrelist().size();
                     now_postion =position;
+                    if(!isLoadingdata){
+                        isLoadingdata = true;
+                        mPresenter.loadPreData(comic_id,comic_chapters,Constants.LEFT_TO_RIGHT);
+                    }
                 }else if(position>=mChapters.getPrelist().size()+mChapters.getNowlist().size()){
                     comic_size = mChapters.getNextlist().size();
                     chapter_title = comic_chapter_title.get(comic_chapters+1);
                     now_postion = position - mChapters.getPrelist().size() - mChapters.getNowlist().size();
+                    if(!isLoadingdata){
+                        isLoadingdata = true;
+                        mPresenter.loadNextData(comic_id,comic_chapters,Constants.LEFT_TO_RIGHT);;
+                    }
                 }else {
                     comic_size = mChapters.getNowlist().size();
                     chapter_title = comic_chapter_title.get(comic_chapters);
@@ -116,7 +124,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             @Override
             public void onPageScrollStateChanged(int state) {
                 switch (state){
-                    case  ViewPager.SCROLL_STATE_DRAGGING:
+                   /* case  ViewPager.SCROLL_STATE_DRAGGING:
                         mIsScrolled = false;
                         break;
                     case ViewPager.SCROLL_STATE_SETTLING:
@@ -130,7 +138,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                             }
                         }
                         mIsScrolled = true;
-                        break;
+                        break;*/
                 }
 
             }
@@ -200,19 +208,30 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     public void nextChapter(Chapters data) {
-        /*mAdapter.setNextDatas(data.getComiclist());
-        comic_size = data.getComiclist().size();
         comic_chapters++;
-        isLoadingdata = false;*/
+        mChapters.setPrelist(mChapters.getNowlist());
+        mChapters.setNowlist(mChapters.getNextlist());
+        mChapters.setNextlist(data.getNextlist());
+        mAdapter.setDatas(mChapters);
+        comic_size = mChapters.getNextlist().size();
+        mViewpager.setCurrentItem(mChapters.getPrelist().size(),false);
+        setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+comic_size);
+        showToast("完成了预加载");
+        isLoadingdata = false;
     }
 
     @Override
     public void preChapter(Chapters data) {
-       /* mAdapter.setPreDatas(data.getComiclist());
-        comic_size = data.getComiclist().size();
-        mViewpager.setCurrentItem(comic_size,false);
         comic_chapters--;
-        isLoadingdata = false;*/
+        mChapters.setNextlist(mChapters.getNowlist());
+        mChapters.setNowlist(mChapters.getPrelist());
+        mChapters.setPrelist(data.getPrelist());
+        mAdapter.setDatas(mChapters);
+        comic_size = mChapters.getPrelist().size();
+        mViewpager.setCurrentItem(mChapters.getPrelist().size()+mChapters.getNowlist().size()-1,false);
+        setTitle(comic_chapter_title.get(comic_chapters)+"-"+comic_size+"/"+comic_size);
+        showToast("完成了之前的预加载");
+        isLoadingdata = false;
     }
 
     @Override
