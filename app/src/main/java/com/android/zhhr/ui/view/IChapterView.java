@@ -18,9 +18,9 @@ public interface IChapterView<T> extends IBaseView{
     //弹出菜单
     void showMenu();
     //下一章
-    void nextChapter(T data);
+    void nextChapter(T data,int loadingPosition);
     //前一章
-    void preChapter(T data);
+    void preChapter(T data,int loadingPosition);
     //切换预览模式
     void SwitchModel(int a);
     //前一页

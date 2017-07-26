@@ -6,13 +6,11 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.entity.Chapters;
+import com.android.zhhr.data.entity.PreloadChapters;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +51,11 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void setDatas(Chapters chapters){
+    public void setDatas(PreloadChapters preloadChapters){
         this.mdatas.clear();
-        this.mdatas.addAll(chapters.getPrelist());
-        this.mdatas.addAll(chapters.getNowlist());
-        this.mdatas.addAll(chapters.getNextlist());
+        this.mdatas.addAll(preloadChapters.getPrelist());
+        this.mdatas.addAll(preloadChapters.getNowlist());
+        this.mdatas.addAll(preloadChapters.getNextlist());
         notifyDataSetChanged();
     }
 

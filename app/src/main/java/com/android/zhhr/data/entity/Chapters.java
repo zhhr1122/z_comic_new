@@ -3,44 +3,24 @@ package com.android.zhhr.data.entity;
 import java.util.List;
 
 /**
- * Created by 皓然 on 2017/7/24.
+ * Created by 皓然 on 2017/7/20.
  */
 
 public class Chapters extends BaseBean{
-    protected List<String> prelist;
-    protected List<String> nowlist;
-    protected List<String> nextlist;
+    protected List<String> comiclist;
 
-    public List<String> getPrelist() {
-        return prelist;
+    public List<String> getComiclist() {
+        return comiclist;
     }
 
-    public void setPrelist(List<String> prelist) {
-        this.prelist = prelist;
-    }
-
-    public List<String> getNowlist() {
-        return nowlist;
-    }
-
-    public void setNowlist(List<String> nowlist) {
-        this.nowlist = nowlist;
-    }
-
-    public List<String> getNextlist() {
-        return nextlist;
-    }
-
-    public void setNextlist(List<String> nextlist) {
-        this.nextlist = nextlist;
+    public void setComiclist(List<String> comiclist) {
+        this.comiclist = comiclist;
     }
 
     @Override
     public String toString() {
-        return "Chapters{" +
-                "prelist=" + prelist +
-                ", nowlist=" + nowlist +
-                ", nextlist=" + nextlist +
+        return "Subject{" +
+                "comiclist=" + comiclist +
                 '}';
     }
 }

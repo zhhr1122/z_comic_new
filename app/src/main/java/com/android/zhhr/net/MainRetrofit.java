@@ -1,6 +1,9 @@
 package com.android.zhhr.net;
 
 
+import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.commons.Url;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -15,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 class MainRetrofit {
     public ComicService comicService;
 
-    public static final String BASE_URL = "http://101.200.60.112:5000";
+    public static final String BASE_URL = Url.TencentComicChapters;
 
     private static final int DEFAULT_TIMEOUT = 5;
 

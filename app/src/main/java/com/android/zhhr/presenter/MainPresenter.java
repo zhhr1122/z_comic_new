@@ -4,8 +4,6 @@ import android.app.Activity;
 
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.MovieEntity;
-import com.android.zhhr.data.entity.Subject;
 import com.android.zhhr.ui.view.IMainView;
 import com.android.zhhr.utils.TencentComicAnalysis;
 
@@ -18,7 +16,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -96,10 +93,10 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Subject, List<MovieEntity>>() {
+                .map(new Func1<Chapters, List<MovieEntity>>() {
 
                     @Override
-                    public List<MovieEntity> call(Subject subject) {
+                    public List<MovieEntity> call(Chapters subject) {
                         return (List<MovieEntity>) subject.getSubjects();
                     }
                 })

@@ -1,7 +1,7 @@
 package com.android.zhhr.net;
 
+import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.Chapters;
-import com.android.zhhr.data.entity.Subject;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -14,11 +14,11 @@ import rx.Observable;
 
 public interface ComicService {
     @GET("top250")
-    Observable<Subject> getTopMovie(@Query("start") int start, @Query("count") int count);
+    Observable<Chapters> getTopMovie(@Query("start") int start, @Query("count") int count);
 
     @GET("getChapterList/{id}/{chapter}")
-    Observable<Subject> getChapters(@Path("id") String id,@Path("chapter") String chapter);
+    Observable<Chapters> getChapters(@Path("id") String id, @Path("chapter") String chapter);
 
     @GET("getPreNowChapterList/{id}/{chapter}")
-    Observable<Chapters> getPreNowChapterList(@Path("id") String id, @Path("chapter") String chapter);
+    Observable<PreloadChapters> getPreNowChapterList(@Path("id") String id, @Path("chapter") String chapter);
 }
