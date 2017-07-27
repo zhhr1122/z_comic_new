@@ -9,7 +9,11 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
+import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
+import com.xw.repo.BubbleSeekBar;
+
+import butterknife.Bind;
 
 /**
  * Created by 皓然 on 2017/7/22.
@@ -49,13 +53,14 @@ public class ReaderMenuLayout extends RelativeLayout{
 
     @Override
     public void setVisibility(int visibility) {
+        int Topheight = DisplayUtil.dip2px(getContext(),110);
         int height = DisplayUtil.dip2px(getContext(),60);
         switch (visibility){
             case View.GONE:
                 mTop.setVisibility(View.GONE);
                 mBottom.setVisibility(View.GONE);
                 AnimationSet animationSet1 = new AnimationSet(true);
-                TranslateAnimation trans1 = new TranslateAnimation(0, 0 , 0 ,-height);
+                TranslateAnimation trans1 = new TranslateAnimation(0, 0 , 0 ,-Topheight);
                 AlphaAnimation alphaAnimation1 = new AlphaAnimation(1,0);
                 animationSet1.addAnimation(trans1);
                 animationSet1.addAnimation(alphaAnimation1);
@@ -75,7 +80,7 @@ public class ReaderMenuLayout extends RelativeLayout{
                 mTop.setVisibility(View.VISIBLE);
                 mBottom.setVisibility(View.VISIBLE);
                 AnimationSet animationSet3 = new AnimationSet(true);
-                TranslateAnimation trans = new TranslateAnimation(0, 0 , -height,0 );
+                TranslateAnimation trans = new TranslateAnimation(0, 0 , -Topheight,0 );
                 AlphaAnimation alphaAnimation3 = new AlphaAnimation(0,1);
                 animationSet3.addAnimation(trans);
                 animationSet3.addAnimation(alphaAnimation3);

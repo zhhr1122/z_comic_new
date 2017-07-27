@@ -12,4 +12,5 @@
     <color name="colorTextColor">#666666</color>
     <color name="colorTextColorDark">#333333</color>
     <color name="colorTextColorLight">#999999</color>
+    <color name="colorTrack">#535252</color>
 </resources>

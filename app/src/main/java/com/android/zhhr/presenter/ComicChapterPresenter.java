@@ -1,6 +1,7 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
@@ -145,6 +146,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 loadNextData(comic_id,comic_chapters,Constants.LEFT_TO_RIGHT);;
             }
         }else {//当前章节
+            isLoadingdata = false;
             comic_size = mPreloadChapters.getNowlist().size();
             chapter_title = comic_chapter_title.get(comic_chapters);
             now_postion = position - mPreloadChapters.getPrelist().size();
@@ -157,7 +159,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         if (x<0.336){
             mView.prePage();
         }else if(x<0.666){
-            mView.showMenu();
+            if(!isLoadingdata){
+                mView.showMenu();
+            }else{
+                mView.ShowToast("正在载入，请稍后");
+            }
         }else {
             mView.nextPage();
         }
@@ -194,13 +200,15 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
             @Override
             public void onNext(Chapters result) {
-                mPreloadChapters.setPrelist(mPreloadChapters.getNowlist());
-                mPreloadChapters.setNowlist(mPreloadChapters.getNextlist());
-                mPreloadChapters.setNextlist(result.getComiclist());
-                comic_chapters++;
-                mView.nextChapter(mPreloadChapters,loadingPosition);
-                mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(1+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
-                isLoadingdata = false;
+                if(isLoadingdata){
+                    mPreloadChapters.setPrelist(mPreloadChapters.getNowlist());
+                    mPreloadChapters.setNowlist(mPreloadChapters.getNextlist());
+                    mPreloadChapters.setNextlist(result.getComiclist());
+                    comic_chapters++;
+                    mView.nextChapter(mPreloadChapters,loadingPosition);
+                    mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(1+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
+                    isLoadingdata = false;
+                }
             }
         };
         comicService.getChapters(id,(chapter+2)+"")
@@ -233,13 +241,15 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
             @Override
             public void onNext(Chapters result) {
-                mPreloadChapters.setNextlist(mPreloadChapters.getNowlist());
-                mPreloadChapters.setNowlist(mPreloadChapters.getPrelist());
-                mPreloadChapters.setPrelist(result.getComiclist());
-                comic_chapters--;
-                mView.preChapter(mPreloadChapters,loadingPosition);
-                mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(mPreloadChapters.getNowlist().size()+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
-                isLoadingdata = false;
+                if(isLoadingdata){
+                    mPreloadChapters.setNextlist(mPreloadChapters.getNowlist());
+                    mPreloadChapters.setNowlist(mPreloadChapters.getPrelist());
+                    mPreloadChapters.setPrelist(result.getComiclist());
+                    comic_chapters--;
+                    mView.preChapter(mPreloadChapters,loadingPosition);
+                    mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(mPreloadChapters.getNowlist().size()+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
+                    isLoadingdata = false;
+                }
             }
         };
         comicService.getChapters(id,(chapter-2)+"")

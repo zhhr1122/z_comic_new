@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.android.zhhr"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -58,4 +58,6 @@ dependencies {
 
     compile 'cn.jiguang.sdk:jpush:3.0.3'  // 此处以JPush 3.0.3 版本为例。
     compile 'cn.jiguang.sdk:jcore:1.1.1'  // 此处以JCore 1.1.1 版本为例。
+
+    compile 'com.xw.repo:bubbleseekbar:3.4-lite'
 }

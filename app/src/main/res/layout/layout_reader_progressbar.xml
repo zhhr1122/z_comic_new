@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_marginTop="60dp"
+        android:layout_height="50dp"
+        android:layout_width="match_parent">
+        <View
+            android:alpha="0.9"
+            android:background="@mipmap/reader_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <com.android.zhhr.ui.custom.ZBubbleSeekBar
+            android:id="@+id/sb_seekbar"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:bsb_bubble_color="@color/colorAccent"
+            app:bsb_bubble_text_color="@color/colorBg"
+            app:bsb_thumb_color="@color/colorBg"
+            app:bsb_thumb_radius="10dp"
+            app:bsb_second_track_size="4dp"
+            app:bsb_max="20"
+            app:bsb_min="1"
+            app:bsb_progress="1"
+            app:bsb_second_track_color="@color/colorAccent"
+            app:bsb_track_size="4dp"
+            app:bsb_track_color="@color/colorTrack"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

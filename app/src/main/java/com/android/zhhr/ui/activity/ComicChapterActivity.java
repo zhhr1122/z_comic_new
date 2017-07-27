@@ -15,7 +15,9 @@ import com.android.zhhr.presenter.ComicChapterPresenter;
 import com.android.zhhr.ui.adapter.ChapterViewpagerAdapter;
 import com.android.zhhr.ui.custom.ComicReaderViewpager;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
+import com.android.zhhr.ui.custom.ZBubbleSeekBar;
 import com.android.zhhr.ui.view.IChapterView;
+import com.xw.repo.BubbleSeekBar;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -38,8 +40,12 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     ImageView mBack;
     @Bind(R.id.tv_title)
     TextView mTitle;
+    @Bind(R.id.sb_seekbar)
+    ZBubbleSeekBar mSeekbar;
 
     ChapterViewpagerAdapter mAdapter;
+
+    private boolean isSelecting;
 
     @Override
     protected void initPresenter() {
@@ -74,6 +80,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
             @Override
             public void onPageSelected(int position) {
+                if(menuLayout.isShow()&&!isSelecting){
+                    menuLayout.setVisibility(View.GONE);
+                }
+                mSeekbar.setProgress(position-mPresenter.getmPreloadChapters().getPrelist().size()+1);
                 mPresenter.loadMoreData(position);
             }
 
@@ -100,6 +110,23 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             }
         });
         mPresenter.loadData();
+        mSeekbar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(int progress, float progressFloat) {
+                mViewpager.setCurrentItem(progress+mPresenter.getmPreloadChapters().getPrelist().size()-1);
+                //isSelecting = true;
+            }
+
+            @Override
+            public void getProgressOnActionUp(int progress, float progressFloat) {
+                menuLayout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void getProgressOnFinally(int progress, float progressFloat) {
+
+            }
+        });
     }
 
     @Override
@@ -148,6 +175,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             mViewpager.setCurrentItem(datas.size()-1,false);//关闭切换动画
         }*/
         mViewpager.setCurrentItem(datas.getPrelist().size(),false);
+        mSeekbar.setmMax(datas.getNowlist().size());
     }
 
     @Override
@@ -164,6 +192,8 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     public void nextChapter(PreloadChapters data, int loadingPosition) {
         mAdapter.setDatas(data);
         mViewpager.setCurrentItem(data.getPrelist().size()+loadingPosition,false);
+        mSeekbar.setmMax(data.getNowlist().size());
+        //mSeekbar.setProgress(data.getPrelist().size());
         //showToast("完成了预加载");
     }
 
@@ -171,6 +201,8 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     public void preChapter(PreloadChapters data, int loadingPosition) {
         mAdapter.setDatas(data);
         mViewpager.setCurrentItem(data.getPrelist().size()+data.getNowlist().size()+loadingPosition-1,false);
+        mSeekbar.setmMax(data.getNowlist().size());
+        //mSeekbar.setProgress(1);
         //showToast("完成了之前的预加载");
     }
 
