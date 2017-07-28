@@ -9,8 +9,6 @@ import java.util.List;
 public interface IDetailView<T> extends  IBaseView{
     void getDataFinish();
 
-    void showEmptyView();
-
     void showErrorView(Throwable throwable);
 
     void fillData(T data);

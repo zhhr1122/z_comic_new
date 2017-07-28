@@ -1,4 +1,4 @@
-package com.android.zhhr.ui.custom;
+package com.android.zhhr.utils;
 
 import android.content.res.Resources;
 import android.os.Environment;
@@ -13,7 +13,7 @@ import java.util.Properties;
  * Created by 皓然 on 2017/7/27.
  */
 
-class BubbleUtils {
+public class BubbleUtils {
 
     private static final File BUILD_PROP_FILE = new File(Environment.getRootDirectory(), "build.prop");
     private static Properties sBuildProperties;
@@ -33,16 +33,16 @@ class BubbleUtils {
         return sBuildProperties;
     }
 
-    static boolean isMIUI() {
+    public static boolean isMIUI() {
         return getBuildProperties().containsKey("ro.miui.ui.version.name");
     }
 
-    static int dp2px(int dp) {
+    public static int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 Resources.getSystem().getDisplayMetrics());
     }
 
-    static int sp2px(int sp) {
+    public static int sp2px(int sp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
                 Resources.getSystem().getDisplayMetrics());
     }

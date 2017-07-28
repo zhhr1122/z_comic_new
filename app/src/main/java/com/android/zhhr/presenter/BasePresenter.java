@@ -1,6 +1,7 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.net.MainFactory;
@@ -21,4 +22,6 @@ public abstract class BasePresenter<GV extends IBaseView> {
         mContext = context;
         mView = view;
     }
+
+
 }

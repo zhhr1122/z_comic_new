@@ -18,6 +18,5 @@
         <include layout="@layout/layout_reader_bottom"></include>
 
     </com.android.zhhr.ui.custom.ReaderMenuLayout>
-
-
+    <include layout="@layout/layout_loading"></include>
 </RelativeLayout>

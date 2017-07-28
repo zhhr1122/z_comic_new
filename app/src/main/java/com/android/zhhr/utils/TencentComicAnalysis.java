@@ -72,12 +72,12 @@ public class TencentComicAnalysis {
         //设置状态
         String status = detail.select("label").get(0).text();
         //设置更新日期
-        Element ElementUpdate = doc.getElementsByAttributeValue("class"," ui-pl10 ui-text-gray6").get(0);
-        String updates = ElementUpdate.select("span").get(0).text();
         if(status.equals("已完结")){
             comic.setStatus("已完结");
             comic.setUpdates("全"+ElementChapters.size()+"话");
         }else {
+            Element ElementUpdate = doc.getElementsByAttributeValue("class"," ui-pl10 ui-text-gray6").get(0);
+            String updates = ElementUpdate.select("span").get(0).text();
             comic.setUpdates(updates);
             comic.setStatus("更新最新话");
         }

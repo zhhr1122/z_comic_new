@@ -5,11 +5,11 @@
     android:layout_height="40dp">
     <ImageView
         android:id="@+id/iv_back"
-        android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
-        android:src="@mipmap/back_btn"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:src="@mipmap/btn_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="12.5dp"
        />
     <ImageView
         android:id="@+id/iv_more"

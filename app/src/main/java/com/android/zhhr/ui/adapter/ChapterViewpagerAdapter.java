@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.bumptech.glide.Glide;
@@ -88,11 +89,13 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
         if(Direction == Constants.RIGHT_TO_LEFT){
             Glide.with(mContext)
                     .load(mdatas.get(mdatas.size()-position-1))
+                    .placeholder(R.mipmap.pic_default_vertical)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }else{
             Glide.with(mContext)
                     .load(mdatas.get(position))
+                    .placeholder(R.mipmap.pic_default_vertical)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }

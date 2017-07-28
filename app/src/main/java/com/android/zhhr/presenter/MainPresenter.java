@@ -37,7 +37,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
 
             @Override
             public void onError(Throwable e) {
-                mView.ShowToast("获取数据失败"+e.toString());
+                mView.showErrorView(e);
             }
 
             @Override
@@ -113,7 +113,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
 
             @Override
             public void onError(Throwable e) {
-                mView.ShowToast("获取数据失败"+e.toString());
+                mView.showErrorView(e);
             }
 
             @Override

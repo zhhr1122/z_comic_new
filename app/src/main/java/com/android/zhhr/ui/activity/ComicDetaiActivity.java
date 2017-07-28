@@ -1,6 +1,7 @@
 package com.android.zhhr.ui.activity;
 
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -16,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +91,17 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Bind(R.id.btn_read)
     Button mRead;
 
-    private DetailAdapter mAdapter;
+    @Bind(R.id.iv_loading)
+    ImageView mLoading;
+    @Bind(R.id.rl_loading)
+    RelativeLayout mRLloading;
+    @Bind(R.id.tv_loading)
+    TextView mLoadingText;
+    @Bind(R.id.iv_error)
+    ImageView mReload;
+
+
+    DetailAdapter mAdapter;
 
     private float mScale = 1.0f;
     private float Dy = 0;
@@ -119,6 +130,9 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         mBack.setOnClickListener(this);
         mScrollView.setScaleTopListener(new MyScaleTopListener());
         mAdapter.setOnItemClickListener(this);
+        mLoading.setImageResource(R.drawable.loading);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
+        animationDrawable.start();
     }
 
     @Override
@@ -126,26 +140,32 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         mAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void showEmptyView() {
-
-    }
 
     @Override
     public void showErrorView(Throwable throwable) {
+        mRLloading.setVisibility(View.VISIBLE);
+        mReload.setVisibility(View.VISIBLE);
+        if(throwable instanceof ConnectException){
+            mLoadingText.setText("无法访问服务器接口");
+        }else{
+            mLoadingText.setText("未知错误"+throwable.toString());
+        }
 
     }
 
     @Override
     public void fillData(Comic comic) {
+        mRLloading.setVisibility(View.GONE);
         mComic = comic;
         Glide.with(this)
                 .load(comic.getCover())
+                .placeholder(R.mipmap.pic_default)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .bitmapTransform(new CenterCrop(this))
                 .into(mHeaderView);
         Glide.with(this)
                 .load(comic.getCover())
+                .placeholder(R.mipmap.pic_default)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .bitmapTransform(new BlurTransformation(this, 10), new CenterCrop(this))
                 .into(mHeaderViewBg);
@@ -316,6 +336,14 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @OnClick(R.id.btn_read)
     public void StartRead(View view){
         IntentUtil.ToComicChapter(this,comic_id,0, (ArrayList<String>) mComic.getChapters());
+    }
+
+    @OnClick(R.id.iv_error)
+    public void reload(View view){
+        mPresenter.getDetail(comic_id);
+        mRLloading.setVisibility(View.VISIBLE);
+        mReload.setVisibility(View.GONE);
+        mLoadingText.setText("正在重新加载，请稍后");
     }
 
 }

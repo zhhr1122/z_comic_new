@@ -71,6 +71,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     public void updateWithClear(List<T> datas){
         list.clear();
         list.addAll(datas);
+        notifyDataSetChanged();
     }
 
     public void update(List<T> datas){

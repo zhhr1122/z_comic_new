@@ -9,8 +9,6 @@ import java.util.List;
 public interface IChapterView<T> extends IBaseView{
     //获取数据完成
     void getDataFinish();
-    //未获取到数据
-    void showEmptyView();
     //展示错误页面
     void showErrorView(Throwable throwable);
     //填充数据

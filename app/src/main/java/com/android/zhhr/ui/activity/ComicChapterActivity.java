@@ -1,12 +1,14 @@
 package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
@@ -17,7 +19,11 @@ import com.android.zhhr.ui.custom.ComicReaderViewpager;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
 import com.android.zhhr.ui.custom.ZBubbleSeekBar;
 import com.android.zhhr.ui.view.IChapterView;
+import com.android.zhhr.utils.IntentUtil;
 import com.xw.repo.BubbleSeekBar;
+
+import java.net.ConnectException;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -45,7 +51,15 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     ChapterViewpagerAdapter mAdapter;
 
-    private boolean isSelecting;
+    @Bind(R.id.iv_loading)
+    ImageView mLoading;
+    @Bind(R.id.rl_loading)
+    RelativeLayout mRLloading;
+    @Bind(R.id.tv_loading)
+    TextView mLoadingText;
+    @Bind(R.id.iv_error)
+    ImageView mReload;
+
 
     @Override
     protected void initPresenter() {
@@ -62,6 +76,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     protected void initView() {
         setNavigation();
+        mLoading.setImageResource(R.drawable.loading);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
+        animationDrawable.start();
+
         mAdapter = new ChapterViewpagerAdapter(this);
         mAdapter.setDirection(Constants.LEFT_TO_RIGHT);
         mViewpager.setOffscreenPageLimit(4);
@@ -80,7 +98,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
             @Override
             public void onPageSelected(int position) {
-                if(menuLayout.isShow()&&!isSelecting){
+                if(menuLayout.isShow()){
                     menuLayout.setVisibility(View.GONE);
                 }
                 mSeekbar.setProgress(position-mPresenter.getmPreloadChapters().getPrelist().size()+1);
@@ -113,13 +131,12 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mSeekbar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int progress, float progressFloat) {
-                mViewpager.setCurrentItem(progress+mPresenter.getmPreloadChapters().getPrelist().size()-1);
-                //isSelecting = true;
+
             }
 
             @Override
             public void getProgressOnActionUp(int progress, float progressFloat) {
-                menuLayout.setVisibility(View.VISIBLE);
+                mViewpager.setCurrentItem(progress+mPresenter.getmPreloadChapters().getPrelist().size()-1);
             }
 
             @Override
@@ -151,20 +168,22 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     public void ShowToast(String t) {
         showToast(t);
     }
-
+    //数据加载成功
     @Override
     public void getDataFinish() {
-
+        mRLloading.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showEmptyView() {
-
-    }
-
+    //数据加载失败
     @Override
     public void showErrorView(Throwable throwable) {
-
+        mRLloading.setVisibility(View.VISIBLE);
+        mReload.setVisibility(View.VISIBLE);
+        if(throwable instanceof ConnectException){
+            mLoadingText.setText("无法访问服务器接口");
+        }else{
+            mLoadingText.setText("未知错误"+throwable.toString());
+        }
     }
 
     @Override
@@ -193,8 +212,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mAdapter.setDatas(data);
         mViewpager.setCurrentItem(data.getPrelist().size()+loadingPosition,false);
         mSeekbar.setmMax(data.getNowlist().size());
-        //mSeekbar.setProgress(data.getPrelist().size());
-        //showToast("完成了预加载");
+        //为什么第一页的时候需要单独再设置Progress?因为adapter的LIST并未发生改变，所以调用刷新方法后没有调用onPageSelected方法，故没有设置Progress
+        if(mPresenter.getComic_chapters()==1){
+            mSeekbar.setProgress(1);
+        }
     }
 
     @Override
@@ -202,8 +223,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mAdapter.setDatas(data);
         mViewpager.setCurrentItem(data.getPrelist().size()+data.getNowlist().size()+loadingPosition-1,false);
         mSeekbar.setmMax(data.getNowlist().size());
-        //mSeekbar.setProgress(1);
-        //showToast("完成了之前的预加载");
+        //为什么第一页的时候需要单独再设置Progress?因为adapter的LIST并未发生改变，所以调用刷新方法后没有调用onPageSelected方法，故没有设置Progress
+        if(mPresenter.getComic_chapters()==0){
+            mSeekbar.setProgress(data.getNowlist().size());
+        }
     }
 
     @Override
@@ -217,7 +240,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         if(postion>=0){
             mViewpager.setCurrentItem(postion);
         }else{
-
+            showToast("没有了");
         }
     }
 
@@ -227,7 +250,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         if(postion<mAdapter.getCount()){
             mViewpager.setCurrentItem(postion);
         }else{
-
+            showToast("没有了");
         }
     }
 
@@ -236,5 +259,18 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @OnClick(R.id.iv_back)
     public void finish(View view){
         this.finish();
+    }
+
+    @OnClick(R.id.iv_error)
+    public void reload(View view){
+        mPresenter.loadData();
+        mRLloading.setVisibility(View.VISIBLE);
+        mReload.setVisibility(View.GONE);
+        mLoadingText.setText("正在重新加载，请稍后");
+    }
+    @OnClick(R.id.iv_index)
+    public void toIndex(View view){
+        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getComic_id(),mPresenter.getComic_chapters(), (ArrayList<String>) mPresenter.getComic_chapter_title());
+
     }
 }

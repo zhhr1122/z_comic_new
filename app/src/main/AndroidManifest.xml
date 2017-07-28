@@ -46,6 +46,7 @@
         </activity>
         <activity android:name=".ui.activity.ComicDetaiActivity"></activity>
         <activity android:name=".ui.activity.ComicChapterActivity"></activity>
+        <activity android:name=".ui.activity.IndexActivity"></activity>
 
 
         <!-- Required SDK 核心功能-->

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/layout_actionbar_color"></include>
+    <RelativeLayout
+        android:id="@+id/rl_order"
+        android:layout_marginTop="60dp"
+        android:background="@color/colorBgDark"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        >
+        <TextView
+            android:textSize="12dp"
+            android:textColor="@color/colorTextLight"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="共711话，已完结"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+        <ImageView
+            android:layout_marginRight="5dp"
+            android:id="@+id/iv_order"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/zhengxu"
+            android:padding="7.5dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/rl_order"
+        android:background="@color/colorBg"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:id="@+id/rv_index">
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

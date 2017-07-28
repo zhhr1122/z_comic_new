@@ -12,6 +12,7 @@ import android.util.SparseArray;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.zhhr.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 

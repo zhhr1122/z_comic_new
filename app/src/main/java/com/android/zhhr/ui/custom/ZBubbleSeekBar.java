@@ -32,7 +32,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 
-import com.xw.repo.bubbleseekbar.R;
+import com.android.zhhr.utils.BubbleUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
