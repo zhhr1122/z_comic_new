@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="40dp">
     <ImageView
-        android:id="@+id/iv_back"
+        android:id="@+id/iv_back_color"
         android:layout_centerVertical="true"
         android:src="@mipmap/btn_back_color"
         android:layout_width="40dp"
@@ -16,12 +16,13 @@
     <TextView
         android:text="标题"
         android:gravity="center"
-        android:id="@+id/tv_actionbar_title"
+        android:id="@+id/tv_loading_title"
         android:textSize="15dp"
         android:textColor="@color/colorTextColor"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <TextView
+        android:visibility="gone"
         android:layout_marginRight="10dp"
         android:text="已下载章节"
         android:layout_centerVertical="true"

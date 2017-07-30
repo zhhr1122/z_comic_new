@@ -1,6 +1,13 @@
 package com.android.zhhr.utils;
 
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.ui.custom.IndexItemView;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,9 +37,9 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
-    public static Comic TransToComicDetail(Document doc){
+    public static Comic TransToComicDetail(Document doc, final Context context){
         //设置标题
-        Comic comic = new Comic();
+        final Comic comic = new Comic();
         comic.setTitle(doc.title().split("-")[0]);
         //设置标签
         Element ElementDescription = doc.getElementsByAttributeValue("name","Description").get(0);
@@ -57,7 +64,7 @@ public class TencentComicAnalysis {
         //设置章节数
         Element DivChapter = doc.getElementsByAttributeValue("class","chapter-page-all works-chapter-list").get(0);
         List<Element> ElementChapters = DivChapter.getElementsByAttributeValue("target","_blank");
-        List<String> chapters = new ArrayList<>();
+        final List<String> chapters = new ArrayList<>();
         for(int i=0;i<ElementChapters.size();i++){
             chapters.add(ElementChapters.get(i).select("a").text());
         }

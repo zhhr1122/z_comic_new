@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -16,6 +17,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import com.android.zhhr.presenter.ComicDetailPresenter;
 import com.android.zhhr.ui.adapter.DetailAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DetailScrollView;
+import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.view.IDetailView;
 import com.android.zhhr.utils.DisplayUtil;
@@ -46,13 +49,15 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * Created by 皓然 on 2017/7/12.
  */
 
-public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> implements IDetailView<Comic>,BaseRecyclerAdapter.OnItemClickListener,View.OnClickListener {
+public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> implements IDetailView<Comic>,IndexItemView.onItemClickLinstener{
     private String comic_id;
     @Bind(R.id.iv_image)
     ImageView mHeaderView;
 
-    @Bind(R.id.recycle_view)
+    /*@Bind(R.id.recycle_view)
     RecyclerView mRecycleView;
+    DetailAdapter mAdapter;
+    */
 
     @Bind(R.id.sv_comic)
     DetailScrollView mScrollView;
@@ -99,14 +104,17 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     TextView mLoadingText;
     @Bind(R.id.iv_error)
     ImageView mReload;
+    @Bind(R.id.tv_loading_title)
+    TextView mLoadingTitle;
+    @Bind(R.id.ll_index)
+    LinearLayout mIndex;
 
-
-    DetailAdapter mAdapter;
 
     private float mScale = 1.0f;
     private float Dy = 0;
     private Rect normal = new Rect();
     private Comic mComic;
+
 
     @Override
     protected void initPresenter() {
@@ -120,24 +128,27 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @Override
     protected void initView() {
-        NoScrollStaggeredGridLayoutManager layoutManager = new NoScrollStaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+       /* NoScrollStaggeredGridLayoutManager layoutManager = new NoScrollStaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
         mAdapter = new DetailAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
+         */
         comic_id = getIntent().getStringExtra(Constants.COMIC_ID);
         mPresenter.getDetail(comic_id);
-        mBack.setOnClickListener(this);
+        mLoadingTitle.setText(getIntent().getStringExtra(Constants.COMIC_TITLE));
         mScrollView.setScaleTopListener(new MyScaleTopListener());
-        mAdapter.setOnItemClickListener(this);
+
         mLoading.setImageResource(R.drawable.loading);
         AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
         animationDrawable.start();
+
     }
 
     @Override
     public void getDataFinish() {
-        mAdapter.notifyDataSetChanged();
+        //mAdapter.notifyDataSetChanged();
     }
 
 
@@ -154,7 +165,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     }
 
     @Override
-    public void fillData(Comic comic) {
+    public void fillData(final Comic comic) {
         mRLloading.setVisibility(View.GONE);
         mComic = comic;
         Glide.with(this)
@@ -178,16 +189,35 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         mPopularity.setText(comic.getPopularity());
         mUpdate.setText(comic.getUpdates());
         mPoint.setText(comic.getPoint());
-        //showToast(comic.getCollections());
         normal.set(mText.getLeft(),mText.getTop(),getMobileWidth(),mText.getBottom());
-        List<String> datas = comic.getChapters();
-        if(datas!=null&&datas.size()!=0){
+        for(int i=0;i<comic.getChapters().size();i++){
+            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i);
+            indexItemView.setListener(this);
+            mIndex.addView(indexItemView);
+        }
+
+        /*List<String> datas = comic.getChapters();
+       if(datas!=null&&datas.size()!=0){
             mAdapter.updateWithClear(datas);
         }else {
             showToast("未取到数据");
-        }
+        }*/
     }
 
+    @Override
+    public void OrderData(LinearLayout ll) {
+        mIndex.removeAllViews();
+        mIndex.addView(ll);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        if(mPresenter.isOrder()){
+            position = mComic.getChapters().size()-position-1;
+            Log.d("ComicDetailActivity","position="+position);
+        }
+        IntentUtil.ToComicChapter(ComicDetaiActivity.this,position, mPresenter.getmComic().getId(), mPresenter.getmComic().getChapters());
+    }
 
 
     public class MyScaleTopListener implements DetailScrollView.ScaleTopListener {
@@ -299,43 +329,29 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         showToast(toast);
     }
 
-    @Override
-    public void onItemClick(RecyclerView parent, View view, int position) {
-        if(!mAdapter.isOrder()){
-            position = mComic.getChapters().size()-position-1;
-            Log.d("ComicDetailActivity","position="+position);
-        }
-        IntentUtil.ToComicChapter(this,comic_id,position, (ArrayList<String>) mComic.getChapters());
+
+
+    @OnClick({R.id.iv_back_color, R.id.iv_back})
+    public void OnFinish(View view){
+        finish();
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if(id == R.id.iv_back){
-            finish();
-        }
-    }
-
-    /***
-     * 点击事件
-     * @param Order
-     */
-
-    @OnClick({ R.id.iv_oreder2, R.id.iv_order })
+    @OnClick({ R.id.iv_order,R.id.iv_oreder2 })
     public void OrderList(ImageView Order) {
-        mAdapter.setOrder(!mAdapter.isOrder());
-        if(!mAdapter.isOrder()){
-            mOrder2.setImageResource(R.mipmap.daoxu);
-            mOrder.setImageResource(R.mipmap.daoxu);
-        }else{
+        mPresenter.setOrder(!mPresenter.isOrder());
+        if(!mPresenter.isOrder()){
             mOrder2.setImageResource(R.mipmap.zhengxu);
             mOrder.setImageResource(R.mipmap.zhengxu);
+        }else{
+            mOrder2.setImageResource(R.mipmap.daoxu);
+            mOrder.setImageResource(R.mipmap.daoxu);
         }
+        mPresenter.orderIndex(mIndex);
     }
 
     @OnClick(R.id.btn_read)
     public void StartRead(View view){
-        IntentUtil.ToComicChapter(this,comic_id,0, (ArrayList<String>) mComic.getChapters());
+        //IntentUtil.ToComicChapter(this,0,mComic);
     }
 
     @OnClick(R.id.iv_error)

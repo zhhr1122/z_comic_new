@@ -26,7 +26,7 @@ public class DetailScrollView extends ScrollView {
     private RelativeLayout mMoveView;
     private View mLoadingTop;
     private View mLoadingBottom;
-    private View mListView;
+    //private View mListView;
     private View mTopView;
     private View mDetailView;
     private float y;
@@ -102,8 +102,8 @@ public class DetailScrollView extends ScrollView {
         mTopView = inner.getChildAt(1);
         mLoadingTop = mMoveView.getChildAt(0);
         mDetailView = mMoveView.getChildAt(1);
-        mListView = mMoveView.getChildAt(2);
-        mLoadingBottom = mMoveView.getChildAt(3);
+        //mListView = mMoveView.getChildAt(2);
+        mLoadingBottom = mMoveView.getChildAt(4);
         setOverScrollMode(OVER_SCROLL_NEVER);//取消5.0效果
     }
 

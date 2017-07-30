@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.presenter.ComicChapterPresenter;
 import com.android.zhhr.ui.adapter.ChapterViewpagerAdapter;
@@ -59,6 +60,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     TextView mLoadingText;
     @Bind(R.id.iv_error)
     ImageView mReload;
+    @Bind(R.id.tv_loading_title)
+    TextView mLoadingTitle;
+
 
 
     @Override
@@ -144,6 +148,8 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
             }
         });
+        //设置加载时候的标题
+        mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
     }
 
     @Override
@@ -256,7 +262,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
 
 
-    @OnClick(R.id.iv_back)
+    @OnClick({R.id.iv_back,R.id.iv_back_color})
     public void finish(View view){
         this.finish();
     }
@@ -270,7 +276,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
     @OnClick(R.id.iv_index)
     public void toIndex(View view){
-        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getComic_id(),mPresenter.getComic_chapters(), (ArrayList<String>) mPresenter.getComic_chapter_title());
-
+        //IntentUtil.ToIndex(ComicChapterActivity.this,nComic);
     }
 }

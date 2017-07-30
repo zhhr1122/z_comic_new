@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
         Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicDetail(this,comic.getId());
+        IntentUtil.ToComicDetail(this,comic.getId(),comic.getTitle());
     }
 
     @OnClick(R.id.iv_error)

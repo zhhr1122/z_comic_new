@@ -272,6 +272,15 @@
 
                         </RelativeLayout>
                     </LinearLayout>
+                    <LinearLayout
+                        android:background="@color/colorBg"
+                        android:id="@+id/ll_index"
+                        android:layout_below="@id/ll_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                    </LinearLayout>
                     <android.support.v7.widget.RecyclerView
                         android:background="@color/colorBg"
                         android:layout_below="@id/ll_info"
@@ -282,7 +291,7 @@
                     <ImageView
                         android:background="@color/colorBg"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/recycle_view"
+                        android:layout_below="@id/ll_index"
                         android:src="@mipmap/bottom"
                         android:layout_width="match_parent"
                         android:layout_height="400dp"/>
@@ -333,7 +342,6 @@
 
         </RelativeLayout>
     </RelativeLayout>
-    <include layout="@layout/layout_loading"></include>
-
     <include layout="@layout/layout_actionbar"></include>
+    <include layout="@layout/layout_loading"></include>
 </RelativeLayout>

@@ -6,14 +6,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.IndexPresenter;
 import com.android.zhhr.ui.adapter.DetailAdapter;
-import com.android.zhhr.ui.adapter.IndexAdapter;
-import com.android.zhhr.ui.view.IBaseView;
 import com.android.zhhr.ui.view.IIndexView;
 
 import java.util.List;
@@ -32,6 +32,12 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
     RecyclerView mRecycleView;
     @Bind(R.id.iv_order)
     ImageView mOrder;
+    @Bind(R.id.tv_loading_title)
+    TextView mTitle;
+    @Bind(R.id.tv_downloaded)
+    TextView mDownload;
+
+    private Comic mComic;
     @Override
     protected void initPresenter() {
         mPresenter = new IndexPresenter(this,this);
@@ -44,10 +50,13 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
 
     @Override
     protected void initView() {
+        mComic = (Comic) getIntent().getSerializableExtra(Constants.COMIC);
         mAdapter = new DetailAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter.updateWithClear(getIntent().getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
+        mAdapter.updateWithClear(mComic.getChapters());
+        mTitle.setText(mComic.getTitle());
+        mDownload.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -65,7 +74,7 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
         }
     }
 
-    @OnClick(R.id.iv_back)
+    @OnClick(R.id.iv_back_color)
     public void finish(View view){
         this.finish();
     }

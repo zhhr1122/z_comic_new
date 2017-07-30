@@ -1,5 +1,7 @@
 package com.android.zhhr.ui.view;
 
+import android.widget.LinearLayout;
+
 import java.util.List;
 
 /**
@@ -12,4 +14,6 @@ public interface IDetailView<T> extends  IBaseView{
     void showErrorView(Throwable throwable);
 
     void fillData(T data);
+
+    void OrderData(LinearLayout ll);
 }

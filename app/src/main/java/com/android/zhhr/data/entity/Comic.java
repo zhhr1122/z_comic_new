@@ -1,5 +1,7 @@
 package com.android.zhhr.data.entity;
 
+import android.widget.LinearLayout;
+
 import java.util.List;
 
 /**
