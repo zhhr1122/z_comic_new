@@ -66,8 +66,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
 
     @Override
-    protected void initPresenter() {
-        Intent intent = getIntent();
+    protected void initPresenter(Intent intent) {
         mPresenter = new ComicChapterPresenter(this,this);
         mPresenter.init(intent.getStringExtra(Constants.COMIC_ID),intent.getIntExtra(Constants.COMIC_CHAPERS,0),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
     }
@@ -158,6 +157,15 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
 
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mRLloading.setVisibility(View.VISIBLE);
+        mLoadingText.setText("正在加载,请稍后...");
+        initPresenter(intent);
+        initView();
+    }
+
     /**
      * 设置setNavigation()
      */
@@ -182,14 +190,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     //数据加载失败
     @Override
-    public void showErrorView(Throwable throwable) {
+    public void showErrorView(String error) {
         mRLloading.setVisibility(View.VISIBLE);
         mReload.setVisibility(View.VISIBLE);
-        if(throwable instanceof ConnectException){
-            mLoadingText.setText("无法访问服务器接口");
-        }else{
-            mLoadingText.setText("未知错误"+throwable.toString());
-        }
+        mLoadingText.setText(error);
     }
 
     @Override
@@ -276,6 +280,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
     @OnClick(R.id.iv_index)
     public void toIndex(View view){
-        //IntentUtil.ToIndex(ComicChapterActivity.this,nComic);
+        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getComic_id(),mPresenter.getComic_chapter_title(),getIntent().getStringExtra(Constants.COMIC_TITLE));
     }
 }

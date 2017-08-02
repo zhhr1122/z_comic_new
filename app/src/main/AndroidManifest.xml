@@ -44,9 +44,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.ComicDetaiActivity"></activity>
-        <activity android:name=".ui.activity.ComicChapterActivity"></activity>
-        <activity android:name=".ui.activity.IndexActivity"></activity>
+        <activity android:name=".ui.activity.ComicDetaiActivity"/>
+        <activity android:name=".ui.activity.ComicChapterActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".ui.activity.IndexActivity"/>
 
 
         <!-- Required SDK 核心功能-->

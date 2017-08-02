@@ -6,7 +6,10 @@ import android.widget.Toast;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.PreloadChapters;
+import com.android.zhhr.model.ComicModel;
 import com.android.zhhr.ui.view.IChapterView;
+import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.ShowErrorTextUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class ComicChapterPresenter extends BasePresenter<IChapterView>{
+    private ComicModel mModel;
     //当前三话漫画
     private PreloadChapters mPreloadChapters;
     //漫画阅读方向
@@ -40,6 +44,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     public ComicChapterPresenter(Activity context, IChapterView view) {
         super(context, view);
         mPreloadChapters = new PreloadChapters();
+        mModel = new ComicModel(context);
         mDirect = Constants.LEFT_TO_RIGHT;
 
     }
@@ -100,7 +105,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
 
     public void loadData(){
-        Subscriber subscriber = new Subscriber<PreloadChapters>() {
+        mModel.getPreNowChapterList(comic_id,comic_chapters,new Subscriber<PreloadChapters>() {
             @Override
             public void onCompleted() {
                 mView.getDataFinish();
@@ -108,7 +113,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
             @Override
             public void onError(Throwable e) {
-                mView.showErrorView(e);
+                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
             }
 
             @Override
@@ -117,12 +122,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 mView.fillData(mPreloadChapters);
                 mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
             }
-        };
-        comicService.getPreNowChapterList(comic_id,comic_chapters+"")
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+        });
     }
 
     public void loadMoreData(int position){
@@ -188,7 +188,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      */
     public void loadNextData(String id, int chapter, int direction){
 
-        Subscriber subscriber = new Subscriber<Chapters>() {
+        mModel.getChaptersList(id,(chapter+2),new Subscriber<Chapters>() {
             @Override
             public void onCompleted() {
                 isLoadingdata = false;
@@ -198,7 +198,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             @Override
             public void onError(Throwable e) {
                 isLoadingdata = false;
-                mView.ShowToast("获取数据失败"+e.toString());
+                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
             }
 
             @Override
@@ -212,14 +212,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(1+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
                 }
             }
-        };
-        comicService.getChapters(id,(chapter+2)+"")
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-
-
+        });
     }
 
     /***
@@ -229,8 +222,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param direction
      */
     public void loadPreData(String id, int chapter, int direction){
-
-        Subscriber subscriber = new Subscriber<Chapters>() {
+        mModel.getChaptersList(id,chapter-2,new Subscriber<Chapters>() {
             @Override
             public void onCompleted() {
                 isLoadingdata = false;
@@ -240,7 +232,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             @Override
             public void onError(Throwable e) {
                 isLoadingdata = false;
-                mView.ShowToast("获取数据失败"+e.toString());
+                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
             }
 
             @Override
@@ -254,13 +246,6 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(mPreloadChapters.getNowlist().size()+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
                 }
             }
-        };
-
-        comicService.getChapters(id,(chapter-2)+"")
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-
+        });
     }
 }

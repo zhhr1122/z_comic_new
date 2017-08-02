@@ -1,5 +1,6 @@
 package com.android.zhhr.ui.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private int i=3;
 
     @Override
-    protected void initPresenter() {
+    protected void initPresenter(Intent intent) {
         mPresenter = new MainPresenter(this,this);
     }
 

@@ -5,18 +5,22 @@ import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.model.ComicModel;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
 import com.android.zhhr.ui.view.IMainView;
+import com.android.zhhr.utils.ShowErrorTextUtil;
 import com.android.zhhr.utils.TencentComicAnalysis;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,10 +56,12 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     private Comic mComic;
+    private ComicModel mModel;
     public ComicDetailPresenter(Activity context, IDetailView view) {
         super(context, view);
         this.context = context;
         this.mComic = new Comic();
+        this.mModel = new ComicModel(context);
     }
 
     /**
@@ -67,15 +73,15 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             mView.ShowToast("获取ID失败");
         }else{
             mComicId = comic_id;
-            Subscriber subscriber = new Subscriber<Comic>() {
+            mModel.getCmoicDetail(mComicId,new Subscriber<Comic>() {
                 @Override
                 public void onCompleted() {
                     mView.getDataFinish();
                 }
 
                 @Override
-                public void onError(Throwable e) {
-                    mView.showErrorView(e);
+                public void onError(Throwable throwable) {
+                    mView.showErrorView(ShowErrorTextUtil.ShowErrorText(throwable));
                 }
 
                 @Override
@@ -84,29 +90,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     mComic = comic;
                     mView.fillData(comic);
                 }
-
-
-            };
-            Observable observable = Observable.create(new Observable.OnSubscribe<Comic>() {
-                @Override
-                public void call(Subscriber<? super Comic> subscriber) {
-                    try {
-                        Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
-                        Comic comic = TencentComicAnalysis.TransToComicDetail(doc,context);
-                        subscriber.onNext(comic);
-                    } catch (Exception e) {
-                        subscriber.onError(e);
-                        e.printStackTrace();
-                    }finally {
-                        subscriber.onCompleted();
-                    }
-                }
             });
-            observable
-                    .subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber);
         }
     }
 
@@ -120,6 +104,11 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             }else{
                 textView.setText((mComic.getChapters().size()-position)+" - "+mComic.getChapters().get(mComic.getChapters().size()-1-position));
             }
+        }
+        if(!isOrder()){
+            mView.OrderData(R.mipmap.zhengxu);
+        }else{
+            mView.OrderData(R.mipmap.daoxu);
         }
     }
 }

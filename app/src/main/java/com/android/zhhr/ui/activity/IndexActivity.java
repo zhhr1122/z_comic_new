@@ -14,7 +14,9 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.IndexPresenter;
 import com.android.zhhr.ui.adapter.DetailAdapter;
+import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.view.IIndexView;
+import com.android.zhhr.utils.IntentUtil;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ import butterknife.OnClick;
  * Created by 皓然 on 2017/7/28.
  */
 
-public class IndexActivity extends BaseActivity<IndexPresenter> implements IIndexView {
+public class IndexActivity extends BaseActivity<IndexPresenter> implements IIndexView,BaseRecyclerAdapter.OnItemClickListener{
     private List<String> comic_chapter_titles;
     private DetailAdapter mAdapter;
     @Bind(R.id.rv_index)
@@ -38,8 +40,10 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
     TextView mDownload;
 
     private Comic mComic;
+
+    private Intent intent;
     @Override
-    protected void initPresenter() {
+    protected void initPresenter(Intent intent) {
         mPresenter = new IndexPresenter(this,this);
     }
 
@@ -50,12 +54,13 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
 
     @Override
     protected void initView() {
-        mComic = (Comic) getIntent().getSerializableExtra(Constants.COMIC);
+        intent = getIntent();
         mAdapter = new DetailAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter.updateWithClear(mComic.getChapters());
-        mTitle.setText(mComic.getTitle());
+        mAdapter.updateWithClear(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
+        mAdapter.setOnItemClickListener(this);
+        mTitle.setText(getIntent().getStringExtra(Constants.COMIC_TITLE));
         mDownload.setVisibility(View.VISIBLE);
     }
 
@@ -79,4 +84,8 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
         this.finish();
     }
 
+    @Override
+    public void onItemClick(RecyclerView parent, View view, int position) {
+        IntentUtil.ToComicChapter(IndexActivity.this,position,intent.getStringExtra(Constants.COMIC_ID),intent.getStringExtra(Constants.COMIC_TITLE),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
+    }
 }

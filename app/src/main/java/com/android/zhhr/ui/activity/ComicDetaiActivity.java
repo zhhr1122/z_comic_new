@@ -1,5 +1,6 @@
 package com.android.zhhr.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -53,12 +54,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     private String comic_id;
     @Bind(R.id.iv_image)
     ImageView mHeaderView;
-
-    /*@Bind(R.id.recycle_view)
-    RecyclerView mRecycleView;
-    DetailAdapter mAdapter;
-    */
-
     @Bind(R.id.sv_comic)
     DetailScrollView mScrollView;
     @Bind(R.id.tv_title)
@@ -117,7 +112,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
 
     @Override
-    protected void initPresenter() {
+    protected void initPresenter(Intent intent) {
         mPresenter = new ComicDetailPresenter(this,this);
     }
 
@@ -128,13 +123,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @Override
     protected void initView() {
-       /* NoScrollStaggeredGridLayoutManager layoutManager = new NoScrollStaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setScrollEnabled(false);
-        mRecycleView.setLayoutManager(layoutManager);
-        mAdapter = new DetailAdapter(this,R.layout.item_chapter);
-        mRecycleView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
-         */
         comic_id = getIntent().getStringExtra(Constants.COMIC_ID);
         mPresenter.getDetail(comic_id);
         mLoadingTitle.setText(getIntent().getStringExtra(Constants.COMIC_TITLE));
@@ -148,20 +136,15 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @Override
     public void getDataFinish() {
-        //mAdapter.notifyDataSetChanged();
+
     }
 
 
     @Override
-    public void showErrorView(Throwable throwable) {
+    public void showErrorView(String throwable) {
         mRLloading.setVisibility(View.VISIBLE);
         mReload.setVisibility(View.VISIBLE);
-        if(throwable instanceof ConnectException){
-            mLoadingText.setText("无法访问服务器接口");
-        }else{
-            mLoadingText.setText("未知错误"+throwable.toString());
-        }
-
+        mLoadingText.setText(throwable);
     }
 
     @Override
@@ -195,19 +178,12 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }
-
-        /*List<String> datas = comic.getChapters();
-       if(datas!=null&&datas.size()!=0){
-            mAdapter.updateWithClear(datas);
-        }else {
-            showToast("未取到数据");
-        }*/
     }
 
     @Override
-    public void OrderData(LinearLayout ll) {
-        mIndex.removeAllViews();
-        mIndex.addView(ll);
+    public void OrderData(int ResId) {
+        mOrder.setImageResource(ResId);
+        mOrder2.setImageResource(ResId);
     }
 
     @Override
@@ -216,7 +192,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             position = mComic.getChapters().size()-position-1;
             Log.d("ComicDetailActivity","position="+position);
         }
-        IntentUtil.ToComicChapter(ComicDetaiActivity.this,position, mPresenter.getmComic().getId(), mPresenter.getmComic().getChapters());
+        IntentUtil.ToComicChapter(ComicDetaiActivity.this,position, mPresenter.getmComic());
     }
 
 
@@ -263,7 +239,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
         @Override
         public void isBlurTransform(float y) {
-            //Log.d("DetailActivity","y="+y+",gettopview="+y);
             mHeaderViewBg.setAlpha(1-y);
         }
 

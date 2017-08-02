@@ -6,13 +6,7 @@ import java.util.List;
  * Created by 皓然 on 2017/7/20.
  */
 
-public interface IChapterView<T> extends IBaseView{
-    //获取数据完成
-    void getDataFinish();
-    //展示错误页面
-    void showErrorView(Throwable throwable);
-    //填充数据
-    void fillData(T data);
+public interface IChapterView<T> extends ILoadDataView<T>{
     //弹出菜单
     void showMenu();
     //下一章
