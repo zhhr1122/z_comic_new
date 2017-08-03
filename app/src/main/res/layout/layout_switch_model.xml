@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.zhhr.ui.custom.SwitchRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_switch_model"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_switch_small"
+        android:layout_width="300dp"
+        android:layout_height="160dp"
+        android:layout_centerInParent="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.9"
+            android:background="@mipmap/reader_top" />
+
+        <TextView
+            android:id="@+id/tv_switch_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="阅读模式"
+            android:textColor="@color/colorTextColorLight2"
+            android:textSize="13dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@id/tv_switch_title"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/iv_normal_model"
+                    android:layout_width="90dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/btn_switchmodel_normal" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/iv_j_comic_model"
+                    android:layout_width="90dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/btn_switchmodel_j_comic" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:alpha="0.9"
+        android:id="@+id/rl_succ_bg"
+        android:layout_centerInParent="true"
+        android:layout_width="180dp"
+        android:layout_height="240dp"
+        android:background="@color/colorTrack"
+        >
+        <ImageView
+            android:id="@+id/iv_succ"
+            android:layout_centerInParent="true"
+            android:layout_width="110dp"
+            android:layout_height="155dp"
+            android:src="@mipmap/succ_left_to_right"
+            />
+    </RelativeLayout>
+
+
+</com.android.zhhr.ui.custom.SwitchRelativeLayout>

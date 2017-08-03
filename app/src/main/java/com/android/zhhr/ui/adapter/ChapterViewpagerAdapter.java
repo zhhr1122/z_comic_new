@@ -90,13 +90,11 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
             Glide.with(mContext)
                     .load(mdatas.get(mdatas.size()-position-1))
                     .placeholder(R.mipmap.pic_default_vertical)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }else{
             Glide.with(mContext)
                     .load(mdatas.get(position))
                     .placeholder(R.mipmap.pic_default_vertical)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }
         imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {

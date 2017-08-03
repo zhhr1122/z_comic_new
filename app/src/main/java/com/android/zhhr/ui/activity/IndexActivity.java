@@ -39,7 +39,6 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
     @Bind(R.id.tv_downloaded)
     TextView mDownload;
 
-    private Comic mComic;
 
     private Intent intent;
     @Override
@@ -86,6 +85,9 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
 
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
+        if(!mAdapter.isOrder()){
+            position = intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size()-position-1;
+        }
         IntentUtil.ToComicChapter(IndexActivity.this,position,intent.getStringExtra(Constants.COMIC_ID),intent.getStringExtra(Constants.COMIC_TITLE),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
     }
 }
