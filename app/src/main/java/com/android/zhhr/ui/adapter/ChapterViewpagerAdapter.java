@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
@@ -41,6 +42,13 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
     public ChapterViewpagerAdapter(Context context) {
         mdatas = new ArrayList<>();
         this.mContext = context;
+    }
+    public ChapterViewpagerAdapter(Context context,PreloadChapters preloadChapters,int mDirect) {
+        this(context);
+        this.mdatas.addAll(preloadChapters.getPrelist());
+        this.mdatas.addAll(preloadChapters.getNowlist());
+        this.mdatas.addAll(preloadChapters.getNextlist());
+        this.Direction = mDirect;
     }
 
     public int getDirection() {

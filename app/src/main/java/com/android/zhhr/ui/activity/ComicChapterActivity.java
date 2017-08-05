@@ -74,11 +74,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     Button mJcomic;
 
 
-
     @Override
     protected void initPresenter(Intent intent) {
         mPresenter = new ComicChapterPresenter(this,this);
-        mPresenter.init(intent.getStringExtra(Constants.COMIC_ID),intent.getIntExtra(Constants.COMIC_CHAPERS,0),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
+        mPresenter.init(intent.getStringExtra(Constants.COMIC_ID),intent.getIntExtra(Constants.COMIC_CHAPERS,0),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
     }
 
     @Override
@@ -94,7 +93,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         animationDrawable.start();
 
         mAdapter = new ChapterViewpagerAdapter(this);
-        mAdapter.setDirection(Constants.RIGHT_TO_LEFT);
+        mAdapter.setDirection(mPresenter.getmDirect());
         mViewpager.setOffscreenPageLimit(4);
         mAdapter.setListener(new ChapterViewpagerAdapter.OnceClickListener() {
             @Override
@@ -291,19 +290,27 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     public void SwitchModel(int mDirect) {
         if(mAdapter.getDirection()!=mDirect){
-            mAdapter.setDirection(mDirect);
+            int nowposition = mViewpager.getCurrentItem();
+            //必须重新new 一个adapter 否则在接近页面的时候，会有缓存，图片切换会有问题
+            mAdapter = new ChapterViewpagerAdapter(this,mPresenter.getmPreloadChapters(),mDirect);
+            mAdapter.setListener(new ChapterViewpagerAdapter.OnceClickListener() {
+                @Override
+                public void onClick(View view, float x, float y) {
+                    mPresenter.clickScreen(x,y);
+                }
+            });
+            mViewpager.setAdapter(mAdapter);
+            mPresenter.setmDirect(mDirect);
             mSwitchModel.setVisibility(View.GONE,mDirect);
             initReaderModule();
             if(mDirect == Constants.LEFT_TO_RIGHT){
-                //mViewpager.setCurrentItem(mPresenter.getmPreloadChapters().getPrelist().size(),false);
                 mNormal.setBackgroundResource(R.drawable.normal_model_press);
                 mJcomic.setBackgroundResource(R.drawable.btn_switchmodel_j_comic);
             }else{
-                //mViewpager.setCurrentItem(mPresenter.getmPreloadChapters().geNextSize()+mPresenter.getmPreloadChapters().getNowlist().size()-1,false);
                 mNormal.setBackgroundResource(R.drawable.btn_switchmodel_normal);
                 mJcomic.setBackgroundResource(R.drawable.j_comic_model_press);
             }
-            mViewpager.setCurrentItem(mPresenter.getmPreloadChapters().getDataSize()-mViewpager.getCurrentItem()-1,false);
+            mViewpager.setCurrentItem(mPresenter.getmPreloadChapters().getDataSize()-nowposition-1,false);
         }
     }
 
@@ -343,7 +350,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
     @OnClick(R.id.iv_index)
     public void toIndex(View view){
-        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getComic_id(),mPresenter.getComic_chapter_title(),getIntent().getStringExtra(Constants.COMIC_TITLE));
+        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getComic_id(),mPresenter.getComic_chapter_title(),getIntent().getStringExtra(Constants.COMIC_TITLE),mPresenter.getmDirect());
     }
 
     @OnClick(R.id.iv_settiong)

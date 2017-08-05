@@ -1,30 +1,24 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.PreloadChapters;
-import com.android.zhhr.model.ComicModel;
+import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IChapterView;
-import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by 皓然 on 2017/7/20.
  */
 
 public class ComicChapterPresenter extends BasePresenter<IChapterView>{
-    private ComicModel mModel;
+    private ComicModule mModel;
     //当前三话漫画
     private PreloadChapters mPreloadChapters;
     //漫画阅读方向
@@ -45,7 +39,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     public ComicChapterPresenter(Activity context, IChapterView view) {
         super(context, view);
         mPreloadChapters = new PreloadChapters();
-        mModel = new ComicModel(context);
+        mModel = new ComicModule(context);
         mDirect = Constants.LEFT_TO_RIGHT;
 
     }
@@ -56,10 +50,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param comic_chapters
      * @param comic_chapter_title
      */
-    public void init(String comic_id,int comic_chapters,List<String> comic_chapter_title){
+    public void init(String comic_id,int comic_chapters,List<String> comic_chapter_title,int type){
         this.comic_chapter_title = comic_chapter_title;
         this.comic_id = comic_id;
         this.comic_chapters = comic_chapters;
+        this.mDirect = type;
     }
 
     public List<String> getComic_chapter_title() {
@@ -101,6 +96,13 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         this.mPreloadChapters = mPreloadChapters;
     }
 
+    public int getmDirect() {
+        return mDirect;
+    }
+
+    public void setmDirect(int mDirect) {
+        this.mDirect = mDirect;
+    }
 
     public void loadData(){
         mModel.getPreNowChapterList(comic_id,comic_chapters,new Subscriber<PreloadChapters>() {

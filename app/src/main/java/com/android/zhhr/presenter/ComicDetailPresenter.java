@@ -6,29 +6,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
-import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.model.ComicModel;
+import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
-import com.android.zhhr.ui.view.IMainView;
 import com.android.zhhr.utils.ShowErrorTextUtil;
-import com.android.zhhr.utils.TencentComicAnalysis;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by 皓然 on 2017/7/12.
@@ -56,12 +40,12 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     private Comic mComic;
-    private ComicModel mModel;
+    private ComicModule mModel;
     public ComicDetailPresenter(Activity context, IDetailView view) {
         super(context, view);
         this.context = context;
         this.mComic = new Comic();
-        this.mModel = new ComicModel(context);
+        this.mModel = new ComicModule(context);
     }
 
     /**

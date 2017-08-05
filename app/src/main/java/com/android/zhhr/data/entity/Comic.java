@@ -33,6 +33,9 @@ public class Comic extends BaseBean{
     protected String updates;
     //状态
     protected String status;
+    //默认阅读方式
+    protected int readType;
+
 
     public String getStatus() {
         return status;
@@ -42,8 +45,13 @@ public class Comic extends BaseBean{
         this.status = status;
     }
 
+    public int getReadType() {
+        return readType;
+    }
 
-
+    public void setReadType(int readType) {
+        this.readType = readType;
+    }
 
     public List<String> getTags() {
         return tags;
@@ -149,6 +157,8 @@ public class Comic extends BaseBean{
                 ", popularity='" + popularity + '\'' +
                 ", topics='" + topics + '\'' +
                 ", updates='" + updates + '\'' +
+                ", status='" + status + '\'' +
+                ", readType=" + readType +
                 '}';
     }
 }

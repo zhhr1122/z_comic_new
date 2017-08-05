@@ -1,4 +1,4 @@
-package com.android.zhhr.model;
+package com.android.zhhr.module;
 
 import android.content.Context;
 
@@ -20,10 +20,10 @@ import rx.schedulers.Schedulers;
  * Created by 皓然 on 2017/7/31.
  */
 
-public class ComicModel {
+public class ComicModule {
     public static final ComicService comicService = MainFactory.getComicServiceInstance();
     public Context context;
-    public ComicModel(Context context){
+    public ComicModule(Context context){
         this.context = context;
     }
 

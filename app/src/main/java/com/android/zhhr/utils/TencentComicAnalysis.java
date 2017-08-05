@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.custom.IndexItemView;
 
@@ -91,7 +92,13 @@ public class TencentComicAnalysis {
 
         Element ElementPoint = doc.getElementsByAttributeValue("class","ui-text-orange").get(0);
         comic.setPoint(ElementPoint.select("strong").get(0).text());
-
+        //设置阅读方式
+        List<Element> Element_isJ = doc.getElementsByAttributeValue("src","http://q2.qlogo.cn/g?b=qq&k=hMPm8WLLDbcdk0Vs4epHxA&s=100&t=561");
+        if(Element_isJ!=null&&Element_isJ.size()!=0){
+            comic.setReadType(Constants.RIGHT_TO_LEFT);
+        }else{
+            comic.setReadType(Constants.LEFT_TO_RIGHT);
+        }
         return comic;
     }
 

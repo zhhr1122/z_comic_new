@@ -30,23 +30,26 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_CHAPERS,chapters);
         intent.putExtra(Constants.COMIC_ID,mComic.getId());
         intent.putExtra(Constants.COMIC_TITLE,mComic.getTitle());
+        intent.putExtra(Constants.COMIC_READ_TYPE,mComic.getReadType());
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
         context.startActivity(intent);
     }
 
-    public static void ToComicChapter(Context context, int chapters,String id,String title,List<String> chapter_titles){
+    public static void ToComicChapter(Context context, int chapters,String id,String title,List<String> chapter_titles,int type){
         Intent intent = new Intent(context, ComicChapterActivity.class);
         intent.putExtra(Constants.COMIC_CHAPERS,chapters);
         intent.putExtra(Constants.COMIC_ID,id);
         intent.putExtra(Constants.COMIC_TITLE,title);
+        intent.putExtra(Constants.COMIC_READ_TYPE,type);
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) chapter_titles);
         context.startActivity(intent);
     }
 
-    public static void ToIndex(Context context, String id,List<String> ChapterTitles,String title){
+    public static void ToIndex(Context context, String id,List<String> ChapterTitles,String title,int type){
         Intent intent = new Intent(context, IndexActivity.class);
         intent.putExtra(Constants.COMIC_ID,id);
         intent.putExtra(Constants.COMIC_TITLE,title);
+        intent.putExtra(Constants.COMIC_READ_TYPE,type);
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) ChapterTitles);
         context.startActivity(intent);
     }
