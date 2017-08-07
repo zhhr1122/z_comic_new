@@ -8,12 +8,7 @@ import java.util.List;
  * Created by 皓然 on 2017/6/15.
  */
 
-public interface IMainView<T extends BaseBean> extends IZElasticRefreshScrollView {
-    /**
-     *  填充数据
-     */
-    void fillData(List<T> data);
-
+public interface IHomeView<T extends BaseBean> extends IBaseView {
     /**
      * 添加更多数据（用于刷新）
      * @param data
@@ -24,5 +19,11 @@ public interface IMainView<T extends BaseBean> extends IZElasticRefreshScrollVie
      * 没有更多
      */
     void hasNoMoreData();
+
+    void showErrorView(String throwable);
+
+    void fillData(List<T> data);
+
+    void getDataFinish();
 
 }

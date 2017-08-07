@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="40dp"
+        >
+        <fragment
+            android:id="@+id/fm_home"
+            android:name="com.android.zhhr.ui.fragment.HomeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <fragment
+            android:name="com.android.zhhr.ui.fragment.BookShelfFragment"
+            android:id="@+id/fm_bookshelf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <fragment
+            android:name="com.android.zhhr.ui.fragment.BookShelfFragment"
+            android:id="@+id/fm_mine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorBg"
+        android:id="@+id/rl_bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_home"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/homepage" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_bookshelf"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/bookshelf" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_mine"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/mine" />
+            </RelativeLayout>
+
+        </LinearLayout>
+        <View
+            android:background="@color/colorBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

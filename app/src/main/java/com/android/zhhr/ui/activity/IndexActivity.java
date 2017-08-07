@@ -1,18 +1,16 @@
 package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.IndexPresenter;
+import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.DetailAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.view.IIndexView;

@@ -12,7 +12,7 @@ import rx.Observable;
  * Created by 皓然 on 2017/7/4.
  */
 
-public interface ComicService {
+public interface ComicService{
     @GET("top250")
     Observable<Chapters> getTopMovie(@Query("start") int start, @Query("count") int count);
 

@@ -1,4 +1,4 @@
-package com.android.zhhr.ui.activity;
+package com.android.zhhr.ui.activity.base;
 
 import android.content.Context;
 import android.content.Intent;

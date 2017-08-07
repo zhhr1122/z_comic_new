@@ -22,6 +22,7 @@ import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.ComicDetailPresenter;
+import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.custom.DetailScrollView;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
