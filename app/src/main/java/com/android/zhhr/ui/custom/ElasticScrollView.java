@@ -79,9 +79,6 @@ public class ElasticScrollView extends ScrollView {
             case MotionEvent.ACTION_MOVE:
                 final float preY = y;
                 float nowY = ev.getY();
-                /**
-                 * size=4 表示 拖动的距离为屏幕的高度的1/4
-                 */
                 int deltaY;
                 deltaY = (int) Math.sqrt(Math.abs(nowY - preY)*2) ;
                 // 滚动

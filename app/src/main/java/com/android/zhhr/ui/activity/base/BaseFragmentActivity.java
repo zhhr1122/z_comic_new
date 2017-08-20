@@ -80,4 +80,5 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         return R.layout.activity_base;
     }
 
+
 }

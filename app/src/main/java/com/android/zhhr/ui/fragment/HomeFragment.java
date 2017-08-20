@@ -1,5 +1,6 @@
 package com.android.zhhr.ui.fragment;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,8 +18,13 @@ import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ZElasticRefreshScrollView;
 import com.android.zhhr.ui.view.IHomeView;
+import com.android.zhhr.utils.GlideImageLoader;
 import com.android.zhhr.utils.IntentUtil;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -39,7 +45,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     RelativeLayout mErrorView;
     @Bind(R.id.iv_error)
     ImageView mReload;
+    @Bind(R.id.iv_loading_top)
+    ImageView mLoadingTop;
+    @Bind(R.id.B_banner)
+    Banner mBanner;
     private MainAdapter mAdapter;
+
+
 
     private int i=3;
 
@@ -50,6 +62,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        initAnimation();
+        //设置图片加载器
+        mBanner.setImageLoader(new GlideImageLoader());
+        mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         NoScrollStaggeredGridLayoutManager layoutManager = new NoScrollStaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
@@ -74,7 +90,22 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                 i++;
             }
         });
+        mBanner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Comic comic = mPresenter.getmBanners().get(position);
+                IntentUtil.ToComicDetail(mActivity,comic.getId(),comic.getTitle());
+            }
+        });
 
+    }
+
+
+    //初始化动画
+    private void initAnimation() {
+        mLoadingTop.setImageResource(R.drawable.loading_top);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mLoadingTop.getDrawable();
+        animationDrawable.start();
     }
 
     @Override
@@ -91,6 +122,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     public void showErrorView(String throwable) {
         mScrollView.setRefreshing(false);
         mErrorView.setVisibility(View.VISIBLE);
+        mRecycleView.setVisibility(View.GONE);
     }
 
 
@@ -99,10 +131,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         mScrollView.setRefreshing(false);
         if(mErrorView.isShown()){
             mErrorView.setVisibility(View.GONE);
+            mRecycleView.setVisibility(View.VISIBLE);
         }
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void fillBanner(List<Comic> data) {
+        //设置图片集合
+        mBanner.setImages(data);
+        //banner设置方法全部调用完毕时最后调用
+        mBanner.start();
+    }
 
 
     @Override

@@ -30,8 +30,8 @@ public class ComicModule {
         this.context = context;
     }
 
-    public void getComicList(Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getData(Subscriber subscriber){
+        Observable ComicListObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
             @Override
             public void call(Subscriber<? super List<Comic>> subscriber) {
                 try {
@@ -47,7 +47,23 @@ public class ComicModule {
                     subscriber.onCompleted();
                 }
             }
-        }) .subscribeOn(Schedulers.io())
+        });
+        Observable ComicBannerObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+            @Override
+            public void call(Subscriber<? super List<Comic>> subscriber) {
+                try {
+                    Document doc = Jsoup.connect(Url.TencentUpdateTimeUrl).get();
+                    List<Comic>  mdats = TencentComicAnalysis.TransToComic(doc);
+                    subscriber.onNext(mdats);
+                } catch (IOException e) {
+                    subscriber.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        });
+        Observable.merge(ComicListObservable, ComicBannerObservable).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

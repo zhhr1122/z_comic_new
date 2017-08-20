@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content">
                 <RelativeLayout
                     android:id="@+id/rl_loading"
-                    android:background="#f5f5ee"
+                    android:background="@color/colorBg"
                     android:layout_width="match_parent"
                     android:layout_height="40dp">
                     <LinearLayout
@@ -30,9 +30,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp">
                         <ImageView
+                            android:id="@+id/iv_loading_top"
                             android:layout_margin="5dp"
                             android:scaleType="fitXY"
-                            android:src="@mipmap/loading"
+                            android:src="@drawable/loading_top"
                             android:layout_width="30dp"
                             android:layout_height="30dp" />
                         <TextView
@@ -44,8 +45,136 @@
                             />
                     </LinearLayout>
                 </RelativeLayout>
-                <android.support.v7.widget.RecyclerView
+                <LinearLayout
+                    android:id="@+id/ly_meun"
                     android:layout_below="@id/rl_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <LinearLayout
+                            android:background="@color/colorBg"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:orientation="vertical"
+                            >
+                            <ImageView
+                                android:src="@mipmap/fenlei1"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center_horizontal"
+                                />
+                            <TextView
+                                android:textSize="10dp"
+                                android:text="男生榜"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:background="@color/colorBg"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:orientation="vertical"
+                            >
+                            <ImageView
+                                android:src="@mipmap/fenlei3"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center_horizontal"
+                                />
+                            <TextView
+                                android:textSize="10dp"
+                                android:text="女生榜"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:background="@color/colorBg"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:orientation="vertical"
+                            >
+                            <ImageView
+                                android:src="@mipmap/fenlei2"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center_horizontal"
+                                />
+                            <TextView
+                                android:textSize="10dp"
+                                android:text="国漫"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:background="@color/colorBg"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:orientation="vertical"
+                            >
+                            <ImageView
+                                android:src="@mipmap/fenlei4"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center_horizontal"
+                                />
+                            <TextView
+                                android:textSize="10dp"
+                                android:text="日漫"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:background="@color/colorBg"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:orientation="vertical"
+                            >
+                            <ImageView
+                                android:src="@mipmap/fenlei5"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center_horizontal"
+                                />
+                            <TextView
+                                android:textSize="10dp"
+                                android:text="分类"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <View
+                        android:background="@color/colorBgDark"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_below="@id/ly_meun"
                     android:padding="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -82,13 +211,17 @@
 
                 </RelativeLayout>
             </RelativeLayout>
-            <ImageView
-                android:id="@+id/iv_image"
+            <com.youth.banner.Banner
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/B_banner"
+                app:delay_time="4000"
+                app:indicator_drawable_selected="@drawable/indicator_select"
+                app:indicator_drawable_unselected="@drawable/indicator_unselect"
+                app:indicator_margin="5dp"
+                app:indicator_height="8dp"
+                app:indicator_width="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@mipmap/top"
-                android:scaleType="fitXY"
-                />
+                android:layout_height="200dp" />
         </RelativeLayout>
     </com.android.zhhr.ui.custom.ZElasticRefreshScrollView>
 

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.zhhr.presenter.BasePresenter;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
@@ -55,5 +56,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         if (mPresenter == null) {
             throw new IllegalStateException("please init mPresenter in initPresenter() method ");
         }
+    }
+
+    public void showToast(String text){
+        Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
     }
 }

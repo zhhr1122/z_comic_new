@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -27,13 +28,24 @@ import rx.schedulers.Schedulers;
 public class HomePresenter extends BasePresenter<IHomeView>{
     private int num =20;
     private ComicModule mModel;
+    private List<Comic> mBanners,mDatas;
+
+    public List<Comic> getmBanners() {
+        return mBanners;
+    }
+
+    public List<Comic> getmDatas() {
+        return mDatas;
+    }
 
     public HomePresenter(Activity context, IHomeView view) {
         super(context, view);
         this.mModel = new ComicModule(context);
+        mBanners = new ArrayList<>();
+        mDatas = new ArrayList<>();
     }
     public void refreshData(){
-        mModel.getComicList(new Subscriber<List<Comic>>() {
+        mModel.getData(new Subscriber<List<Comic>>() {
             @Override
             public void onCompleted() {
                 mView.getDataFinish();
@@ -46,7 +58,13 @@ public class HomePresenter extends BasePresenter<IHomeView>{
 
             @Override
             public void onNext(List<Comic> comics) {
-                mView.fillData(comics);
+                if(comics.size()>12){
+                    mView.fillData(comics);
+                    mDatas = comics;
+                }else{
+                    mView.fillBanner(comics);
+                    mBanners = comics;
+                }
             }
 
         });
