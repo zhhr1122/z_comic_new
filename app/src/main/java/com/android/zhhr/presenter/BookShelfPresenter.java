@@ -26,7 +26,7 @@ public class BookShelfPresenter extends BasePresenter<IBookShelfView>{
 
 
     public void loadData(){
-        mModel.getMoreComicList(1,new Subscriber<List<Comic>>() {
+        mModel.getCollectedComicList(new Subscriber<List<Comic>>() {
             @Override
             public void onCompleted() {
                 mView.getDataFinish();

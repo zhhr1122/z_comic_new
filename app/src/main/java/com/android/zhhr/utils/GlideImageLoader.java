@@ -32,4 +32,29 @@ public class GlideImageLoader extends ImageLoader {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
     }
+
+    public static void loadImage(Context context,String url,ImageView imageView) {
+        Glide.with(context)
+                .load(url)
+                .placeholder(R.mipmap.pic_default)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
+    public static void loadImage(Context context,int resid,ImageView imageView) {
+        Glide.with(context)
+                .load(resid)
+                .placeholder(R.mipmap.pic_default)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
+
+    public static void loadImage(Context context,int resid,ImageView imageView,boolean isCenter) {
+        Glide.with(context)
+                .load(resid)
+                .placeholder(R.mipmap.pic_default)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
 }

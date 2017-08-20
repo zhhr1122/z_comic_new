@@ -48,7 +48,7 @@ public class HomePresenter extends BasePresenter<IHomeView>{
         mModel.getData(new Subscriber<List<Comic>>() {
             @Override
             public void onCompleted() {
-                mView.getDataFinish();
+                //
             }
 
             @Override
@@ -61,6 +61,7 @@ public class HomePresenter extends BasePresenter<IHomeView>{
                 if(comics.size()>12){
                     mView.fillData(comics);
                     mDatas = comics;
+                    mView.getDataFinish();
                 }else{
                     mView.fillBanner(comics);
                     mBanners = comics;

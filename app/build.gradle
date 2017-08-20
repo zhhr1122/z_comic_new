@@ -1,4 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+greendao {
+    schemaVersion 2
+    daoPackage 'com.android.zhr.greendao.gen'
+    targetGenDir 'src/main/java'
+}
 
 android {
     compileSdkVersion 25
@@ -63,4 +70,7 @@ dependencies {
     compile 'com.zhy:base-rvadapter:3.0.3'
 
     compile 'com.youth.banner:banner:1.4.9'
+
+    compile 'org.greenrobot:greendao:3.0.1'
+    compile 'org.greenrobot:greendao-generator:3.0.0'
 }

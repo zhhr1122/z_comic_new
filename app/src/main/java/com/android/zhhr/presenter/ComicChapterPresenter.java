@@ -50,9 +50,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param comic_chapters
      * @param comic_chapter_title
      */
-    public void init(String comic_id,int comic_chapters,List<String> comic_chapter_title,int type){
+    public void init(long comic_id,int comic_chapters,List<String> comic_chapter_title,int type){
         this.comic_chapter_title = comic_chapter_title;
-        this.comic_id = comic_id;
+        this.comic_id = comic_id+"";
         this.comic_chapters = comic_chapters;
         this.mDirect = type;
     }

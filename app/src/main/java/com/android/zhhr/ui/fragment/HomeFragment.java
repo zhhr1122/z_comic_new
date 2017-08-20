@@ -94,12 +94,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
             @Override
             public void OnBannerClick(int position) {
                 Comic comic = mPresenter.getmBanners().get(position);
-                IntentUtil.ToComicDetail(mActivity,comic.getId(),comic.getTitle());
+                IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
             }
         });
 
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        mScrollView.scrollTo(0,0);
+    }
 
     //初始化动画
     private void initAnimation() {
@@ -172,7 +177,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
         Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicDetail(mActivity,comic.getId(),comic.getTitle());
+        IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
     }
 
     @OnClick(R.id.iv_error)

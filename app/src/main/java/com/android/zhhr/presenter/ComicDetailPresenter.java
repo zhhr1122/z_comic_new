@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.listener.DBhelperListener;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
@@ -20,7 +21,7 @@ import rx.Subscriber;
 
 public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     private Context context;
-    private String mComicId;
+    private long mComicId;
     private boolean isOrder;
 
     public Comic getmComic() {
@@ -56,8 +57,8 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         if(comic_id==null){
             mView.ShowToast("获取ID失败");
         }else{
-            mComicId = comic_id;
-            mModel.getCmoicDetail(mComicId,new Subscriber<Comic>() {
+            mComicId =  Long.parseLong(comic_id);
+            mModel.getCmoicDetail(comic_id,new Subscriber<Comic>() {
                 @Override
                 public void onCompleted() {
                     mView.getDataFinish();
@@ -75,7 +76,49 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     mView.fillData(comic);
                 }
             });
+            mModel.isCollected(mComicId, new Subscriber<Boolean>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(Boolean isCollect) {
+                    if(!isCollect){
+                        mView.setCollect();
+                    }
+                }
+            });
         }
+    }
+
+    public void collectComic(){
+        mModel.collectComic(mComic, new Subscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.ShowToast("已经收藏");
+            }
+
+            @Override
+            public void onNext(Boolean CanSelect) {
+                if(CanSelect){
+                    mView.setCollect();
+                }else{
+                    mView.ShowToast("收藏失败");
+                }
+            }
+
+        });
     }
 
 

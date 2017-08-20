@@ -13,9 +13,11 @@ import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.BookShelfPresenter;
 import com.android.zhhr.ui.adapter.BookShelfAdapter;
+import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.ElasticRecycleView;
 import com.android.zhhr.ui.view.IBookShelfView;
+import com.android.zhhr.utils.IntentUtil;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.List;
@@ -26,7 +28,7 @@ import butterknife.Bind;
  * Created by 皓然 on 2017/8/7.
  */
 
-public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implements IBookShelfView<List<Comic>> {
+public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implements IBookShelfView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
     private BookShelfAdapter mAdapter;
@@ -60,8 +62,14 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         foot.setImageResource(R.mipmap.no_more);
         foot.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         mHeaderAndFooterWrapper.addFootView(foot);
-
         mRecycleView.setAdapter(mHeaderAndFooterWrapper);
+        mAdapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        //每次重新显示加载一次数据
         mPresenter.loadData();
     }
 
@@ -78,7 +86,6 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
 
     @Override
     public void showErrorView(String throwable) {
-        mPresenter.loadData();
         ShowToast("重新加载");
     }
 
@@ -95,5 +102,11 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @Override
     public void showEmptyView() {
 
+    }
+
+    @Override
+    public void onItemClick(RecyclerView parent, View view, int position) {
+        Comic comic = mAdapter.getItems(position);
+        IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
     }
 }

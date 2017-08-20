@@ -3,6 +3,7 @@ package com.android.zhhr.ui.activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -93,6 +94,8 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     TextView mLoadingTitle;
     @Bind(R.id.ll_index)
     LinearLayout mIndex;
+    @Bind(R.id.iv_collect)
+    ImageView mCollect;
 
 
     private float mScale = 1.0f;
@@ -174,6 +177,11 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     public void OrderData(int ResId) {
         mOrder.setImageResource(ResId);
         mOrder2.setImageResource(ResId);
+    }
+
+    @Override
+    public void setCollect() {
+        mCollect.setImageResource(R.mipmap.collect_selet);
     }
 
     @Override
@@ -327,4 +335,8 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         mLoadingText.setText("正在重新加载，请稍后");
     }
 
+    @OnClick(R.id.ll_collect)
+    public void selectComic(View view){
+        mPresenter.collectComic();
+    }
 }

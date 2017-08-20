@@ -66,11 +66,13 @@
                         android:orientation="horizontal"
                         android:layout_height="80dp">
                         <LinearLayout
+                            android:id="@+id/ll_collect"
                             android:gravity="center_vertical"
                             android:layout_weight="2"
                             android:layout_width="0dp"
                             android:layout_height="match_parent">
                             <ImageView
+                                android:id="@+id/iv_collect"
                                 android:layout_marginLeft="10dp"
                                 android:src="@mipmap/collect"
                                 android:layout_width="22dp"

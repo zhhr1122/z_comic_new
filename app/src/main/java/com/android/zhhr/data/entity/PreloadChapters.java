@@ -11,6 +11,16 @@ public class PreloadChapters extends BaseBean{
     protected List<String> prelist;
     protected List<String> nowlist;
     protected List<String> nextlist;
+    protected String id;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public List<String> getPrelist() {
         return prelist;

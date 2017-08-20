@@ -71,7 +71,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     protected void initPresenter(Intent intent) {
         mPresenter = new ComicChapterPresenter(this,this);
-        mPresenter.init(intent.getStringExtra(Constants.COMIC_ID),intent.getIntExtra(Constants.COMIC_CHAPERS,0),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
+        mPresenter.init(intent.getLongExtra(Constants.COMIC_ID,0),intent.getIntExtra(Constants.COMIC_CHAPERS,0),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
     }
 
     @Override

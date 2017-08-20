@@ -1,16 +1,19 @@
 package com.android.zhhr.data.commons;
 
 /**
+ * 一些基本的常量定义
  * Created by 皓然 on 2017/7/13.
  */
 
 public class Constants {
-    public static String COMIC_ID ="comic_id";
-    public static String COMIC_CHAPERS ="comic_chapter";
-    public static String COMIC_TITLE = "comic_title";
-    public static String COMIC_CHAPER_TITLE = "comic_chapter_title";
-    public static String COMIC_READ_TYPE = "comic_read_type";
-    public static String COMIC = "comic";
+    public final static String COMIC_ID ="comic_id";
+    public final static String COMIC_CHAPERS ="comic_chapter";
+    public final static String COMIC_TITLE = "comic_title";
+    public final static String COMIC_CHAPER_TITLE = "comic_chapter_title";
+    public final static String COMIC_READ_TYPE = "comic_read_type";
+    public final static String COMIC = "comic";
     public final static int RIGHT_TO_LEFT =0;
     public final static int LEFT_TO_RIGHT =1;
+    public final static String DB_NAME = "comic";
+
 }
