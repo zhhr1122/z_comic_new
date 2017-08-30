@@ -88,6 +88,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     public void fillData(List<Comic> data) {
         if(data!=null&&data.size()!=0){
             mAdapter.updateWithClear(data);
+            mAdapter.notifyDataSetChanged();
         }else {
             ShowToast("未取到数据");
         }
