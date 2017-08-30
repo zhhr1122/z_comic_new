@@ -7,17 +7,26 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.zhhr.R;
 import com.android.zhhr.data.entity.BaseBean;
 import com.android.zhhr.utils.DisplayUtil;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /***
  * 下拉回弹的ScrollView
@@ -29,7 +38,7 @@ public class ZElasticRefreshScrollView extends ScrollView {
     private RelativeLayout inner;
     private RelativeLayout mMoveView;
     private View mLoadingBottom;
-    private View mListView;
+    //private View mListView;
     private View mTopView;
     private float y;
     private Rect normal = new Rect();
@@ -38,17 +47,20 @@ public class ZElasticRefreshScrollView extends ScrollView {
     private boolean isAction_UP;
     private RefreshListener listener;
     private Handler mhandler = new Handler();
+    private RelativeLayout mLoadingTop;
+    private TextView mLoadingText;
 
-    //private View mLoadingTop;
+    public ZElasticRefreshScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
     public ZElasticRefreshScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        // TODO Auto-generated constructor stub
+        super(context, attrs,0);
     }
 
 
     public ZElasticRefreshScrollView(Context context) {
-        super(context);
-        // TODO Auto-generated constructor stub
+        this(context,null);
     }
 
 
@@ -77,8 +89,9 @@ public class ZElasticRefreshScrollView extends ScrollView {
         }
         mMoveView = (RelativeLayout) inner.getChildAt(0);
         mTopView = inner.getChildAt(1);
-       // mLoadingTop = inner.getChildAt(0);
-        mListView = mMoveView.getChildAt(2);
+        mLoadingTop = (RelativeLayout) mMoveView.getChildAt(0);
+        mLoadingText = (TextView) ((LinearLayout)mLoadingTop.getChildAt(0)).getChildAt(1);
+        //mListView = mMoveView.getChildAt(2);
         mLoadingBottom = mMoveView.getChildAt(3);
         setOverScrollMode(OVER_SCROLL_NEVER);//取消5.0效果
     }
@@ -109,12 +122,16 @@ public class ZElasticRefreshScrollView extends ScrollView {
             case MotionEvent.ACTION_DOWN:
                 y = ev.getY();
                 //Log.d("zhr", "MotionEvent.ACTION_DOWN  y=" + y);
+                mLoadingText.setText("下拉刷新");
+                listener.onActionDown();
                 break;
             case MotionEvent.ACTION_UP:
+                listener.onActionUp();
                 if (isNeedAnimation()) {
                     // Log.v("mlguitar", "will up and animation");
                     if(mMoveView.getTop()>DisplayUtil.dip2px(getContext(),205)&&listener!=null){
                         RefreshAnimation();
+                        mLoadingText.setText("努力加载中...");
                         //animation();
                         isRefresh = true;
                         listener.onRefresh();
@@ -157,6 +174,10 @@ public class ZElasticRefreshScrollView extends ScrollView {
                         mMoveView.layout(mMoveView.getLeft(), mMoveView.getTop() - deltaY, mMoveView.getRight(),
                                 mMoveView.getBottom() - deltaY);
                     }
+
+                    if(mMoveView.getTop()>DisplayUtil.dip2px(getContext(),205)&&listener!=null){
+                        mLoadingText.setText("松开即可刷新");
+                    }
                     // 移动布局
                 }
                 break;
@@ -176,6 +197,37 @@ public class ZElasticRefreshScrollView extends ScrollView {
         ta.setDuration(300);
         mMoveView.startAnimation(ta);
         // 设置回到正常的布局位置  
+        mMoveView.layout(normal.left, normal.top, normal.right, normal.bottom);
+        normal.setEmpty();
+    }
+
+    public void RefreshAnimationFinish() {
+        // 开启移动动画
+        TranslateAnimation ta = new TranslateAnimation(0, 0, mMoveView.getTop()-DisplayUtil.dip2px(getContext(),160), normal.top-DisplayUtil.dip2px(getContext(),160));
+        // Log.d("zhhr112233", "inner.getTop()=" + inner.getTop() + ",normal.top=" + normal.top);
+        Interpolator in = new DecelerateInterpolator();
+        ta.setInterpolator(in);
+        ta.setDuration(300);
+        ta.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                listener.onRefreshFinish();
+                mLoadingText.setText("下拉刷新");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mLoadingText.setText("刷新完成");
+        mMoveView.startAnimation(ta);
+        // 设置回到正常的布局位置
         mMoveView.layout(normal.left, normal.top, normal.right, normal.bottom);
         normal.setEmpty();
     }
@@ -216,7 +268,7 @@ public class ZElasticRefreshScrollView extends ScrollView {
         if(this.isRefresh!=isRefresh){
             this.isRefresh = isRefresh;
             if(isRefresh == false){
-                animation();
+                RefreshAnimationFinish();
             }
         }
     }
@@ -226,6 +278,8 @@ public class ZElasticRefreshScrollView extends ScrollView {
     }
 
     public interface RefreshListener{
+        void onActionDown();
+        void onActionUp();
         void onRefresh();
         void onRefreshFinish();
         void onLoadMore();

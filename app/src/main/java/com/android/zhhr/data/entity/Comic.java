@@ -15,7 +15,7 @@ import org.greenrobot.greendao.annotation.Id;
  * Created by 皓然 on 2017/7/10.
  */
 @Entity
-public class Comic extends BaseBean{
+public class Comic extends BaseBean {
     @Id
     protected long id;
     //标题
@@ -47,13 +47,133 @@ public class Comic extends BaseBean{
     //默认阅读方式
     protected int readType;
 
+    protected int CurrentChapter;
 
+    public int getCurrentChapter() {
+        return this.CurrentChapter;
+    }
 
-    @Generated(hash = 1568780585)
+    public void setCurrentChapter(int CurrentChapter) {
+        this.CurrentChapter = CurrentChapter;
+    }
+
+    public int getReadType() {
+        return this.readType;
+    }
+
+    public void setReadType(int readType) {
+        this.readType = readType;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUpdates() {
+        return this.updates;
+    }
+
+    public void setUpdates(String updates) {
+        this.updates = updates;
+    }
+
+    public String getTopics() {
+        return this.topics;
+    }
+
+    public void setTopics(String topics) {
+        this.topics = topics;
+    }
+
+    public String getPopularity() {
+        return this.popularity;
+    }
+
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
+
+    public String getPoint() {
+        return this.point;
+    }
+
+    public void setPoint(String point) {
+        this.point = point;
+    }
+
+    public String getDescribe() {
+        return this.describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public String getCollections() {
+        return this.collections;
+    }
+
+    public void setCollections(String collections) {
+        this.collections = collections;
+    }
+
+    public List<String> getTags() {
+        return this.tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public List<String> getChapters() {
+        return this.chapters;
+    }
+
+    public void setChapters(List<String> chapters) {
+        this.chapters = chapters;
+    }
+
+    public String getAuthor() {
+        return this.author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getCover() {
+        return this.cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Generated(hash = 839294503)
     public Comic(long id, String title, String cover, String author,
             List<String> chapters, List<String> tags, String collections,
             String describe, String point, String popularity, String topics,
-            String updates, String status, int readType) {
+            String updates, String status, int readType, int CurrentChapter) {
         this.id = id;
         this.title = title;
         this.cover = cover;
@@ -68,200 +188,12 @@ public class Comic extends BaseBean{
         this.updates = updates;
         this.status = status;
         this.readType = readType;
+        this.CurrentChapter = CurrentChapter;
     }
-
-
 
     @Generated(hash = 1347984162)
     public Comic() {
     }
 
 
-
-    @Override
-    public String toString() {
-        return "Comic{" +
-                "title='" + title + '\'' +
-                ", cover='" + cover + '\'' +
-                ", author='" + author + '\'' +
-                ", chapters=" + chapters +
-                ", tags=" + tags +
-                ", collections='" + collections + '\'' +
-                ", describe='" + describe + '\'' +
-                ", point='" + point + '\'' +
-                ", popularity='" + popularity + '\'' +
-                ", topics='" + topics + '\'' +
-                ", updates='" + updates + '\'' +
-                ", status='" + status + '\'' +
-                ", readType=" + readType +
-                '}';
-    }
-
-
-
-    public int getReadType() {
-        return this.readType;
-    }
-
-
-
-    public void setReadType(int readType) {
-        this.readType = readType;
-    }
-
-
-
-    public String getStatus() {
-        return this.status;
-    }
-
-
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-
-
-    public String getUpdates() {
-        return this.updates;
-    }
-
-
-
-    public void setUpdates(String updates) {
-        this.updates = updates;
-    }
-
-
-
-    public String getTopics() {
-        return this.topics;
-    }
-
-
-
-    public void setTopics(String topics) {
-        this.topics = topics;
-    }
-
-
-
-    public String getPopularity() {
-        return this.popularity;
-    }
-
-
-
-    public void setPopularity(String popularity) {
-        this.popularity = popularity;
-    }
-
-
-
-    public String getPoint() {
-        return this.point;
-    }
-
-
-
-    public void setPoint(String point) {
-        this.point = point;
-    }
-
-
-
-    public String getDescribe() {
-        return this.describe;
-    }
-
-
-
-    public void setDescribe(String describe) {
-        this.describe = describe;
-    }
-
-
-
-    public String getCollections() {
-        return this.collections;
-    }
-
-
-
-    public void setCollections(String collections) {
-        this.collections = collections;
-    }
-
-
-
-    public List<String> getTags() {
-        return this.tags;
-    }
-
-
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
-
-
-    public List<String> getChapters() {
-        return this.chapters;
-    }
-
-
-
-    public void setChapters(List<String> chapters) {
-        this.chapters = chapters;
-    }
-
-
-
-    public String getAuthor() {
-        return this.author;
-    }
-
-
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-
-
-    public String getCover() {
-        return this.cover;
-    }
-
-
-
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-
-
-
-    public String getTitle() {
-        return this.title;
-    }
-
-
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
-
-    public long getId() {
-        return this.id;
-    }
-
-
-
-    public void setId(long id) {
-        this.id = id;
-    }
 }

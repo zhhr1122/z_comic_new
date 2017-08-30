@@ -5,13 +5,9 @@ import android.content.Context;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.db.helper.DaoHelper;
-import com.android.zhhr.db.manager.DaoManager;
-import com.android.zhhr.db.manager.GreenDaoManager;
-import com.android.zhhr.listener.DBhelperListener;
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.utils.TencentComicAnalysis;
-import com.android.zhr.greendao.gen.ComicDao;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -71,6 +67,30 @@ public class ComicModule {
             }
         });
         Observable.merge(ComicListObservable, ComicBannerObservable).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void refreshData(Subscriber subscriber){
+        Observable ComicListObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+            @Override
+            public void call(Subscriber<? super List<Comic>> subscriber) {
+                try {
+                    Document doc = Jsoup.connect(Url.TencentTopUrl+"1").get();
+                    Document doc2 = Jsoup.connect(Url.TencentTopUrl+"2").get();
+                    List<Comic>  mdats = TencentComicAnalysis.TransToComic(doc);
+                    mdats.addAll(TencentComicAnalysis.TransToComic(doc2));
+                    subscriber.onNext(mdats);
+                } catch (IOException e) {
+                    subscriber.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        });
+        ComicListObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

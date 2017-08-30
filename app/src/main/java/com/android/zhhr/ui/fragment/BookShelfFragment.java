@@ -4,10 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
@@ -15,7 +11,6 @@ import com.android.zhhr.presenter.BookShelfPresenter;
 import com.android.zhhr.ui.adapter.BookShelfAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
-import com.android.zhhr.ui.custom.ElasticRecycleView;
 import com.android.zhhr.ui.view.IBookShelfView;
 import com.android.zhhr.utils.IntentUtil;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -33,8 +28,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     RecyclerView mRecycleView;
     private BookShelfAdapter mAdapter;
 
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-
+    //private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
 
     @Override
     protected void initPresenter() {
@@ -55,23 +49,24 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
         mAdapter = new BookShelfAdapter(mActivity,R.layout.item_bookshelf);
 
-
-        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
+       /* mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
         ImageView foot = new ImageView(mActivity);
         foot.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         foot.setImageResource(R.mipmap.no_more);
         foot.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mHeaderAndFooterWrapper.addFootView(foot);
-        mRecycleView.setAdapter(mHeaderAndFooterWrapper);
-        mAdapter.setOnItemClickListener(this);
-    }
+        mHeaderAndFooterWrapper.addFootView(foot);*/
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        //每次重新显示加载一次数据
+        mRecycleView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
         mPresenter.loadData();
     }
+    //切换到该fragment做的操作
+   public void onHiddenChanged(boolean hidden) {
+       super.onHiddenChanged(hidden);
+       if (!hidden) {// 不在最前端界面显示
+           mPresenter.loadData();
+       }
+   }
 
     @Override
     public void ShowToast(String t) {
@@ -93,7 +88,6 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     public void fillData(List<Comic> data) {
         if(data!=null&&data.size()!=0){
             mAdapter.updateWithClear(data);
-            mRecycleView.smoothScrollToPosition(3);
         }else {
             ShowToast("未取到数据");
         }

@@ -18,6 +18,9 @@ public class BookShelfAdapter extends BaseRecyclerAdapter<Comic>{
     public BookShelfAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
     }
+    public BookShelfAdapter(Context context, List<Comic> data,int itemLayoutId) {
+        super(context, data, itemLayoutId);
+    }
     @Override
     public void convert(BaseRecyclerHolder holder, Comic item, int position) {
         holder.setText(R.id.tv_title,item.getTitle());

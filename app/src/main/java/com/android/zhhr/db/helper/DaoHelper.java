@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.db.manager.DaoManager;
-import com.android.zhhr.listener.DBhelperListener;
 import com.android.zhr.greendao.gen.DaoMaster;
 import com.android.zhr.greendao.gen.DaoSession;
 
@@ -18,7 +17,6 @@ import java.util.List;
 public class DaoHelper<T> {
     private DaoManager manager;
     private Class<T> clazz;
-    private DBhelperListener listener;
     public DaoHelper(Context context) {
         manager = DaoManager.getInstance(context);
     }

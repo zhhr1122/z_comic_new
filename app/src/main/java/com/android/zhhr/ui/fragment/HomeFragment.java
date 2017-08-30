@@ -4,6 +4,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -73,8 +74,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
-        mPresenter.refreshData();
+        mPresenter.LoadData();
         mScrollView.setRefreshListener(new ZElasticRefreshScrollView.RefreshListener() {
+            @Override
+            public void onActionDown() {
+                mBanner.stopAutoPlay();
+            }
+
+            @Override
+            public void onActionUp() {
+                mBanner.startAutoPlay();
+            }
+
             @Override
             public void onRefresh() {
                 mPresenter.refreshData();
@@ -82,6 +93,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             @Override
             public void onRefreshFinish() {
+                mBanner.startAutoPlay();
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -100,10 +113,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     }
 
-    @Override
+
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        mScrollView.scrollTo(0,0);
+        if (!hidden) {// 不在最前端界面显示
+            mScrollView.scrollTo(0,0);
+        }
     }
 
     //初始化动画
@@ -134,11 +149,20 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Override
     public void getDataFinish() {
         mScrollView.setRefreshing(false);
+        mAdapter.notifyDataSetChanged();
         if(mErrorView.isShown()){
             mErrorView.setVisibility(View.GONE);
             mRecycleView.setVisibility(View.VISIBLE);
         }
-        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefreshFinish() {
+        mScrollView.setRefreshing(false);
+        if(mErrorView.isShown()){
+            mErrorView.setVisibility(View.GONE);
+            mRecycleView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

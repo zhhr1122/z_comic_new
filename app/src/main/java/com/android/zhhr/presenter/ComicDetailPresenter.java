@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.listener.DBhelperListener;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;

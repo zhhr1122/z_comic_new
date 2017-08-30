@@ -26,6 +26,8 @@ public interface IHomeView<T extends BaseBean> extends IBaseView {
 
     void getDataFinish();
 
+    void onRefreshFinish();
+
     void fillBanner(List<T> data);
 
 }

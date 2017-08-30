@@ -25,10 +25,10 @@ import rx.schedulers.Schedulers;
  * Created by 皓然 on 2017/6/15.
  */
 
-public class HomePresenter extends BasePresenter<IHomeView>{
-    private int num =20;
+public class HomePresenter extends BasePresenter<IHomeView> {
+    private int num = 20;
     private ComicModule mModel;
-    private List<Comic> mBanners,mDatas;
+    private List<Comic> mBanners, mDatas;
 
     public List<Comic> getmBanners() {
         return mBanners;
@@ -44,36 +44,9 @@ public class HomePresenter extends BasePresenter<IHomeView>{
         mBanners = new ArrayList<>();
         mDatas = new ArrayList<>();
     }
-    public void refreshData(){
+
+    public void LoadData() {
         mModel.getData(new Subscriber<List<Comic>>() {
-            @Override
-            public void onCompleted() {
-                //
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
-            }
-
-            @Override
-            public void onNext(List<Comic> comics) {
-                if(comics.size()>12){
-                    mView.fillData(comics);
-                    mDatas = comics;
-                    mView.getDataFinish();
-                }else{
-                    mView.fillBanner(comics);
-                    mBanners = comics;
-                }
-            }
-
-        });
-    }
-
-
-    public void loadMoreData(int page){
-        mModel.getMoreComicList(page,new Subscriber<List<Comic>>() {
             @Override
             public void onCompleted() {
                 mView.getDataFinish();
@@ -85,8 +58,55 @@ public class HomePresenter extends BasePresenter<IHomeView>{
             }
 
             @Override
-            public void onNext(List<Comic> movieEntities) {
-                mView.appendMoreDataToView(movieEntities);
+            public void onNext(List<Comic> comics) {
+                if (comics.size() > 12) {
+                    mView.fillData(comics);
+                    mDatas = comics;
+                } else {
+                    mView.fillBanner(comics);
+                    mBanners = comics;
+                }
+            }
+
+        });
+    }
+
+    public void refreshData() {
+        mModel.refreshData(new Subscriber<List<Comic>>() {
+            @Override
+            public void onCompleted() {
+                mView.onRefreshFinish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onNext(List<Comic> comics) {
+                mView.fillData(comics);
+                mDatas = comics;
+            }
+        });
+    }
+
+
+    public void loadMoreData(int page) {
+        mModel.getMoreComicList(page, new Subscriber<List<Comic>>() {
+            @Override
+            public void onCompleted() {
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onNext(List<Comic> comics) {
+                mView.appendMoreDataToView(comics);
             }
         });
     }
