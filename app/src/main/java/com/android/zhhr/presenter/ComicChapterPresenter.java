@@ -123,6 +123,24 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
             }
         });
+        mModel.updateComicCurrentChapter(comic_id,comic_chapters, new Subscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.ShowToast(e.toString());
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if(aBoolean){
+                    mView.ShowToast("保存当前话成功"+(comic_chapters+1));
+                }
+            }
+        });
     }
 
     public void loadMoreData(int position,int mDirect){

@@ -29,7 +29,7 @@ public class IndexItemView extends LinearLayout{
         this.listener = listener;
     }
 
-    public IndexItemView(Context context, String title, final int position) {
+    public IndexItemView(Context context, String title, final int position,int Current) {
         super(context);
         this.setOrientation(VERTICAL);
         /*ll = new LinearLayout(context);
@@ -44,7 +44,11 @@ public class IndexItemView extends LinearLayout{
         lp.setMargins(DisplayUtil.dip2px(context,10),0,0,0);
         mTitle.setGravity(Gravity.CENTER_VERTICAL);
         mTitle.setTextSize(12);
-        mTitle.setTextColor(Color.parseColor("#666666"));
+        if(Current == position+1){
+            mTitle.setTextColor(Color.parseColor("#ff9a6a"));
+        }else{
+            mTitle.setTextColor(Color.parseColor("#666666"));
+        }
        /* mPosition.setGravity(Gravity.CENTER_VERTICAL);
         mPosition.setTextSize(13);
         mPosition.setTextColor(Color.parseColor("#333333"));*/
@@ -62,6 +66,14 @@ public class IndexItemView extends LinearLayout{
 
     public interface onItemClickLinstener{
         public void onItemClick(View view,int position);
+    }
+
+    public void setCurrentColor(boolean isCurrent){
+        if(isCurrent){
+            mTitle.setTextColor(Color.parseColor("#ff9a6a"));
+        }else{
+            mTitle.setTextColor(Color.parseColor("#666666"));
+        }
     }
 
 }

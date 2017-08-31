@@ -57,7 +57,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             mView.ShowToast("获取ID失败");
         }else{
             mComicId =  Long.parseLong(comic_id);
-            mModel.getCmoicDetail(comic_id,new Subscriber<Comic>() {
+            mModel.getComicDetail(comic_id,new Subscriber<Comic>() {
                 @Override
                 public void onCompleted() {
                     mView.getDataFinish();
@@ -72,7 +72,9 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                 public void onNext(Comic comic) {
                     comic.setId(mComicId);
                     mComic = comic;
+                    SaveComicToDB(mComic);
                     mView.fillData(comic);
+                    mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
                 }
             });
             mModel.isCollected(mComicId, new Subscriber<Boolean>() {
@@ -96,8 +98,33 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         }
     }
 
+    public void getCurrentChapters(){
+        mModel.getComicFromDB(mComicId, new Subscriber<Comic>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.ShowToast("获取当前章节数目失败"+e.toString());
+            }
+
+            @Override
+            public void onNext(Comic mComic) {
+                if(mComic!=null){
+                    mView.setCurrent(mComic.getCurrentChapter());
+                }
+            }
+        });
+    }
+
     public void collectComic(){
-        mModel.collectComic(mComic, new Subscriber<Boolean>() {
+        final java.util.Date date = new java.util.Date();
+        long datetime = date.getTime();
+        mComic.setCrateTime(datetime);
+        mComic.setIsCollected(true);
+        mModel.updateComicToDB(mComic, new Subscriber<Boolean>() {
             @Override
             public void onCompleted() {
 
@@ -112,6 +139,30 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             public void onNext(Boolean CanSelect) {
                 if(CanSelect){
                     mView.setCollect();
+                    mView.ShowToast("收藏成功"+date.toString());
+                }else{
+                    mView.ShowToast("收藏失败");
+                }
+            }
+        });
+    }
+
+    public void SaveComicToDB(Comic mComic){
+        mModel.saveComicToDB(mComic, new Subscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.ShowToast("保存到数据库失败"+e.toString());
+            }
+
+            @Override
+            public void onNext(Boolean CanSelect) {
+                if(CanSelect){
+                    mView.ShowToast("保存到数据库成功");
                 }else{
                     mView.ShowToast("收藏失败");
                 }

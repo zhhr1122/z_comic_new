@@ -32,7 +32,7 @@ public class ComicModule {
         this.context = context;
         mHelper = new DaoHelper(context);
     }
-
+    //首页相关
     public void getData(Subscriber subscriber){
         Observable ComicListObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
             @Override
@@ -96,7 +96,6 @@ public class ComicModule {
                 .subscribe(subscriber);
     }
 
-
     public void getMoreComicList(final int page, Subscriber subscriber){
         Observable.create(new Observable.OnSubscribe<List<Comic>>() {
             @Override
@@ -119,35 +118,21 @@ public class ComicModule {
 
     }
 
-    public void getCollectedComicList(Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
-            @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
-                try {
-                    List<Comic> comics = mHelper.listComicAll();
-                    subscriber.onNext(comics);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                    e.printStackTrace();
-                }finally {
-                    subscriber.onCompleted();
-                }
-            }
-        }) .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-
-    }
-
-    public void getCmoicDetail(final String mComicId,Subscriber subscriber){
+    //详情页相关
+    public void getComicDetail(final String mComicId,Subscriber subscriber){
        Observable.create(new Observable.OnSubscribe<Comic>() {
             @Override
             public void call(Subscriber<? super Comic> subscriber) {
                 try {
                     Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
-                    Comic comic = TencentComicAnalysis.TransToComicDetail(doc,context);
-                    subscriber.onNext(comic);
+                    Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,context);
+                    Comic comicFromDB = (Comic) mHelper.findComic(Long.parseLong(mComicId));
+                    if(comicFromDB!=null) {
+                        mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
+                    }else{
+                        mComic.setCurrentChapter(0);
+                    }
+                    subscriber.onNext(mComic);
                 } catch (Exception e) {
                     subscriber.onError(e);
                     e.printStackTrace();
@@ -161,6 +146,7 @@ public class ComicModule {
                .subscribe(subscriber);
     }
 
+    //阅读相关
     public void getPreNowChapterList(String comic_id,int comic_chapters,Subscriber subscriber){
         comicService.getPreNowChapterList(comic_id,comic_chapters+"")
                 .subscribeOn(Schedulers.io())
@@ -178,7 +164,9 @@ public class ComicModule {
 
     }
 
-    public void collectComic(final Comic comic,Subscriber subscriber){
+    //操作数据库相关方法
+
+    public void saveComicToDB(final Comic comic,Subscriber subscriber){
         Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
@@ -204,13 +192,76 @@ public class ComicModule {
                 .subscribe(subscriber);
     }
 
+    public void updateComicCurrentChapter(final String comic_id, final int current_chapters, Subscriber subscriber){
+        Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                try{
+                    Comic mComic = (Comic) mHelper.findComic(Long.parseLong(comic_id));
+                    final java.util.Date date = new java.util.Date();
+                    long datetime = date.getTime();
+                    if(mComic!=null){
+                        mComic.setCurrentChapter(current_chapters+1);
+                        mComic.setUpdateTime(datetime);
+                        if(mHelper.update(mComic)){
+                            subscriber.onNext(true);
+                        }else{
+                            subscriber.onNext(false);
+                        }
+                    }else{
+                        subscriber.onNext(false);
+                    }
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void updateComicToDB(final Comic mComic, Subscriber subscriber){
+        Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                try{
+                    Comic comic = (Comic) mHelper.findComic(mComic.getId());
+                    if(comic!=null){
+                        if(mHelper.update(mComic)){
+                            subscriber.onNext(true);
+                        }else{
+                            subscriber.onNext(false);
+                        }
+                    }else{
+                        subscriber.onNext(false);
+                    }
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
     public void isCollected(final long id,Subscriber subscriber) {
         Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
                 try{
-                    if(mHelper.findComic(id)!=null) {
-                        subscriber.onNext(false);
+                    Comic mComic = (Comic) mHelper.findComic(id);
+                    if(mComic!=null) {
+                        if(mComic.getIsCollected()){
+                            subscriber.onNext(false);
+                        }else{
+                            subscriber.onNext(true);
+                        }
                     }else{
                         subscriber.onNext(true);
                     }
@@ -224,5 +275,49 @@ public class ComicModule {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    public void getComicFromDB(final long id,Subscriber subscriber) {
+        Observable.create(new Observable.OnSubscribe<Comic>() {
+            @Override
+            public void call(Subscriber<? super Comic> subscriber) {
+                try{
+                    Comic mComic = (Comic) mHelper.findComic(id);
+                    if(mComic!=null) {
+                        subscriber.onNext(mComic);
+                    }else{
+                        subscriber.onNext(null);
+                    }
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getCollectedComicList(Subscriber subscriber){
+        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+            @Override
+            public void call(Subscriber<? super List<Comic>> subscriber) {
+                try {
+                    List<Comic> comics = mHelper.queryCollect();
+                    subscriber.onNext(comics);
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
     }
 }

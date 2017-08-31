@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.db.manager.DaoManager;
+import com.android.zhr.greendao.gen.ComicDao;
 import com.android.zhr.greendao.gen.DaoMaster;
 import com.android.zhr.greendao.gen.DaoSession;
 
@@ -93,6 +94,15 @@ public class DaoHelper<T> {
         }
         return false;
     }
+
+    public List<Comic> queryCollect(){
+        List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
+                .where(ComicDao.Properties.IsCollected.eq(true))
+                .limit(10000)
+                .orderAsc(ComicDao.Properties.CrateTime)
+                .list();
+        return list;
+    }
     //queryRaw查询
     public List<T> queryAll(String where, String... selectionArgs) {
         List<T> list = manager.getDaoSession().queryRaw(clazz, where, selectionArgs);
@@ -110,5 +120,7 @@ public class DaoHelper<T> {
         List<T> list = session.loadAll(clazz);
         return list;
     }
+
+
 }
 

@@ -41,7 +41,10 @@ public class ComicDao extends AbstractDao<Comic, Long> {
         public final static Property Updates = new Property(11, String.class, "updates", false, "UPDATES");
         public final static Property Status = new Property(12, String.class, "status", false, "STATUS");
         public final static Property ReadType = new Property(13, int.class, "readType", false, "READ_TYPE");
-        public final static Property CurrentChapter = new Property(14, int.class, "CurrentChapter", false, "CURRENT_CHAPTER");
+        public final static Property CurrentChapter = new Property(14, int.class, "currentChapter", false, "CURRENT_CHAPTER");
+        public final static Property UpdateTime = new Property(15, long.class, "updateTime", false, "UPDATE_TIME");
+        public final static Property CrateTime = new Property(16, long.class, "crateTime", false, "CRATE_TIME");
+        public final static Property IsCollected = new Property(17, boolean.class, "isCollected", false, "IS_COLLECTED");
     };
 
     private final StringConverter chaptersConverter = new StringConverter();
@@ -73,7 +76,10 @@ public class ComicDao extends AbstractDao<Comic, Long> {
                 "\"UPDATES\" TEXT," + // 11: updates
                 "\"STATUS\" TEXT," + // 12: status
                 "\"READ_TYPE\" INTEGER NOT NULL ," + // 13: readType
-                "\"CURRENT_CHAPTER\" INTEGER NOT NULL );"); // 14: CurrentChapter
+                "\"CURRENT_CHAPTER\" INTEGER NOT NULL ," + // 14: currentChapter
+                "\"UPDATE_TIME\" INTEGER NOT NULL ," + // 15: updateTime
+                "\"CRATE_TIME\" INTEGER NOT NULL ," + // 16: crateTime
+                "\"IS_COLLECTED\" INTEGER NOT NULL );"); // 17: isCollected
     }
 
     /** Drops the underlying database table. */
@@ -148,6 +154,9 @@ public class ComicDao extends AbstractDao<Comic, Long> {
         }
         stmt.bindLong(14, entity.getReadType());
         stmt.bindLong(15, entity.getCurrentChapter());
+        stmt.bindLong(16, entity.getUpdateTime());
+        stmt.bindLong(17, entity.getCrateTime());
+        stmt.bindLong(18, entity.getIsCollected() ? 1L: 0L);
     }
 
     @Override
@@ -216,6 +225,9 @@ public class ComicDao extends AbstractDao<Comic, Long> {
         }
         stmt.bindLong(14, entity.getReadType());
         stmt.bindLong(15, entity.getCurrentChapter());
+        stmt.bindLong(16, entity.getUpdateTime());
+        stmt.bindLong(17, entity.getCrateTime());
+        stmt.bindLong(18, entity.getIsCollected() ? 1L: 0L);
     }
 
     @Override
@@ -240,7 +252,10 @@ public class ComicDao extends AbstractDao<Comic, Long> {
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // updates
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // status
             cursor.getInt(offset + 13), // readType
-            cursor.getInt(offset + 14) // CurrentChapter
+            cursor.getInt(offset + 14), // currentChapter
+            cursor.getLong(offset + 15), // updateTime
+            cursor.getLong(offset + 16), // crateTime
+            cursor.getShort(offset + 17) != 0 // isCollected
         );
         return entity;
     }
@@ -262,6 +277,9 @@ public class ComicDao extends AbstractDao<Comic, Long> {
         entity.setStatus(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
         entity.setReadType(cursor.getInt(offset + 13));
         entity.setCurrentChapter(cursor.getInt(offset + 14));
+        entity.setUpdateTime(cursor.getLong(offset + 15));
+        entity.setCrateTime(cursor.getLong(offset + 16));
+        entity.setIsCollected(cursor.getShort(offset + 17) != 0);
      }
     
     @Override

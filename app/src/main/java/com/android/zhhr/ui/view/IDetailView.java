@@ -11,4 +11,5 @@ import java.util.List;
 public interface IDetailView<T> extends  ILoadDataView<T>{
     void OrderData(int ResId);
     void setCollect();
+    void setCurrent(int current);
 }

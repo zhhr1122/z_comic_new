@@ -102,6 +102,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     private float Dy = 0;
     private Rect normal = new Rect();
     private Comic mComic;
+    private int mCurrent;
 
 
     @Override
@@ -117,14 +118,19 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     protected void initView() {
         comic_id = getIntent().getStringExtra(Constants.COMIC_ID);
-        mPresenter.getDetail(comic_id);
         mLoadingTitle.setText(getIntent().getStringExtra(Constants.COMIC_TITLE));
         mScrollView.setScaleTopListener(new MyScaleTopListener());
 
         mLoading.setImageResource(R.drawable.loading);
         AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
         animationDrawable.start();
+        mPresenter.getDetail(comic_id);
+    }
 
+    @Override
+    protected void onResume() {
+        mPresenter.getCurrentChapters();
+        super.onResume();
     }
 
     @Override
@@ -166,8 +172,12 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         mUpdate.setText(comic.getUpdates());
         mPoint.setText(comic.getPoint());
         normal.set(mText.getLeft(),mText.getTop(),getMobileWidth(),mText.getBottom());
+        mCurrent = mComic.getCurrentChapter();
+        if(mCurrent>0){
+            mRead.setText("续看第"+mCurrent+"话");
+        }
         for(int i=0;i<comic.getChapters().size();i++){
-            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i);
+            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i,mCurrent);
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }
@@ -182,6 +192,20 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     public void setCollect() {
         mCollect.setImageResource(R.mipmap.collect_selet);
+    }
+
+    @Override
+    public void setCurrent(int current) {
+        if(mIndex.getChildCount()!=0){
+            if(mCurrent-1>=0){
+                ((IndexItemView)mIndex.getChildAt(mCurrent-1)).setCurrentColor(false);
+            }
+            if(current-1>=0){
+                ((IndexItemView)mIndex.getChildAt(current-1)).setCurrentColor(true);
+            }
+            mCurrent = current;
+            mRead.setText("续看第"+mCurrent+"话");
+        }
     }
 
     @Override
@@ -324,7 +348,12 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @OnClick(R.id.btn_read)
     public void StartRead(View view){
-        //IntentUtil.ToComicChapter(this,0,mComic);
+        if(mCurrent == 0){
+            IntentUtil.ToComicChapter(this,0,mPresenter.getmComic());
+        }else{
+            IntentUtil.ToComicChapter(this,mCurrent-1,mPresenter.getmComic());
+        }
+
     }
 
     @OnClick(R.id.iv_error)
