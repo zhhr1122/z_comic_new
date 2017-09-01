@@ -125,6 +125,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         });
     }
 
+    /**
+     * 保存当前章节数目到数据库
+     */
     public void updateComicCurrentChapter() {
         mModel.updateComicCurrentChapter(comic_id+"",comic_chapters, new Subscriber<Boolean>() {
             @Override
@@ -159,7 +162,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     now_postion =position;
                     if(!isLoadingdata){
                         isLoadingdata = true;
-                        loadPreData(comic_id+"",comic_chapters,mDirect);
+                        loadPreData(comic_id+"",comic_chapters);
                     }
                 }else if(position>= mPreloadChapters.getPrelist().size()+ mPreloadChapters.getNowlist().size()){//后一章
                     loadingPosition = position - mPreloadChapters.getPrelist().size()- mPreloadChapters.getNowlist().size();
@@ -168,7 +171,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     now_postion = position - mPreloadChapters.getPrelist().size() - mPreloadChapters.getNowlist().size();
                     if(!isLoadingdata){
                         isLoadingdata = true;
-                        loadNextData(comic_id+"",comic_chapters,mDirect);;
+                        loadNextData(comic_id+"",comic_chapters);;
                     }
                 }else {//当前章节
                     isLoadingdata = false;
@@ -185,7 +188,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     now_postion = position;
                     if(!isLoadingdata){
                         isLoadingdata = true;
-                        loadNextData(comic_id+"",comic_chapters,mDirect);
+                        loadNextData(comic_id+"",comic_chapters);
                     }
                 }else if(position>= mPreloadChapters.getNextlist().size()+ mPreloadChapters.getNowlist().size()){//前一章
                     loadingPosition = position - mPreloadChapters.getNextlist().size()- mPreloadChapters.getNowlist().size();
@@ -194,7 +197,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     now_postion = position - mPreloadChapters.getNextlist().size() - mPreloadChapters.getNowlist().size();
                     if(!isLoadingdata){
                         isLoadingdata = true;
-                        loadPreData(comic_id+"",comic_chapters,mDirect);;
+                        loadPreData(comic_id+"",comic_chapters);;
                     }
                 }else {//当前章节
                     isLoadingdata = false;
@@ -236,9 +239,8 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * 加载后一章
      * @param id
      * @param chapter
-     * @param direction
      */
-    public void loadNextData(String id, int chapter, int direction){
+    public void loadNextData(String id, int chapter){
 
         mModel.getChaptersList(id,(chapter+2),new Subscriber<Chapters>() {
             @Override
@@ -278,9 +280,8 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * 加载前一章
      * @param id
      * @param chapter
-     * @param direction
      */
-    public void loadPreData(String id, int chapter, int direction){
+    public void loadPreData(String id, int chapter){
         mModel.getChaptersList(id,chapter-2,new Subscriber<Chapters>() {
             @Override
             public void onCompleted() {
