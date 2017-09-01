@@ -58,7 +58,6 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
 
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
-        mPresenter.loadData();
     }
     //切换到该fragment做的操作
    public void onHiddenChanged(boolean hidden) {
@@ -67,6 +66,12 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
            mPresenter.loadData();
        }
    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.loadData();
+    }
 
     @Override
     public void ShowToast(String t) {

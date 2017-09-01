@@ -197,11 +197,20 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     public void setCurrent(int current) {
         if(mIndex.getChildCount()!=0){
-            if(mCurrent-1>=0){
-                ((IndexItemView)mIndex.getChildAt(mCurrent-1)).setCurrentColor(false);
-            }
-            if(current-1>=0){
-                ((IndexItemView)mIndex.getChildAt(current-1)).setCurrentColor(true);
+            if(!mPresenter.isOrder()){
+                if(mCurrent-1>=0){
+                    ((IndexItemView)mIndex.getChildAt(mCurrent-1)).setCurrentColor(false);
+                }
+                if(current-1>=0){
+                    ((IndexItemView)mIndex.getChildAt(current-1)).setCurrentColor(true);
+                }
+            }else{
+                if(mPresenter.getmComic().getChapters().size()-mCurrent>=0){
+                    ((IndexItemView)mIndex.getChildAt(mPresenter.getmComic().getChapters().size()-mCurrent)).setCurrentColor(false);
+                }
+                if(mPresenter.getmComic().getChapters().size()-current>=0){
+                    ((IndexItemView)mIndex.getChildAt(mPresenter.getmComic().getChapters().size()-current)).setCurrentColor(true);
+                }
             }
             mCurrent = current;
             mRead.setText("续看第"+mCurrent+"话");

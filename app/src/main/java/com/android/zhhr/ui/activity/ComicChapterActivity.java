@@ -218,7 +218,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         }else{
             mViewpager.setCurrentItem(datas.getPrelist().size(),false);
         }
-
+        mPresenter.updateComicCurrentChapter();
     }
 
     @Override
@@ -271,6 +271,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 mSeekbar.setProgress(data.getNowlist().size());
             }
         }
+        mPresenter.updateComicCurrentChapter();
     }
 
     @Override
@@ -286,6 +287,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 mSeekbar.setProgress(1);
             }
         }
+        mPresenter.updateComicCurrentChapter();
     }
 
     @Override

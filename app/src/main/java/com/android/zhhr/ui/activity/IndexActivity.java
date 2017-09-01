@@ -86,6 +86,6 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
         if(!mAdapter.isOrder()){
             position = intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size()-position-1;
         }
-        IntentUtil.ToComicChapter(IndexActivity.this,position,intent.getStringExtra(Constants.COMIC_ID),intent.getStringExtra(Constants.COMIC_TITLE),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
+        IntentUtil.ToComicChapter(IndexActivity.this,position,intent.getLongExtra(Constants.COMIC_ID,0),intent.getStringExtra(Constants.COMIC_TITLE),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
     }
 }

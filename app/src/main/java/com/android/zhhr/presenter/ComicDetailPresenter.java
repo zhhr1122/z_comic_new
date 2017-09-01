@@ -2,6 +2,8 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,6 +12,7 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
+import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 
 import rx.Subscriber;
@@ -111,9 +114,10 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             }
 
             @Override
-            public void onNext(Comic mComic) {
-                if(mComic!=null){
-                    mView.setCurrent(mComic.getCurrentChapter());
+            public void onNext(Comic comic) {
+                if(comic!=null){
+                    mComic.setCurrentChapter(comic.getCurrentChapter());
+                    mView.setCurrent(comic.getCurrentChapter());
                 }
             }
         });
@@ -173,12 +177,30 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
 
     public void orderIndex(LinearLayout mlayout) {
+        Drawable img_location = context.getResources().getDrawable(R.mipmap.location);
+        img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
         for(int position=0;position<mComic.getChapters().size();position++){
             IndexItemView itemView = (IndexItemView) mlayout.getChildAt(position);
             TextView textView = (TextView) itemView.getChildAt(0);
             if(!isOrder()){
+                if(mComic.getCurrentChapter() == (position+1)){
+                    textView.setTextColor(Color.parseColor("#ff9a6a"));
+                    textView.setCompoundDrawables(null, null, img_location, null);
+                    textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
+                }else{
+                    textView.setTextColor(Color.parseColor("#666666"));
+                    textView.setCompoundDrawables(null, null, null, null);
+                }
                 textView.setText((position+1)+" - "+mComic.getChapters().get(position));
             }else{
+                if(mComic.getChapters().size()-mComic.getCurrentChapter() == position){
+                    textView.setTextColor(Color.parseColor("#ff9a6a"));
+                    textView.setCompoundDrawables(null, null, img_location, null);
+                    textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
+                }else{
+                    textView.setTextColor(Color.parseColor("#666666"));
+                    textView.setCompoundDrawables(null, null, null, null);
+                }
                 textView.setText((mComic.getChapters().size()-position)+" - "+mComic.getChapters().get(mComic.getChapters().size()-1-position));
             }
         }

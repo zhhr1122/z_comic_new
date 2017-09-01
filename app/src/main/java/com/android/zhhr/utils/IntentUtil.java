@@ -35,7 +35,7 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void ToComicChapter(Context context, int chapters,String id,String title,List<String> chapter_titles,int type){
+    public static void ToComicChapter(Context context, int chapters,long id,String title,List<String> chapter_titles,int type){
         Intent intent = new Intent(context, ComicChapterActivity.class);
         intent.putExtra(Constants.COMIC_CHAPERS,chapters);
         intent.putExtra(Constants.COMIC_ID,id);
@@ -45,7 +45,7 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void ToIndex(Context context, String id,List<String> ChapterTitles,String title,int type){
+    public static void ToIndex(Context context, long id,List<String> ChapterTitles,String title,int type){
         Intent intent = new Intent(context, IndexActivity.class);
         intent.putExtra(Constants.COMIC_ID,id);
         intent.putExtra(Constants.COMIC_TITLE,title);
