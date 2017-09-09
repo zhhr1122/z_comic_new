@@ -24,6 +24,7 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.ComicDetailPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
+import com.android.zhhr.ui.custom.DetailFloatLinearLayout;
 import com.android.zhhr.ui.custom.DetailScrollView;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
@@ -96,6 +97,10 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     LinearLayout mIndex;
     @Bind(R.id.iv_collect)
     ImageView mCollect;
+    @Bind(R.id.tv_collect)
+    TextView mIsCollect;
+    @Bind(R.id.ll_floatbottom)
+    DetailFloatLinearLayout mFloatButtom;
 
 
     private float mScale = 1.0f;
@@ -125,6 +130,17 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
         animationDrawable.start();
         mPresenter.getDetail(comic_id);
+        mFloatButtom.setOnFloatBottomClickListener(new DetailFloatLinearLayout.FloatButtomOnclickListener() {
+            @Override
+            public void onClickLocation(View view) {
+                mScrollView.ScrollToPosition(mCurrent);
+            }
+
+            @Override
+            public void onClickScroll(View view) {
+                ShowToast("点击了滑动");
+            }
+        });
     }
 
     @Override
@@ -192,6 +208,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     public void setCollect() {
         mCollect.setImageResource(R.mipmap.collect_selet);
+        mIsCollect.setText("已收藏");
     }
 
     @Override

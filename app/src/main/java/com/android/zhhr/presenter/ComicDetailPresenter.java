@@ -25,6 +25,15 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     private Context context;
     private long mComicId;
     private boolean isOrder;
+    private boolean isCollected;
+
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
+    }
 
     public Comic getmComic() {
         return mComic;
@@ -128,27 +137,30 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         long datetime = date.getTime();
         mComic.setCrateTime(datetime);
         mComic.setIsCollected(true);
-        mModel.updateComicToDB(mComic, new Subscriber<Boolean>() {
-            @Override
-            public void onCompleted() {
+        if(!isCollected){
+            mModel.updateComicToDB(mComic, new Subscriber<Boolean>() {
+                @Override
+                public void onCompleted() {
 
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mView.ShowToast("已经收藏");
-            }
-
-            @Override
-            public void onNext(Boolean CanSelect) {
-                if(CanSelect){
-                    mView.setCollect();
-                    mView.ShowToast("收藏成功"+date.toString());
-                }else{
-                    mView.ShowToast("收藏失败");
                 }
-            }
-        });
+
+                @Override
+                public void onError(Throwable e) {
+                    mView.ShowToast("已经收藏");
+                }
+
+                @Override
+                public void onNext(Boolean CanSelect) {
+                    if(CanSelect){
+                        mView.setCollect();
+                        isCollected = true;
+                        //mView.ShowToast("收藏成功"+date.toString());
+                    }/*else{
+                    mView.ShowToast("收藏失败");
+                }*/
+                }
+            });
+        }
     }
 
     public void SaveComicToDB(Comic mComic){
@@ -160,16 +172,16 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
             @Override
             public void onError(Throwable e) {
-                mView.ShowToast("保存到数据库失败"+e.toString());
+                //mView.ShowToast("保存到数据库失败"+e.toString());
             }
 
             @Override
             public void onNext(Boolean CanSelect) {
-                if(CanSelect){
+               /* if(CanSelect){
                     mView.ShowToast("保存到数据库成功");
                 }else{
                     mView.ShowToast("收藏失败");
-                }
+                }*/
             }
 
         });
@@ -210,4 +222,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             mView.OrderData(R.mipmap.daoxu);
         }
     }
+
+
 }

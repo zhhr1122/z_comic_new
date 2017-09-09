@@ -1,5 +1,8 @@
 package com.android.zhhr.ui.custom;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -274,6 +277,49 @@ public class DetailScrollView extends ScrollView {
 
     public void setScaleTopListener(ScaleTopListener scalelistener) {
         this.scalelistener = scalelistener;
+    }
+    public void ScrollToPosition(int position){
+        if(position==0){
+            position =1;
+        }
+        ScrollTo(0,DisplayUtil.dip2px(getContext(),170+(position-1)*60)+mDetailView.getHeight());
+    }
+
+    public void ScrollTo(int x,int y) {
+
+        ObjectAnimator xTranslate = ObjectAnimator.ofInt(this, "scrollX", x);
+        ObjectAnimator yTranslate = ObjectAnimator.ofInt(this, "scrollY", y);
+        Interpolator in = new DecelerateInterpolator();
+        AnimatorSet animators = new AnimatorSet();
+        animators.setDuration(200l);
+        animators.setInterpolator(in);
+        animators.playTogether(xTranslate, yTranslate);
+        animators.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator arg0) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        animators.start();
     }
 
     public void setRefreshListener(RefreshListener listener){

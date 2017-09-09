@@ -79,6 +79,7 @@
                                 android:layout_height="22dp"
                                 />
                             <TextView
+                                android:id="@+id/tv_collect"
                                 android:layout_marginLeft="2dp"
                                 android:textSize="13dp"
                                 android:textColor="@color/colorTextColor"
@@ -345,5 +346,6 @@
         </RelativeLayout>
     </RelativeLayout>
     <include layout="@layout/layout_actionbar"></include>
+    <include layout="@layout/layout_floatbutton"></include>
     <include layout="@layout/layout_loading"></include>
 </RelativeLayout>
