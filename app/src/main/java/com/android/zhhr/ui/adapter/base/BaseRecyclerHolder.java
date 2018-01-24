@@ -9,6 +9,7 @@ import android.view.View;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.SparseArray;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import com.android.zhhr.R;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.w3c.dom.Text;
 
 /**
  * 万能的RecyclerView的ViewHolder
@@ -77,6 +80,24 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
     public BaseRecyclerHolder setImageResource(int viewId,int drawableId){
         ImageView iv = getView(viewId);
         iv.setImageResource(drawableId);
+        return this;
+    }
+
+    /**
+     * 设置图片
+     */
+    public BaseRecyclerHolder setFrameLayoutImageResource(int viewId,int drawableId){
+        FrameLayout iv = getView(viewId);
+        iv.setBackgroundResource(drawableId);
+        return this;
+    }
+
+    /**
+     * 设置图片
+     */
+    public BaseRecyclerHolder setTextViewColor(int viewId,int color){
+        TextView iv = getView(viewId);
+        iv.setTextColor(color);
         return this;
     }
 

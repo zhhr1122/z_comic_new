@@ -2,7 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/layout_actionbar_color"></include>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_actionbar"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <ImageView
+            android:id="@+id/iv_back_color"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/btn_back_color"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="12.5dp"
+            />
+        <TextView
+            android:text="选择下载章节"
+            android:gravity="center"
+            android:id="@+id/tv_loading_title"
+            android:textSize="15dp"
+            android:textColor="@color/colorTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_order"
         android:layout_marginTop="60dp"
@@ -33,7 +55,7 @@
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_below="@id/rl_order"
-        android:background="@color/colorBg"
+        android:background="@color/colorBgDark"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

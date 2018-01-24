@@ -36,7 +36,8 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
     TextView mTitle;
     @Bind(R.id.tv_downloaded)
     TextView mDownload;
-
+    @Bind(R.id.tv_chapters_num)
+    TextView mChapterNum;
 
     private Intent intent;
     @Override
@@ -57,7 +58,8 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.updateWithClear(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
         mAdapter.setOnItemClickListener(this);
-        mTitle.setText(getIntent().getStringExtra(Constants.COMIC_TITLE));
+        mTitle.setText(intent.getStringExtra(Constants.COMIC_TITLE));
+        mChapterNum.setText(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size());
         mDownload.setVisibility(View.VISIBLE);
     }
 

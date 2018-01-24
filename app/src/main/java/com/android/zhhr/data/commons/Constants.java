@@ -15,5 +15,13 @@ public class Constants {
     public final static int RIGHT_TO_LEFT =0;
     public final static int LEFT_TO_RIGHT =1;
     public final static String DB_NAME = "comic";
+    /**
+     * 表示当前章节的状态
+     * 0 未选取 1 已选择 2 已下载
+     */
+    public final static int CHAPTER_FREE = 0;
+    public final static int CHAPTER_SELECTED= 1;
+    public final static int CHAPTER_DOWNLOAD = 2;
+
 
 }

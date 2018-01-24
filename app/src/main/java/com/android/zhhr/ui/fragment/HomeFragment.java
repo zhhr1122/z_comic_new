@@ -54,7 +54,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
 
 
-    private int i=3;
+    private int i=3;//预制一开始加载的条目
 
     @Override
     protected void initPresenter() {

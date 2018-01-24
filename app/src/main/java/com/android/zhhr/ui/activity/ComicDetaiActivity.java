@@ -394,4 +394,9 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     public void selectComic(View view){
         mPresenter.collectComic();
     }
+
+    @OnClick(R.id.iv_download)
+    public void toSelectDownloadActivity(View view){
+        IntentUtil.ToSelectDownload(this,mPresenter.getmComic());
+    }
 }

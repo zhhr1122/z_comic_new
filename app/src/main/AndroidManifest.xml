@@ -48,6 +48,7 @@
         <activity android:name=".ui.activity.ComicChapterActivity"
             android:launchMode="singleTask"/>
         <activity android:name=".ui.activity.IndexActivity"/>
+        <activity android:name=".ui.activity.SelectDownloadActivity"/>
 
 
         <!-- Required SDK 核心功能-->

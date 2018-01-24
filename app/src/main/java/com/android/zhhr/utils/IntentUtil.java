@@ -8,6 +8,7 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
+import com.android.zhhr.ui.activity.SelectDownloadActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,13 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_TITLE,title);
         intent.putExtra(Constants.COMIC_READ_TYPE,type);
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) ChapterTitles);
+        context.startActivity(intent);
+    }
+
+    public static void ToSelectDownload(Context context, Comic mComic){
+        Intent intent = new Intent(context, SelectDownloadActivity.class);
+        intent.putExtra(Constants.COMIC_ID,mComic.getId());
+        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
         context.startActivity(intent);
     }
 }

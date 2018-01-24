@@ -34,6 +34,16 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
         a.recycle();
     }
 
+    /**
+     *
+     * @param context
+     * @param ResId 间隔的drawable
+     */
+    public DividerGridItemDecoration(Context context,int ResId)
+    {
+        mDivider = context.getDrawable(ResId);
+    }
+
     @Override
     public void onDraw(Canvas c, RecyclerView parent, State state)
     {
