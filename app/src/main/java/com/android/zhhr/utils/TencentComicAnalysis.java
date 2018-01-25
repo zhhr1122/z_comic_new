@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.LargeHomeItem;
 import com.android.zhhr.ui.custom.IndexItemView;
 
 import org.jsoup.nodes.Document;
@@ -17,6 +18,7 @@ import org.jsoup.select.Elements;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by 皓然 on 2017/7/9.
@@ -33,6 +35,24 @@ public class TencentComicAnalysis {
             comic.setTitle(detail.get(i).select("a").attr("title"));
             comic.setCover(detail.get(i).select("img").attr("data-original"));
             comic.setId(Long.parseLong(getID(infos.get(i).select("a").attr("href"))));
+            mdats.add(comic);
+        }
+        return mdats;
+    }
+
+    //处理漫画列表
+    public static List<LargeHomeItem> TransToRecommendComic(Document doc){
+        List<LargeHomeItem> mdats = new ArrayList<LargeHomeItem>();
+        List<Element> detail = doc.getElementsByAttributeValue("class","in-anishe-text");
+        Random random =new Random();
+        int result = random.nextInt(5);
+        for(int i=(result*6);i<(result+1)*6;i++){
+            LargeHomeItem comic = new LargeHomeItem();
+            comic.setTitle(detail.get(i).select("a").attr("title"));
+            comic.setCover(detail.get(i).select("img").attr("data-original"));
+            Element ElementDescribe = detail.get(i).getElementsByAttributeValue("class","mod-cover-list-intro").get(0);
+            comic.setDescribe(ElementDescribe.select("p").text());
+            comic.setId(Long.parseLong(getID(detail.get(i).select("a").attr("href"))));
             mdats.add(comic);
         }
         return mdats;

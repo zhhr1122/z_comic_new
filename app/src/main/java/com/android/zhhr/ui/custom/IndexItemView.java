@@ -8,11 +8,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
+
+import java.util.concurrent.locks.Lock;
 
 /**
  * Created by 皓然 on 2017/7/30.
@@ -21,6 +24,9 @@ import com.android.zhhr.utils.DisplayUtil;
 public class IndexItemView extends LinearLayout{
     private TextView mTitle;
     private Drawable img_location;
+
+    private ImageView Locker;
+
     //TextView mPosition;
     //LinearLayout ll;
     private onItemClickLinstener listener;
@@ -33,11 +39,17 @@ public class IndexItemView extends LinearLayout{
         this.listener = listener;
     }
 
-    public IndexItemView(Context context, String title, final int position,int Current) {
+    public IndexItemView(Context context, String title, final int position,int Current,int size) {
         super(context);
         this.setOrientation(VERTICAL);
+        LinearLayout ll = new LinearLayout(context);
+        ll.setOrientation(HORIZONTAL);
         img_location = getResources().getDrawable(R.mipmap.location);
         img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
+
+        Locker = new ImageView(context);
+        Locker.setImageResource(R.mipmap.lock);
+
         /*ll = new LinearLayout(context);
         ll.setOrientation(HORIZONTAL);*/
         mTitle = new TextView(context);
@@ -62,8 +74,16 @@ public class IndexItemView extends LinearLayout{
         mPosition.setTextColor(Color.parseColor("#333333"));*/
         /*ll.addView(mPosition,lp);*/
         //ll.addView(mTitle,lp);
-        addView(mTitle, lp);
+        LayoutParams lockerlp = new LayoutParams(LayoutParams.WRAP_CONTENT, DisplayUtil.dip2px(context,60));
+        lockerlp.gravity = Gravity.CENTER_VERTICAL;
+        lockerlp.setMargins(DisplayUtil.dip2px(context,10),0,0,0);
+        ll.addView(Locker,lockerlp);
+        ll.addView(mTitle,lp);
+        addView(ll,  new LayoutParams(LayoutParams.WRAP_CONTENT, DisplayUtil.dip2px(context,60)));
         addView(mBottom, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context,0.5f)));
+        if(position<size-10){
+            Locker.setVisibility(View.GONE);
+        }
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

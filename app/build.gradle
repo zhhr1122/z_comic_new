@@ -8,16 +8,15 @@ greendao {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.android.zhhr"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        applicationId "com.android.zhhr" //JPush上注册的包名.
         ndk {
             //选择要添加的对应cpu类型的.so库。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
@@ -34,6 +33,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
         }
     }
 }
@@ -73,4 +77,6 @@ dependencies {
 
     compile 'org.greenrobot:greendao:3.0.1'
     compile 'org.greenrobot:greendao-generator:3.0.0'
+
+    compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }

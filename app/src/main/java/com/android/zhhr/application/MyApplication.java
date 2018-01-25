@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhhr.db.manager.GreenDaoManager;
+import com.zonst.libzadsdk.ZAdSdk;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -22,6 +23,9 @@ public class MyApplication extends Application {
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
         JPushInterface.init(this);            // 初始化 JPush
         DaoManager.getInstance(this.getApplicationContext());
+
+        ZAdSdk.initialize(getApplicationContext());
+        ZAdSdk.getInstance().setEnableLog(true);
     }
 
 }

@@ -11,11 +11,13 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.zhhr.R;
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.HomePresenter;
 import com.android.zhhr.ui.adapter.MainAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
+import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ZElasticRefreshScrollView;
 import com.android.zhhr.ui.view.IHomeView;
@@ -35,7 +37,7 @@ import butterknife.OnClick;
  * Created by 皓然 on 2017/8/6.
  */
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeView<Comic>,BaseRecyclerAdapter.OnItemClickListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeView<Comic>,MainAdapter.OnItemClickListener {
 
     @Bind(R.id.recycle_view)
     RecyclerView mRecycleView;
@@ -67,13 +69,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
-        NoScrollStaggeredGridLayoutManager layoutManager = new NoScrollStaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(getActivity(),6);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mAdapter = new MainAdapter(mActivity,R.layout.item_image);
+        mAdapter = new MainAdapter(mActivity,R.layout.item_hometitle,R.layout.item_homepage);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
-        mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
+        //mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
         mPresenter.LoadData();
         mScrollView.setRefreshListener(new ZElasticRefreshScrollView.RefreshListener() {
             @Override
@@ -88,7 +90,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             @Override
             public void onRefresh() {
-                mPresenter.refreshData();
+                mPresenter.LoadData();
+                //mPresenter.refreshData();
             }
 
             @Override
@@ -99,8 +102,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             @Override
             public void onLoadMore() {
-                mPresenter.loadMoreData(i);
-                i++;
+                /*mPresenter.loadMoreData(i);
+                i++;*/
             }
         });
         mBanner.setOnBannerListener(new OnBannerListener() {
@@ -204,9 +207,47 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
     }
 
+    @Override
+    public void onTitleClick(RecyclerView parent, View view, int type) {
+        switch (type){
+            case Constants.TYPE_HOT:
+                ShowToast("更多排行开发中");
+                break;
+            case Constants.TYPE_RECOMMEND:
+                ShowToast("更多热门推荐开发中");
+                break;
+            default:
+                break;
+        }
+    }
+
     @OnClick(R.id.iv_error)
     public void ReloadData(View view){
         mErrorView.setVisibility(View.GONE);
-        mPresenter.refreshData();
+        //mPresenter.refreshData();
+        mPresenter.LoadData();
+    }
+
+    @OnClick({ R.id.ll_category1, R.id.ll_category2, R.id.ll_category3, R.id.ll_category4,R.id.ll_category5 })
+    public void toCategory(View view) {
+        switch (view.getId()) {
+            case R.id.ll_category1:
+                showToast("开发中，敬请期待");
+                break;
+            case R.id.ll_category2:
+                showToast("开发中，敬请期待");
+                break;
+            case R.id.ll_category3:
+                showToast("开发中，敬请期待");
+                break;
+            case R.id.ll_category4:
+                showToast("开发中，敬请期待");
+                break;
+            case R.id.ll_category5:
+                showToast("开发中，敬请期待");
+                break;
+            default:
+                break;
+        }
     }
 }

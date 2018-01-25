@@ -5,6 +5,7 @@ import android.widget.Button;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
+import com.android.zhhr.utils.ADUtils;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class MainActivity extends BaseFragmentActivity {
         fragments.add (fragmentManager.findFragmentById(R.id.fm_bookshelf));
         fragments.add (fragmentManager.findFragmentById(R.id.fm_mine));
         selectTab(0);
+        //add start for adsdk
+        ADUtils.getAdFullInterstitial(this);
     }
 
     @OnClick(R.id.btn_home)

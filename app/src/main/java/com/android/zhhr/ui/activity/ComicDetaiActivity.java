@@ -3,7 +3,6 @@ package com.android.zhhr.ui.activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -17,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
@@ -33,6 +33,8 @@ import com.android.zhhr.utils.IntentUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.zonst.libzadsdk.bean.RewardBean;
+import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -102,6 +104,10 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Bind(R.id.ll_floatbottom)
     DetailFloatLinearLayout mFloatButtom;
 
+    //add start by ad
+    @Bind(R.id.layout1_banner)
+    LinearLayout mAdBanner;
+
 
     private float mScale = 1.0f;
     private float Dy = 0;
@@ -138,9 +144,11 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
             @Override
             public void onClickScroll(View view) {
-                ShowToast("点击了滑动");
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
+        //add
+        mPresenter.getAdBanner(this,mAdBanner);
     }
 
     @Override
@@ -193,7 +201,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             mRead.setText("续看第"+mCurrent+"话");
         }
         for(int i=0;i<comic.getChapters().size();i++){
-            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i,mCurrent);
+            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i,mCurrent,comic.getChapters().size());
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }
@@ -240,7 +248,10 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             position = mComic.getChapters().size()-position-1;
             Log.d("ComicDetailActivity","position="+position);
         }
-        IntentUtil.ToComicChapter(ComicDetaiActivity.this,position, mPresenter.getmComic());
+        //add start by zhr for sdk
+        IntentUtil.ToComicChapter(ComicDetaiActivity.this, position, mPresenter.getmComic());
+        //add end
+
     }
 
 
@@ -352,8 +363,13 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         showToast(toast);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdBanner.removeAllViews();
+    }
 
-
+    //点击事件
     @OnClick({R.id.iv_back_color, R.id.iv_back})
     public void OnFinish(View view){
         finish();

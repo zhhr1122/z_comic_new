@@ -94,7 +94,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         if(data!=null&&data.size()!=0){
             mAdapter.updateWithClear(data);
         }else {
-            ShowToast("未取到数据");
+            //ShowToast("未取到数据");
         }
     }
 

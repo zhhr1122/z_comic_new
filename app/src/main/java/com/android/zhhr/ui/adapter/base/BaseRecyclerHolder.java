@@ -70,7 +70,11 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setText(int viewId,String text){
         TextView tv = getView(viewId);
-        tv.setText(text);
+        if(text==null){
+            tv.setVisibility(View.GONE);
+        }else{
+            tv.setText(text);
+        }
         return this;
     }
 

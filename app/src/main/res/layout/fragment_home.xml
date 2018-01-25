@@ -59,6 +59,7 @@
                         android:orientation="horizontal"
                         >
                         <LinearLayout
+                            android:id="@+id/ll_category1"
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -80,6 +81,7 @@
                                 />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/ll_category2"
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -101,6 +103,7 @@
                                 />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/ll_category3"
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -122,6 +125,7 @@
                                 />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/ll_category4"
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -143,6 +147,7 @@
                                 />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/ll_category5"
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -165,17 +170,11 @@
                         </LinearLayout>
 
                     </LinearLayout>
-                    <View
-                        android:background="@color/colorBgDark"
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        />
-
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_below="@id/ly_meun"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/recycle_view">

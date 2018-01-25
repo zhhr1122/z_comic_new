@@ -2,6 +2,7 @@ package com.android.zhhr.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
@@ -9,6 +10,12 @@ import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
+import com.zonst.libzadsdk.ZAdComponent;
+import com.zonst.libzadsdk.ZAdSdk;
+import com.zonst.libzadsdk.ZAdType;
+import com.zonst.libzadsdk.listener.ZAdDisplayListener;
+import com.zonst.libzadsdk.listener.ZAdLoadListener;
+import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,5 +67,12 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_ID,mComic.getId());
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
         context.startActivity(intent);
+    }
+
+    public static void getRewardVideoAd(Context context, ZAdRewardListener listener){
+        Log.d("zhhr1122","getVideoAd start");
+        ZAdComponent ad = ZAdSdk.getInstance().getAd(ZAdType.VIDEO_REWARD, "1002");
+        ad.setRewardListener(listener);
+        ZAdSdk.getInstance().getLoader().loadAd(context, ad, false);
     }
 }

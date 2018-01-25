@@ -91,7 +91,7 @@ public class DetailScrollView extends ScrollView {
         }else if(y>0){
             scalelistener.isShowTab(SHOW_NONE);
         }
-        Log.d("zhhr","y="+y);
+        //Log.d("zhhr","y="+y);
         /*if (scrollViewListener != null) {
             scrollViewListener.onScrollChanged(this, x, y, oldx, oldy);
         }*/

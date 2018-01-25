@@ -23,5 +23,8 @@ public class Constants {
     public final static int CHAPTER_SELECTED= 1;
     public final static int CHAPTER_DOWNLOAD = 2;
 
+    public final static int TYPE_RECOMMEND = 0;
+    public final static int TYPE_HOT = 1;
+
 
 }

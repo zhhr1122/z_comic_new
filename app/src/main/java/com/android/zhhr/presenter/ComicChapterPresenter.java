@@ -1,13 +1,18 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.view.IChapterView;
+import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
+import com.zonst.libzadsdk.bean.RewardBean;
+import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import java.util.List;
 
@@ -104,6 +109,26 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         this.mDirect = mDirect;
     }
 
+    public void loadDataforAd(){
+        if(comic_chapter_title.size()-10<=comic_chapters){
+            IntentUtil.getRewardVideoAd(mContext, new ZAdRewardListener() {
+
+                @Override
+                public void onReward(RewardBean rewardBean) {
+                    Log.d("zhhr1122","onReward");
+                    if(rewardBean!=null&&rewardBean.fraud == 0){
+                        loadData();
+                    }else{
+                        mView.ShowToast("没有获得奖励");
+                        mContext.finish();
+                    }
+                }
+            });
+        }else{
+            loadData();
+        }
+    }
+
     public void loadData(){
         mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Subscriber<PreloadChapters>() {
             @Override
@@ -142,9 +167,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
             @Override
             public void onNext(Boolean aBoolean) {
-                if(aBoolean){
+                /*if(aBoolean){
                     mView.ShowToast("保存当前话成功"+(comic_chapters+1));
-                }
+                }*/
             }
         });
     }

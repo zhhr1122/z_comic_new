@@ -347,5 +347,13 @@
     </RelativeLayout>
     <include layout="@layout/layout_actionbar"></include>
     <include layout="@layout/layout_floatbutton"></include>
+    <LinearLayout
+        android:id="@+id/layout1_banner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        >
+    </LinearLayout>
     <include layout="@layout/layout_loading"></include>
 </RelativeLayout>

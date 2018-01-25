@@ -2,8 +2,10 @@ package com.android.zhhr.module;
 
 import android.content.Context;
 
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.net.MainFactory;
@@ -13,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -38,10 +41,29 @@ public class ComicModule {
             @Override
             public void call(Subscriber<? super List<Comic>> subscriber) {
                 try {
+                    List<Comic>  mdats = new ArrayList<>();
+                    HomeTitle homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("强推作品");
+                    homeTitle.setTitleType(Constants.TYPE_RECOMMEND);
+                    mdats.add(homeTitle);
+
+                    Document recommend = Jsoup.connect(Url.TencentHomePage).get();
+                    mdats.addAll(TencentComicAnalysis.TransToRecommendComic(recommend));
+
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("排行榜");
+                    homeTitle.setTitleType(Constants.TYPE_HOT);
+                    mdats.add(homeTitle);
+
                     Document doc = Jsoup.connect(Url.TencentTopUrl+"1").get();
                     Document doc2 = Jsoup.connect(Url.TencentTopUrl+"2").get();
-                    List<Comic>  mdats = TencentComicAnalysis.TransToComic(doc);
+
+                    mdats.addAll(TencentComicAnalysis.TransToComic(doc));
                     mdats.addAll(TencentComicAnalysis.TransToComic(doc2));
+
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("");
+                    mdats.add(homeTitle);
                     subscriber.onNext(mdats);
                 } catch (IOException e) {
                     subscriber.onError(e);
@@ -77,10 +99,20 @@ public class ComicModule {
             @Override
             public void call(Subscriber<? super List<Comic>> subscriber) {
                 try {
+                    List<Comic>  mdats = new ArrayList<>();
+                    HomeTitle homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("排行榜");
+                    mdats.add(homeTitle);
+
                     Document doc = Jsoup.connect(Url.TencentTopUrl+"1").get();
                     Document doc2 = Jsoup.connect(Url.TencentTopUrl+"2").get();
-                    List<Comic>  mdats = TencentComicAnalysis.TransToComic(doc);
+
+                    mdats.addAll(TencentComicAnalysis.TransToComic(doc));
                     mdats.addAll(TencentComicAnalysis.TransToComic(doc2));
+
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("");
+                    mdats.add(homeTitle);
                     subscriber.onNext(mdats);
                 } catch (IOException e) {
                     subscriber.onError(e);

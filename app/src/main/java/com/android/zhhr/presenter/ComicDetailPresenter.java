@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,8 +15,12 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
+import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
+import com.zonst.libzadsdk.ZAdComponent;
+import com.zonst.libzadsdk.ZAdSdk;
+import com.zonst.libzadsdk.ZAdType;
 
 import rx.Subscriber;
 
@@ -86,7 +93,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     mComic = comic;
                     SaveComicToDB(mComic);
                     mView.fillData(comic);
-                    mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
+                    //mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
                 }
             });
             mModel.isCollected(mComicId, new Subscriber<Boolean>() {
@@ -119,7 +126,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
             @Override
             public void onError(Throwable e) {
-                mView.ShowToast("获取当前章节数目失败"+e.toString());
+                //mView.ShowToast("获取当前章节数目失败"+e.toString());
             }
 
             @Override
@@ -193,7 +200,9 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
         for(int position=0;position<mComic.getChapters().size();position++){
             IndexItemView itemView = (IndexItemView) mlayout.getChildAt(position);
-            TextView textView = (TextView) itemView.getChildAt(0);
+            LinearLayout ll = (LinearLayout) itemView.getChildAt(0);
+            ImageView imageView = (ImageView) ll.getChildAt(0);
+            TextView textView = (TextView) ll.getChildAt(1);
             if(!isOrder()){
                 if(mComic.getCurrentChapter() == (position+1)){
                     textView.setTextColor(Color.parseColor("#ff9a6a"));
@@ -204,6 +213,14 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((position+1)+" - "+mComic.getChapters().get(position));
+                //add start by zhr for sdk
+                if(position>mComic.getChapters().size()-10){
+                    imageView.setVisibility(View.VISIBLE);
+                }else{
+                    imageView.setVisibility(View.GONE);
+                }
+                //add start by zhr for sdk
+
             }else{
                 if(mComic.getChapters().size()-mComic.getCurrentChapter() == position){
                     textView.setTextColor(Color.parseColor("#ff9a6a"));
@@ -214,6 +231,14 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((mComic.getChapters().size()-position)+" - "+mComic.getChapters().get(mComic.getChapters().size()-1-position));
+                //add start by zhr for sdk
+                if(position<10){
+                    imageView.setVisibility(View.VISIBLE);
+                }else{
+                    imageView.setVisibility(View.GONE);
+                }
+                //add end
+
             }
         }
         if(!isOrder()){
@@ -223,5 +248,12 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         }
     }
 
-
+    /**
+     * 添加banner广告
+     * @param context
+     * @param mAdBanner
+     */
+    public void getAdBanner(Context context,ViewGroup mAdBanner) {
+        ADUtils.getAdBanner(context,mAdBanner);
+    }
 }

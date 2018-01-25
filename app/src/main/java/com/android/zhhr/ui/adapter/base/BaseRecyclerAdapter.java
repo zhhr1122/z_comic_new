@@ -15,13 +15,13 @@ import java.util.List;
  */
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerHolder> {
 
-    private Context context;//上下文
+    protected Context context;//上下文
     protected List<T> list;//数据源
-    private LayoutInflater inflater;//布局器
-    private int itemLayoutId;//布局id
+    protected LayoutInflater inflater;//布局器
+    protected int itemLayoutId;//布局id
     private OnItemClickListener listener;//点击事件监听器
-    private OnItemLongClickListener longClickListener;//长按监听器
-    private RecyclerView recyclerView;
+    protected OnItemLongClickListener longClickListener;//长按监听器
+    protected RecyclerView recyclerView;
 
     //在RecyclerView提供数据的时候调用
     @Override
@@ -161,4 +161,5 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * @param position    位置
      */
     public abstract void convert(BaseRecyclerHolder holder, T item, int position);
+
 }

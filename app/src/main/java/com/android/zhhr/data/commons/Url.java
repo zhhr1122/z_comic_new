@@ -7,6 +7,8 @@ public class Url {
     //抓取腾讯漫画TOP
     public static String TencentTopUrl = "http://ac.qq.com/Comic/all/state/pink/search/hot/page/";
 
+    public static String TencentHomePage = "http://ac.qq.com/";
+
     //抓取腾讯漫画更新时间TOP
     public static String TencentUpdateTimeUrl = "http://ac.qq.com/Comic/index/state/pink/";
 
