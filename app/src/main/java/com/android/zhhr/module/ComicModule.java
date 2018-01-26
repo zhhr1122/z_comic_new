@@ -48,7 +48,24 @@ public class ComicModule {
                     mdats.add(homeTitle);
 
                     Document recommend = Jsoup.connect(Url.TencentHomePage).get();
+
                     mdats.addAll(TencentComicAnalysis.TransToRecommendComic(recommend));
+
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("少年漫画");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    mdats.add(homeTitle);
+
+                    mdats.addAll(TencentComicAnalysis.TransToBoysComic(recommend));
+
+
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("少女漫画");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToGirlsComic(recommend));
+
+
 
                     homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("热门连载");
@@ -95,8 +112,8 @@ public class ComicModule {
             @Override
             public void call(Subscriber<? super List<Comic>> subscriber) {
                 try {
-                    Document doc = Jsoup.connect(Url.TencentUpdateTimeUrl).get();
-                    List<Comic>  mdats = TencentComicAnalysis.TransToComic(doc);
+                    Document doc = Jsoup.connect(Url.TencentBanner).get();
+                    List<Comic>  mdats = TencentComicAnalysis.TransToBanner(doc);
                     subscriber.onNext(mdats);
                 } catch (IOException e) {
                     subscriber.onError(e);

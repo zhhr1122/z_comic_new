@@ -25,10 +25,10 @@ public class GlideImageLoader extends ImageLoader {
          */
         //Glide 加载图片简单用法
         Comic mComic = (Comic) path;
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(context)
                 .load(mComic.getCover())
                 .placeholder(R.mipmap.pic_default)
-                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
     }

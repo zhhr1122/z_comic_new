@@ -63,17 +63,18 @@
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
                             >
                             <ImageView
                                 android:src="@mipmap/fenlei1"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:layout_gravity="center_horizontal"
                                 />
                             <TextView
-                                android:textSize="10dp"
+                                android:layout_marginTop="-5dp"
+                                android:textSize="12dp"
                                 android:text="男生榜"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -85,17 +86,18 @@
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
                             >
                             <ImageView
                                 android:src="@mipmap/fenlei3"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:layout_gravity="center_horizontal"
                                 />
                             <TextView
-                                android:textSize="10dp"
+                                android:layout_marginTop="-5dp"
+                                android:textSize="12dp"
                                 android:text="女生榜"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -107,17 +109,18 @@
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
                             >
                             <ImageView
                                 android:src="@mipmap/fenlei2"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:layout_gravity="center_horizontal"
                                 />
                             <TextView
-                                android:textSize="10dp"
+                                android:layout_marginTop="-5dp"
+                                android:textSize="12dp"
                                 android:text="国漫"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -129,17 +132,18 @@
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
                             >
                             <ImageView
                                 android:src="@mipmap/fenlei4"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:layout_gravity="center_horizontal"
                                 />
                             <TextView
-                                android:textSize="10dp"
+                                android:layout_marginTop="-5dp"
+                                android:textSize="12dp"
                                 android:text="日漫"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -151,17 +155,18 @@
                             android:background="@color/colorBg"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
                             >
                             <ImageView
                                 android:src="@mipmap/fenlei5"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:layout_gravity="center_horizontal"
                                 />
                             <TextView
-                                android:textSize="10dp"
+                                android:layout_marginTop="-5dp"
+                                android:textSize="12dp"
                                 android:text="分类"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

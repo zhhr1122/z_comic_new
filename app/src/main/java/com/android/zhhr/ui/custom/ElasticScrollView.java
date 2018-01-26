@@ -115,7 +115,7 @@ public class ElasticScrollView extends ScrollView {
 
     public void animation() {
         // 开启移动动画
-        TranslateAnimation ta = new TranslateAnimation(0, 0, inner.getTop(),normal.top);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, inner.getTop(),0);
         ta.setDuration(300);
         Interpolator in = new DecelerateInterpolator();
         ta.setInterpolator(in);

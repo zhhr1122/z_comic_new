@@ -1,9 +1,11 @@
 package com.android.zhhr.ui.fragment;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
@@ -11,6 +13,7 @@ import com.android.zhhr.presenter.BookShelfPresenter;
 import com.android.zhhr.ui.adapter.BookShelfAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
+import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.view.IBookShelfView;
 import com.android.zhhr.utils.IntentUtil;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -28,6 +31,9 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     RecyclerView mRecycleView;
     private BookShelfAdapter mAdapter;
 
+    @Bind(R.id.iv_loading_top)
+    ImageView mLoadingTop;
+
     //private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
 
     @Override
@@ -43,8 +49,9 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
-
-        GridLayoutManager layoutManager = new GridLayoutManager(mActivity,3);
+        initAnimation();
+        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,3);
+        layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
         mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
         mAdapter = new BookShelfAdapter(mActivity,R.layout.item_bookshelf);
@@ -66,6 +73,13 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
            mPresenter.loadData();
        }
    }
+
+    //初始化动画
+    private void initAnimation() {
+        mLoadingTop.setImageResource(R.drawable.loading_top);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mLoadingTop.getDrawable();
+        animationDrawable.start();
+    }
 
     @Override
     public void onResume() {

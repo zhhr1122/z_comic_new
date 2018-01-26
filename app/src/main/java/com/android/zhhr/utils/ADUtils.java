@@ -8,6 +8,7 @@ import com.zonst.libzadsdk.ZAdComponent;
 import com.zonst.libzadsdk.ZAdSdk;
 import com.zonst.libzadsdk.ZAdType;
 import com.zonst.libzadsdk.listener.ZAdDisplayListener;
+import com.zonst.libzadsdk.listener.ZAdLoadListener;
 
 /**
  * Created by 张皓然 on 2018/1/25.
@@ -24,6 +25,18 @@ public class ADUtils {
 
     public static void getAdFullInterstitial(Context context){
         ZAdComponent ad = ZAdSdk.getInstance().getAd(ZAdType.FULL_SCREEN, "1003");
+        ad.setDisplayListener(new ZAdDisplayListener() {
+            @Override
+            public void onDisplay(boolean b) {
+                Log.d("zhhr1122","full screen onDisplay is"+b);
+            }
+        });
+        ad.setLoadListener(new ZAdLoadListener() {
+            @Override
+            public void onResult(int i) {
+                Log.d("zhhr1122","full screen onResult = "+i);
+            }
+        });
         ZAdSdk.getInstance().getLoader().loadAd(context, ad, false);
 
     }

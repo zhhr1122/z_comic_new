@@ -3,6 +3,53 @@
     android:background="@color/colorBg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.android.zhhr.ui.custom.ElasticScrollView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            >
+            <RelativeLayout
+                android:id="@+id/rl_loading"
+                android:background="@color/colorBg"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <LinearLayout
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp">
+                    <ImageView
+                        android:id="@+id/iv_loading_top"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/loading_top"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
+                    <TextView
+                        android:id="@+id/tv_loading"
+                        android:text="真的沒有啦..."
+                        android:gravity="center"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/rl_loading"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/rv_bookshelf"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </com.android.zhhr.ui.custom.ElasticScrollView>
     <View
         android:id="@+id/v_top"
         android:background="@color/colorAccent"
@@ -25,13 +72,5 @@
             android:layout_height="match_parent" />
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/rl_actionbar"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:id="@+id/rv_bookshelf"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>
