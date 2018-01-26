@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.FullHomeItem;
 import com.android.zhhr.data.entity.LargeHomeItem;
 import com.android.zhhr.ui.custom.IndexItemView;
 
@@ -41,6 +42,24 @@ public class TencentComicAnalysis {
     }
 
     //处理漫画列表
+    public static List<FullHomeItem> TransToJapanComic(Document doc){
+        List<FullHomeItem> mdats = new ArrayList<>();
+        List<Element> detail = doc.getElementsByAttributeValue("class","ret-works-cover");
+        List<Element> infos = doc.getElementsByAttributeValue("class","ret-works-info");
+        for(int i=0;i<3;i++){
+            FullHomeItem comic = new FullHomeItem();
+            comic.setTitle(detail.get(i).select("a").attr("title"));
+            comic.setCover(detail.get(i).select("img").attr("data-original"));
+            comic.setAuthor(infos.get(i).select("p").attr("title"));
+            Element ElementDescribe = infos.get(i).getElementsByAttributeValue("class","ret-works-decs").get(0);
+            comic.setDescribe(ElementDescribe.select("p").text());
+            comic.setId(Long.parseLong(getID(infos.get(i).select("a").attr("href"))));
+            mdats.add(comic);
+        }
+        return mdats;
+    }
+
+    //处理漫画列表
     public static List<LargeHomeItem> TransToRecommendComic(Document doc){
         List<LargeHomeItem> mdats = new ArrayList<LargeHomeItem>();
         List<Element> detail = doc.getElementsByAttributeValue("class","in-anishe-text");
@@ -53,6 +72,29 @@ public class TencentComicAnalysis {
             Element ElementDescribe = detail.get(i).getElementsByAttributeValue("class","mod-cover-list-intro").get(0);
             comic.setDescribe(ElementDescribe.select("p").text());
             comic.setId(Long.parseLong(getID(detail.get(i).select("a").attr("href"))));
+            mdats.add(comic);
+        }
+        return mdats;
+    }
+
+    /**
+     * 热门连载
+     * @param doc
+     * @return
+     */
+    public static List<LargeHomeItem> TransToNewComic(Document doc){
+        List<LargeHomeItem> mdats = new ArrayList<LargeHomeItem>();
+        Random random =new Random();
+        int result = random.nextInt(7);
+        Element detail = doc.getElementsByAttributeValue("class","in-anishe-list clearfix in-anishe-ul").get(result);
+        List<Element> hots = detail.getElementsByTag("li");
+        for(int i=0;i<4;i++){
+            LargeHomeItem comic = new LargeHomeItem();
+            comic.setTitle(hots.get(i).select("img").attr("alt"));
+            comic.setCover(hots.get(i).select("img").attr("data-original"));
+            Element ElementDescribe = hots.get(i).getElementsByAttributeValue("class","mod-cover-list-intro").get(0);
+            comic.setDescribe(ElementDescribe.select("p").text());
+            comic.setId(Long.parseLong(getID(hots.get(i).select("a").attr("href"))));
             mdats.add(comic);
         }
         return mdats;

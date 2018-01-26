@@ -72,7 +72,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(getActivity(),6);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mAdapter = new MainAdapter(mActivity,R.layout.item_hometitle,R.layout.item_homepage);
+        mAdapter = new MainAdapter(mActivity,R.layout.item_hometitle,R.layout.item_homepage,R.layout.item_homepage_full);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         //mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
@@ -210,13 +210,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Override
     public void onTitleClick(RecyclerView parent, View view, int type) {
         switch (type){
-            case Constants.TYPE_HOT:
+            case Constants.TYPE_RANK_LIST:
                 ShowToast("更多排行开发中");
                 break;
             case Constants.TYPE_RECOMMEND:
                 ShowToast("更多热门推荐开发中");
                 break;
             default:
+                ShowToast("开发中");
                 break;
         }
     }

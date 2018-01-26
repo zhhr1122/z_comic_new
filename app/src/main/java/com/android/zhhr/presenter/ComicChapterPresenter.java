@@ -117,6 +117,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 public void onReward(RewardBean rewardBean) {
                     Log.d("zhhr1122","onReward");
                     if(rewardBean!=null&&rewardBean.fraud == 0){
+                        mView.ShowToast("获得奖励");
                         loadData();
                     }else{
                         mView.ShowToast("没有获得奖励");

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.FullHomeItem;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.LargeHomeItem;
 import com.android.zhhr.data.entity.SmallHomeItem;
@@ -25,20 +26,23 @@ import java.util.List;
  */
 
 public class MainAdapter extends BaseRecyclerAdapter<Comic> {
-    public static final int ITEM_LARGE = 3 ;
-    public static final int ITEM_TITLE = 6;
+    public static final int ITEM_TITLE = 0;
+    public static final int ITEM_LARGE = 1 ;
     public static final int ITEM_SMALL = 2;
+    public static final int ITEM_FULL = 3;
     private int itemTitleLayoutId;
+    private int itemFullLayoutId;
     private OnItemClickListener mItemClickListener;
 
     public MainAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
     }
 
-    public MainAdapter(Context context, int itemTitleLayoutId,int itemLayoutId) {
+    public MainAdapter(Context context, int itemTitleLayoutId,int itemLayoutId,int itemFullLayoutId) {
         super(context, itemLayoutId);
         this.itemLayoutId = itemLayoutId;
         this.itemTitleLayoutId = itemTitleLayoutId;
+        this.itemFullLayoutId = itemFullLayoutId;
     }
 
     public MainAdapter(Context context, List<Comic> list, int itemLayoutId) {
@@ -92,17 +96,16 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
             case ITEM_TITLE:
                 holder.setText(R.id.tv_hometitle,((HomeTitle)item).getItemTitle());
                 break;
-            case ITEM_LARGE:
+            case ITEM_FULL:
                 holder.setText(R.id.tv_title,item.getTitle());
                 holder.setText(R.id.tv_describe,item.getDescribe());
-                holder.setImageByUrl(R.id.iv_image,item.getCover());
-                break;
-            case ITEM_SMALL:
-                holder.setText(R.id.tv_title,item.getTitle());
-                holder.setText(R.id.tv_describe,item.getDescribe());
+                holder.setText(R.id.tv_author,item.getAuthor());
                 holder.setImageByUrl(R.id.iv_image,item.getCover());
                 break;
             default:
+                holder.setText(R.id.tv_title,item.getTitle());
+                holder.setText(R.id.tv_describe,item.getDescribe());
+                holder.setImageByUrl(R.id.iv_image,item.getCover());
                 break;
         }
     }
@@ -118,6 +121,9 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
                 break;
             case ITEM_SMALL:
                 view = inflater.inflate(itemLayoutId, parent, false);
+                break;
+            case ITEM_FULL:
+                view = inflater.inflate(itemFullLayoutId, parent, false);
                 break;
             default:
                 view = inflater.inflate(itemLayoutId, parent, false);
@@ -135,7 +141,10 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
             return ITEM_SMALL;
         }else if(comic instanceof LargeHomeItem){
             return ITEM_LARGE;
-        }else{
+        }else if(comic instanceof FullHomeItem){
+            return ITEM_FULL;
+        }
+        else{
             return ITEM_SMALL;
         }
     }
@@ -150,7 +159,25 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return getItemViewType(position);
+                    int size = 2;
+                    switch (getItemViewType(position)){
+                        case ITEM_TITLE:
+                            size = 6;
+                            break;
+                        case ITEM_SMALL:
+                            size = 2;
+                            break;
+                        case ITEM_LARGE:
+                            size = 3;
+                            break;
+                        case  ITEM_FULL:
+                            size = 6;
+                            break;
+                         default:
+                             size = 2;
+                             break;
+                    }
+                    return size;
                 }
             });
         }

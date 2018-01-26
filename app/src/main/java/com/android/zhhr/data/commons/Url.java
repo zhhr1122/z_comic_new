@@ -9,6 +9,8 @@ public class Url {
 
     public static String TencentHomePage = "http://ac.qq.com/";
 
+    public static String TencentJapanHot = "http://ac.qq.com/Comic/all/state/pink/nation/4/search/hot/page/1";
+
     //抓取腾讯漫画更新时间TOP
     public static String TencentUpdateTimeUrl = "http://ac.qq.com/Comic/index/state/pink/";
 

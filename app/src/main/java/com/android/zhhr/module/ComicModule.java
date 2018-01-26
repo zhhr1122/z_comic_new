@@ -51,8 +51,26 @@ public class ComicModule {
                     mdats.addAll(TencentComicAnalysis.TransToRecommendComic(recommend));
 
                     homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("热门连载");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    mdats.add(homeTitle);
+
+                    mdats.addAll(TencentComicAnalysis.TransToNewComic(recommend));
+
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("日漫馆");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_JAPAN);
+                    mdats.add(homeTitle);
+
+                    Document japan = Jsoup.connect(Url.TencentJapanHot).get();
+                    mdats.addAll(TencentComicAnalysis.TransToJapanComic(japan));
+
+
+
+
+                    homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("排行榜");
-                    homeTitle.setTitleType(Constants.TYPE_HOT);
+                    homeTitle.setTitleType(Constants.TYPE_RANK_LIST);
                     mdats.add(homeTitle);
 
                     Document doc = Jsoup.connect(Url.TencentTopUrl+"1").get();
