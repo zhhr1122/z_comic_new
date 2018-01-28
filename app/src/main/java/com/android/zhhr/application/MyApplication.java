@@ -3,6 +3,7 @@ package com.android.zhhr.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhhr.db.manager.GreenDaoManager;
 import com.zonst.libzadsdk.ZAdSdk;
@@ -24,8 +25,11 @@ public class MyApplication extends Application {
         JPushInterface.init(this);            // 初始化 JPush
         DaoManager.getInstance(this.getApplicationContext());
 
-        ZAdSdk.initialize(getApplicationContext());
-        ZAdSdk.getInstance().setEnableLog(true);
+        //广告开关
+        if(Constants.isAD){
+            ZAdSdk.initialize(getApplicationContext());
+            ZAdSdk.getInstance().setEnableLog(true);
+        }
     }
 
 }

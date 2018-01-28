@@ -148,7 +148,9 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             }
         });
         //add
-        mPresenter.getAdBanner(this,mAdBanner);
+        if(Constants.isAD){
+            mPresenter.getAdBanner(this,mAdBanner);
+        }
     }
 
     @Override
@@ -248,9 +250,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             position = mComic.getChapters().size()-position-1;
             Log.d("ComicDetailActivity","position="+position);
         }
-        //add start by zhr for sdk
         IntentUtil.ToComicChapter(ComicDetaiActivity.this, position, mPresenter.getmComic());
-        //add end
 
     }
 
@@ -265,12 +265,12 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             mHeaderView.layout((int) (0-dx),0, (int) (getMobileWidth()+dx), (int) y);
             Dy = y - height;
             mText.layout(normal.left,(int)(normal.top+Dy),normal.right,(int)(normal.bottom+Dy));
-            Log.d("DetailActivity","Dy="+Dy+",normal="+normal.toString());
+            //Log.d("DetailActivity","Dy="+Dy+",normal="+normal.toString());
         }
 
         @Override
         public void isFinished() {
-            Log.d("DetailScrollView","Dy="+Dy);
+            //Log.d("DetailScrollView","Dy="+Dy);
             Interpolator in = new DecelerateInterpolator();
             ScaleAnimation ta = new ScaleAnimation(mScale, 1.0f, mScale, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.0f);
             //第一个参数fromX为动画起始时 X坐标上的伸缩尺寸

@@ -49,6 +49,9 @@ public class ZElasticRefreshScrollView extends ScrollView {
     private Handler mhandler = new Handler();
     private RelativeLayout mLoadingTop;
     private TextView mLoadingText;
+    public static final int  SCROLL_TO_UP =1;
+    public static final int  SCROLL_TO_DOWN =2;
+    int oldY= 0;
 
     public ZElasticRefreshScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -77,7 +80,22 @@ public class ZElasticRefreshScrollView extends ScrollView {
         if(y>=height){
             this.scrollTo(0,height);
         }
-        //Log.d("zhhr","y="+y);
+        //Log.d("zhhr","y="+y+",mTopView.getHeight()="+mTopView.getHeight());
+        if(y<mTopView.getHeight()-DisplayUtil.dip2px(getContext(),60)){
+            listener.onAlphaActionBar(0f);
+        }else if(y<mTopView.getHeight()){
+            listener.onAlphaActionBar((float)(y-(mTopView.getHeight()-DisplayUtil.dip2px(getContext(),60)))/DisplayUtil.dip2px(getContext(),60));
+        }else{
+            listener.onAlphaActionBar(1f);
+        }
+
+        if(y - oldY>0){
+            listener.onScroll(SCROLL_TO_DOWN);
+        }else if(y - oldY<0&&y<height){
+            listener.onScroll(SCROLL_TO_UP);
+        }
+        oldY = y;
+
         /*if (scrollViewListener != null) {
             scrollViewListener.onScrollChanged(this, x, y, oldx, oldy);
         }*/
@@ -136,7 +154,7 @@ public class ZElasticRefreshScrollView extends ScrollView {
                         isRefresh = true;
                         listener.onRefresh();
                     }else{
-                        Log.v("zhhr112233", "getScrollY="+getScrollY()+",height="+height);
+                        //Log.v("zhhr112233", "getScrollY="+getScrollY()+",height="+height);
                         if(getScrollY()==height&&listener!=null){
                             listener.onLoadMore();
                         }
@@ -283,6 +301,8 @@ public class ZElasticRefreshScrollView extends ScrollView {
         void onRefresh();
         void onRefreshFinish();
         void onLoadMore();
+        void onScroll(int y);
+        void onAlphaActionBar(float a);
     }
 
     public void setRefreshListener(RefreshListener listener){

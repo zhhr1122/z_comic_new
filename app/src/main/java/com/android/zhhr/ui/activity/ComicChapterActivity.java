@@ -172,7 +172,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         });
         //设置加载时候的标题
         mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
-        mPresenter.loadDataforAd();
+        if(Constants.isAD){
+            mPresenter.loadDataforAd();
+        }else{
+            mPresenter.loadData();
+        }
         initReaderModule(mPresenter.getmDirect());
     }
 

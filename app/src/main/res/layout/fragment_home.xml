@@ -228,6 +228,69 @@
                 android:layout_height="200dp" />
         </RelativeLayout>
     </com.android.zhhr.ui.custom.ZElasticRefreshScrollView>
+    <RelativeLayout
+        android:id="@+id/rl_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <View
+            android:alpha="0"
+            android:background="@color/colorPrimary"
+            android:id="@+id/v_actionbar_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            >
+            <LinearLayout
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:textSize="16dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorBg"
+                    android:text="推荐"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:textSize="16dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorBg"
+                    android:text="男生"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:textSize="16dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorBg"
+                    android:text="女生"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
 
 
 </RelativeLayout>

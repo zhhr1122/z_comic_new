@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ZElasticRefreshScrollView;
 import com.android.zhhr.ui.view.IHomeView;
+import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.android.zhhr.utils.IntentUtil;
 import com.youth.banner.Banner;
@@ -53,6 +57,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Bind(R.id.B_banner)
     Banner mBanner;
     private MainAdapter mAdapter;
+    @Bind(R.id.rl_actionbar)
+    RelativeLayout mActionBar;
+    @Bind(R.id.v_actionbar_bg)
+    View mActionBarBg;
 
 
 
@@ -104,6 +112,39 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
             public void onLoadMore() {
                 /*mPresenter.loadMoreData(i);
                 i++;*/
+            }
+
+            @Override
+            public void onScroll(int y) {
+                if(y == ZElasticRefreshScrollView.SCROLL_TO_DOWN){
+                    if(mActionBar.getVisibility() == View.VISIBLE){
+                        mActionBar.setVisibility(View.GONE);
+                        AnimationSet animationSet = new AnimationSet(true);
+                        TranslateAnimation trans = new TranslateAnimation(0, 0 , 0, -DisplayUtil.dip2px(mActivity.getApplicationContext(),60) );
+                        AlphaAnimation alphaAnimation = new AlphaAnimation(1,0);
+                        animationSet.addAnimation(trans);
+                        animationSet.addAnimation(alphaAnimation);
+                        animationSet.setDuration(200);
+                        mActionBar.startAnimation(animationSet);
+                    }
+                }else{
+                    if(mActionBar.getVisibility() == View.GONE){
+                        mActionBar.setVisibility(View.VISIBLE);
+                        AnimationSet animationSet = new AnimationSet(true);
+                        TranslateAnimation trans = new TranslateAnimation(0, 0 , -DisplayUtil.dip2px(mActivity.getApplicationContext(),60), 0 );
+                        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+                        animationSet.addAnimation(trans);
+                        animationSet.addAnimation(alphaAnimation);
+                        animationSet.setDuration(200);
+                        mActionBar.startAnimation(animationSet);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onAlphaActionBar(float a) {
+                mActionBarBg.setAlpha(a);
             }
         });
         mBanner.setOnBannerListener(new OnBannerListener() {
