@@ -376,7 +376,9 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     protected void onDestroy() {
         super.onDestroy();
         mAdBanner.removeAllViews();
-        banner.release();
+        if(banner!=null){
+            banner.release();
+        }
     }
 
     //点击事件
