@@ -1,6 +1,7 @@
 package com.android.zhhr.module;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
@@ -42,61 +43,17 @@ public class ComicModule {
             public void call(Subscriber<? super List<Comic>> subscriber) {
                 try {
                     List<Comic>  mdats = new ArrayList<>();
-                    HomeTitle homeTitle = new HomeTitle();
-                    homeTitle.setItemTitle("强推作品");
-                    homeTitle.setTitleType(Constants.TYPE_RECOMMEND);
-                    mdats.add(homeTitle);
-
                     Document recommend = Jsoup.connect(Url.TencentHomePage).get();
-
-                    mdats.addAll(TencentComicAnalysis.TransToRecommendComic(recommend));
-
-                    homeTitle = new HomeTitle();
-                    homeTitle.setItemTitle("少年漫画");
-                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
-                    mdats.add(homeTitle);
-
-                    mdats.addAll(TencentComicAnalysis.TransToBoysComic(recommend));
-
-
-                    homeTitle = new HomeTitle();
-                    homeTitle.setItemTitle("少女漫画");
-                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
-                    mdats.add(homeTitle);
-                    mdats.addAll(TencentComicAnalysis.TransToGirlsComic(recommend));
-
-
-
-                    homeTitle = new HomeTitle();
-                    homeTitle.setItemTitle("热门连载");
-                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
-                    mdats.add(homeTitle);
-
-                    mdats.addAll(TencentComicAnalysis.TransToNewComic(recommend));
-
-                    homeTitle = new HomeTitle();
-                    homeTitle.setItemTitle("日漫馆");
-                    homeTitle.setTitleType(Constants.TYPE_HOT_JAPAN);
-                    mdats.add(homeTitle);
-
                     Document japan = Jsoup.connect(Url.TencentJapanHot).get();
-                    mdats.addAll(TencentComicAnalysis.TransToJapanComic(japan));
-
-
-
-
-                    homeTitle = new HomeTitle();
-                    homeTitle.setItemTitle("排行榜");
-                    homeTitle.setTitleType(Constants.TYPE_RANK_LIST);
-                    mdats.add(homeTitle);
-
                     Document doc = Jsoup.connect(Url.TencentTopUrl+"1").get();
-                    Document doc2 = Jsoup.connect(Url.TencentTopUrl+"2").get();
+                    addComic(recommend,mdats,Constants.TYPE_RECOMMEND);
+                    addComic(recommend,mdats,Constants.TYPE_BOY_RANK);
+                    addComic(recommend,mdats,Constants.TYPE_GIRL_RANK);
+                    addComic(recommend,mdats,Constants.TYPE_HOT_SERIAL);
+                    addComic(japan,mdats,Constants.TYPE_HOT_JAPAN);
+                    addComic(doc,mdats,Constants.TYPE_RANK_LIST);
 
-                    mdats.addAll(TencentComicAnalysis.TransToComic(doc));
-                    mdats.addAll(TencentComicAnalysis.TransToComic(doc2));
-
-                    homeTitle = new HomeTitle();
+                    HomeTitle homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("");
                     mdats.add(homeTitle);
                     subscriber.onNext(mdats);
@@ -127,6 +84,66 @@ public class ComicModule {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    /**
+     * 添加漫画到List里
+     * @param doc
+     * @param mdats
+     * @param type
+     */
+    private void addComic(Document doc, List<Comic> mdats, int type) {
+        HomeTitle homeTitle;
+        try {
+            switch (type){
+                case Constants.TYPE_RECOMMEND:
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("强推作品");
+                    homeTitle.setTitleType(Constants.TYPE_RECOMMEND);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToRecommendComic(doc));
+                    break;
+                case Constants.TYPE_BOY_RANK:
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("少年漫画");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToBoysComic(doc));
+                    break;
+                case Constants.TYPE_GIRL_RANK:
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("少女漫画");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToGirlsComic(doc));
+                    break;
+                case Constants.TYPE_HOT_SERIAL:
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("热门连载");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToNewComic(doc));
+                    break;
+                case Constants.TYPE_HOT_JAPAN:
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("日漫馆");
+                    homeTitle.setTitleType(Constants.TYPE_HOT_JAPAN);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToJapanComic(doc));
+                    break;
+                case Constants.TYPE_RANK_LIST:
+                    homeTitle = new HomeTitle();
+                    homeTitle.setItemTitle("排行榜");
+                    homeTitle.setTitleType(Constants.TYPE_RANK_LIST);
+                    mdats.add(homeTitle);
+                    mdats.addAll(TencentComicAnalysis.TransToComic(doc));
+                    break;
+            }
+        }catch (Exception e){
+            Log.d("zhhr","type = "+type+"is Error");
+            throw e;
+        }
+
     }
 
     public void refreshData(Subscriber subscriber){

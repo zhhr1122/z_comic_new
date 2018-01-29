@@ -30,10 +30,12 @@ public class Constants {
     public final static int TYPE_RANK_LIST = 1;
     public final static int TYPE_HOT_SERIAL = 2;
     public final static int TYPE_HOT_JAPAN = 3;
+    public final static int TYPE_BOY_RANK = 4;
+    public final static int TYPE_GIRL_RANK = 5;
     /**
      * 控制广告的开关
      */
-    public final static boolean isAD = false;
+    public final static boolean isAD = true;
 
 
 }

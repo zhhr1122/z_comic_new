@@ -102,7 +102,11 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
-    //处理漫画列表
+    /**
+     * 强推漫画
+     * @param doc
+     * @return
+     */
     public static List<LargeHomeItem> TransToRecommendComic(Document doc){
         List<LargeHomeItem> mdats = new ArrayList<LargeHomeItem>();
         List<Element> detail = doc.getElementsByAttributeValue("class","in-anishe-text");
@@ -142,6 +146,12 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
+
+    /**
+     * 女生榜
+     * @param doc
+     * @return
+     */
     public static List<SmallHomeItem> TransToGirlsComic(Document doc){
         List<SmallHomeItem> mdats = new ArrayList<SmallHomeItem>();
         Random random =new Random();
@@ -182,6 +192,13 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
+
+    /**
+     * 漫画详情
+     * @param doc
+     * @param context
+     * @return
+     */
     public static Comic TransToComicDetail(Document doc, final Context context){
         //设置标题
         final Comic comic = new Comic();
@@ -251,6 +268,11 @@ public class TencentComicAnalysis {
         }
     }
 
+    /**
+     * 获取漫画ID
+     * @param splitID
+     * @return
+     */
     public static String getID(String splitID){
         String[] ids = splitID.split("/");
         return ids[ids.length-1];
