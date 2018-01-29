@@ -24,12 +24,16 @@ import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ZElasticRefreshScrollView;
 import com.android.zhhr.ui.view.IHomeView;
+import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.android.zhhr.utils.IntentUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
+import com.zonst.libzadsdk.ZAdComponent;
+import com.zonst.libzadsdk.ZAdSdk;
+import com.zonst.libzadsdk.ZAdType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +56,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     RelativeLayout mErrorView;
     @Bind(R.id.iv_error)
     ImageView mReload;
-    @Bind(R.id.iv_loading_top)
-    ImageView mLoadingTop;
     @Bind(R.id.B_banner)
     Banner mBanner;
     private MainAdapter mAdapter;
@@ -62,9 +64,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Bind(R.id.v_actionbar_bg)
     View mActionBarBg;
 
+    private ZAdComponent ad;
 
 
-    private int i=3;//预制一开始加载的条目
 
     @Override
     protected void initPresenter() {
@@ -73,7 +75,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        initAnimation();
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
@@ -165,13 +166,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         }
     }
 
-    //初始化动画
-    private void initAnimation() {
-        mLoadingTop.setImageResource(R.drawable.loading_top);
-        AnimationDrawable animationDrawable = (AnimationDrawable) mLoadingTop.getDrawable();
-        animationDrawable.start();
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_home;
@@ -179,7 +173,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     @Override
     public void ShowToast(String t) {
-        Toast.makeText(mActivity,t,Toast.LENGTH_LONG).show();;
+        Toast.makeText(mActivity,t,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -255,12 +249,22 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                 ShowToast("更多排行开发中");
                 break;
             case Constants.TYPE_RECOMMEND:
+                ad= ZAdSdk.getInstance().createAd(getActivity(), ZAdType.VIDEO, "1004");
+                ZAdSdk.getInstance().getLoader().loadAd(ad);
                 ShowToast("更多热门推荐开发中");
                 break;
             default:
                 ShowToast("开发中");
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if(ad!=null){
+            ad.release();
+        }
+        super.onDestroy();
     }
 
     @OnClick(R.id.iv_error)

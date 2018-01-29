@@ -3,6 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <FrameLayout
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
         android:id="@+id/fl_position_wrapper"
         android:background="@drawable/btn_select_download"
         android:layout_width="match_parent"
@@ -12,6 +14,8 @@
             android:id="@+id/tv_position"
             android:gravity="center"
             android:text="1"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 

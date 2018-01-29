@@ -119,7 +119,7 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {//必须实现，销毁
-        ((ViewPager) container).removeView((View) object);
+        container.removeView((View) object);
     }
 
     public interface OnceClickListener{

@@ -334,7 +334,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        mPresenter.releseAd();
+        super.onDestroy();
+    }
 
     @OnClick({R.id.iv_back,R.id.iv_back_color})
     public void finish(View view){

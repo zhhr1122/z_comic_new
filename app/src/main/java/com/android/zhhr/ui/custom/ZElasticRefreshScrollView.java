@@ -2,6 +2,7 @@ package com.android.zhhr.ui.custom;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -48,6 +50,7 @@ public class ZElasticRefreshScrollView extends ScrollView {
     private RefreshListener listener;
     private Handler mhandler = new Handler();
     private RelativeLayout mLoadingTop;
+    private ImageView mLoadingTopImg;
     private TextView mLoadingText;
     public static final int  SCROLL_TO_UP =1;
     public static final int  SCROLL_TO_DOWN =2;
@@ -112,6 +115,14 @@ public class ZElasticRefreshScrollView extends ScrollView {
         //mListView = mMoveView.getChildAt(2);
         mLoadingBottom = mMoveView.getChildAt(3);
         setOverScrollMode(OVER_SCROLL_NEVER);//取消5.0效果
+        mLoadingTopImg = inner.findViewById(R.id.iv_loading_top);
+        initAnimation();
+    }
+
+    private void initAnimation() {
+        mLoadingTopImg.setImageResource(R.drawable.loading_top);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mLoadingTopImg.getDrawable();
+        animationDrawable.start();
     }
 
     //重写滑动方法

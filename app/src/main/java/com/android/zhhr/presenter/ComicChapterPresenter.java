@@ -9,8 +9,12 @@ import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.view.IChapterView;
+import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
+import com.zonst.libzadsdk.ZAdComponent;
+import com.zonst.libzadsdk.ZAdSdk;
+import com.zonst.libzadsdk.ZAdType;
 import com.zonst.libzadsdk.bean.RewardBean;
 import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
@@ -40,6 +44,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     boolean isLoadingdata = false;
     //加载过程中进行的翻页
     private int loadingPosition = 0;
+
+    private ZAdComponent ad;
+    private ZAdComponent pre_AD;
 
     public ComicChapterPresenter(Activity context, IChapterView view) {
         super(context, view);
@@ -111,8 +118,8 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     public void loadDataforAd(){
         if(comic_chapter_title.size()-10<=comic_chapters){
-            IntentUtil.getRewardVideoAd(mContext, new ZAdRewardListener() {
-
+            ad = ZAdSdk.getInstance().createAd(mContext, ZAdType.VIDEO_REWARD, "1003");
+            ad.setRewardListener(new ZAdRewardListener() {
                 @Override
                 public void onReward(RewardBean rewardBean) {
                     Log.d("zhhr1122","onReward");
@@ -125,7 +132,14 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     }
                 }
             });
+            ZAdSdk.getInstance().getLoader().loadAd(ad);
         }else{
+            pre_AD= ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1004");
+            if(ZAdSdk.getInstance().getLoader().readyForPreloadAd(pre_AD)){
+                ZAdSdk.getInstance().getLoader().showPreloadAd(pre_AD);
+            }else{
+                mView.ShowToast("预加载广告未完成");
+            }
             loadData();
         }
     }
@@ -197,7 +211,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     now_postion = position - mPreloadChapters.getPrelist().size() - mPreloadChapters.getNowlist().size();
                     if(!isLoadingdata){
                         isLoadingdata = true;
-                        loadNextData(comic_id+"",comic_chapters);;
+                        loadNextData(comic_id+"",comic_chapters);
                     }
                 }else {//当前章节
                     isLoadingdata = false;
@@ -223,7 +237,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     now_postion = position - mPreloadChapters.getNextlist().size() - mPreloadChapters.getNowlist().size();
                     if(!isLoadingdata){
                         isLoadingdata = true;
-                        loadPreData(comic_id+"",comic_chapters);;
+                        loadPreData(comic_id+"",comic_chapters);
                     }
                 }else {//当前章节
                     isLoadingdata = false;
@@ -340,5 +354,14 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 }
             }
         });
+    }
+
+    public void releseAd(){
+        if(ad!=null){
+            ad.release();
+        }
+        if(pre_AD!=null){
+            pre_AD.release();
+        }
     }
 }

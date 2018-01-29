@@ -140,8 +140,7 @@ public class ComicModule {
                     break;
             }
         }catch (Exception e){
-            Log.d("zhhr","type = "+type+"is Error");
-            throw e;
+            Log.d("zhhr","type = "+type+" is Error");
         }
 
     }

@@ -120,10 +120,6 @@ public class ElasticRecycleView extends RecyclerView{
     public boolean isNeedMove(){
         int aa[] = ((StaggeredGridLayoutManager)getLayoutManager()).findFirstVisibleItemPositions(null);
     //达到这个条件就说明滑到了顶部
-        if(getChildAt(0).getScrollY() == 0&& aa[0]==0){
-            return true;
-        }else{
-            return false;
-        }
+        return getChildAt(0).getScrollY() == 0 && aa[0] == 0;
     }
 }

@@ -49,7 +49,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
-        initAnimation();
+        //initAnimation();
         NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,3);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
@@ -74,12 +74,6 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
        }
    }
 
-    //初始化动画
-    private void initAnimation() {
-        mLoadingTop.setImageResource(R.drawable.loading_top);
-        AnimationDrawable animationDrawable = (AnimationDrawable) mLoadingTop.getDrawable();
-        animationDrawable.start();
-    }
 
     @Override
     public void onResume() {

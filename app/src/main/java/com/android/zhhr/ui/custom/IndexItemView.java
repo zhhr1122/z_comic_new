@@ -93,7 +93,7 @@ public class IndexItemView extends LinearLayout{
     }
 
     public interface onItemClickLinstener{
-        public void onItemClick(View view,int position);
+        void onItemClick(View view, int position);
     }
 
     public void setCurrentColor(boolean isCurrent){

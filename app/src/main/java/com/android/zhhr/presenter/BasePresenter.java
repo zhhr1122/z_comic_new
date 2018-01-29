@@ -23,4 +23,6 @@ public abstract class BasePresenter<GV extends IBaseView> {
     }
 
 
+    protected BasePresenter() {
+    }
 }

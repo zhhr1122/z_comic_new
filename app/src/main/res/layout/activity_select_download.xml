@@ -1,7 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <com.android.zhhr.ui.custom.ElasticScrollView
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            >
+            <RelativeLayout
+                android:id="@+id/rl_loading"
+                android:background="@color/colorBg"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <LinearLayout
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp">
+                    <ImageView
+                        android:id="@+id/iv_loading_top"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/loading_top"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
+                    <TextView
+                        android:id="@+id/tv_loading"
+                        android:text="真的沒有啦..."
+                        android:gravity="center"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/rl_loading"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:id="@+id/rv_index"
+                android:background="@color/colorBgDark"
+                >
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </com.android.zhhr.ui.custom.ElasticScrollView>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rl_actionbar"
         android:layout_marginTop="20dp"
@@ -53,15 +102,5 @@
             android:layout_height="30dp" />
 
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@id/rl_order"
-        android:background="@color/colorBgDark"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:id="@+id/rv_index">
-    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

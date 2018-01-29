@@ -3,6 +3,7 @@ package com.android.zhhr.presenter;
 import android.app.Activity;
 
 import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.ui.view.ISelectDownloadView;
 
 import java.util.ArrayList;
@@ -15,16 +16,16 @@ import java.util.Map;
  */
 
 public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
-    //已经选中的章节
+    /*//已经选中的章节
     private ArrayList<Integer> SelectedChapters;
     //已经下载的章节
-    private ArrayList<Integer> DownloadedChapters;
+    private ArrayList<Integer> DownloadedChapters;*/
 
     private ArrayList<String> mChapters;
 
     private HashMap<Integer,Integer> map;
 
-    public ArrayList<Integer> getSelectedChapters() {
+    /*public ArrayList<Integer> getSelectedChapters() {
         return SelectedChapters;
     }
 
@@ -39,7 +40,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     public void setDownloadedChapters(ArrayList<Integer> downloadedChapters) {
         DownloadedChapters = downloadedChapters;
     }
-
+*/
     public SelectDownloadPresenter(Activity context, ISelectDownloadView view,ArrayList<String> mChapters) {
         super(context, view);
         this.mChapters = mChapters;
@@ -47,8 +48,8 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     }
 
     private void initData() {
-        SelectedChapters = new ArrayList<>();
-        DownloadedChapters = new ArrayList<>();
+        /*SelectedChapters = new ArrayList<>();
+        DownloadedChapters = new ArrayList<>();*/
         map = new HashMap<Integer, Integer>();
         if(mChapters!=null&&mChapters.size()!=0){
             for(int i=0;i<mChapters.size();i++){
@@ -57,9 +58,14 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
         }
     }
 
-    public void addToSelected(int position){
-        SelectedChapters.add(position);
-        map.put(position,Constants.CHAPTER_SELECTED);
-        mView.addToDownloadList(map);
+    public void uptdateToSelected(int position){
+        //SelectedChapters.add(position);
+        if(map.get(position).equals(Constants.CHAPTER_FREE)){
+            map.put(position,Constants.CHAPTER_SELECTED);
+        }else if(map.get(position).equals(Constants.CHAPTER_SELECTED)){
+            map.put(position,Constants.CHAPTER_FREE);
+        }
+        mView.updateDownloadList(map);
     }
+
 }

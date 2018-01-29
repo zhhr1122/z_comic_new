@@ -9,6 +9,7 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
+import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
 import com.zonst.libzadsdk.ZAdComponent;
 import com.zonst.libzadsdk.ZAdSdk;
@@ -26,6 +27,12 @@ import java.util.List;
  */
 
 public class IntentUtil {
+    public static void ToMainActivity(Context context){
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+
+
     public static void ToComicDetail(Context context, String id,String title){
         Intent intent = new Intent(context, ComicDetaiActivity.class);
         intent.putExtra(Constants.COMIC_ID,id);
@@ -67,12 +74,5 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_ID,mComic.getId());
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
         context.startActivity(intent);
-    }
-
-    public static void getRewardVideoAd(Context context, ZAdRewardListener listener){
-        Log.d("zhhr1122","getVideoAd start");
-        ZAdComponent ad = ZAdSdk.getInstance().getAd(ZAdType.VIDEO_REWARD, "1002");
-        ad.setRewardListener(listener);
-        ZAdSdk.getInstance().getLoader().loadAd(context, ad, false);
     }
 }

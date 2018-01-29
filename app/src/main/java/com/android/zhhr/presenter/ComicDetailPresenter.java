@@ -254,6 +254,8 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
      * @param mAdBanner
      */
     public void getAdBanner(Context context,ViewGroup mAdBanner) {
-        ADUtils.getAdBanner(context,mAdBanner);
+        ZAdComponent banner = ZAdSdk.getInstance().createAd(context,ZAdType.BANNER, "1001");
+        mAdBanner.addView(banner.getContentView()); // 添加到父视图里
+        ZAdSdk.getInstance().getLoader().loadAd(banner);
     }
 }

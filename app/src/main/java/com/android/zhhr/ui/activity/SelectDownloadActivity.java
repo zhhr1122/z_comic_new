@@ -18,6 +18,7 @@ import com.android.zhhr.ui.adapter.MainAdapter;
 import com.android.zhhr.ui.adapter.SelectDownloadAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
+import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.view.ISelectDownloadView;
 
@@ -57,7 +58,8 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
 
     @Override
     protected void initView() {
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(this,3);
+        layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
         mAdapter = new SelectDownloadAdapter(this,R.layout.item_select_download);
         mAdapter.updateWithClear(chapters);
@@ -65,9 +67,9 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 if(mAdapter.isOrder){
-                    mPresenter.addToSelected(position);
+                    mPresenter.uptdateToSelected(position);
                 }else{
-                    mPresenter.addToSelected(chapters.size()-position-1);
+                    mPresenter.uptdateToSelected(chapters.size()-position-1);
                 }
             }
         });
@@ -102,7 +104,7 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
     }
 
     @Override
-    public void addToDownloadList(HashMap map) {
+    public void updateDownloadList(HashMap map) {
         mAdapter.setMap(map);
         mAdapter.notifyDataSetChanged();
     }
