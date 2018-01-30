@@ -3,10 +3,15 @@ package com.android.zhhr.ui.activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,8 +20,12 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.presenter.ComicChapterPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
+import com.android.zhhr.ui.adapter.ChapterRecycleAdapter;
 import com.android.zhhr.ui.adapter.ChapterViewpagerAdapter;
+import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.ComicReaderViewpager;
+import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
+import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
 import com.android.zhhr.ui.custom.SwitchRelativeLayout;
 import com.android.zhhr.ui.custom.ZBubbleSeekBar;
@@ -67,6 +76,12 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Bind(R.id.iv_j_comic_model)
     Button mJcomic;
 
+    @Bind(R.id.rv_chapters)
+    RecyclerView mRecycleView;
+
+    ChapterRecycleAdapter mVerticalAdapter;
+    int mCurrentPosition = 0;
+
 
     @Override
     protected void initPresenter(Intent intent) {
@@ -94,7 +109,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mLoading.setImageResource(R.drawable.loading);
         AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
         animationDrawable.start();
-
+        //横版阅读初始化
         mAdapter = new ChapterViewpagerAdapter(this);
         mAdapter.setDirection(mPresenter.getmDirect());
         mViewpager.setOffscreenPageLimit(4);
@@ -150,6 +165,53 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
             }
         });
+        //卷轴阅读初始化
+        mVerticalAdapter = new ChapterRecycleAdapter(this,R.layout.item_comic_reader);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayout.VERTICAL);
+        mRecycleView.setLayoutManager(manager);
+        mRecycleView.setAdapter(mVerticalAdapter);
+        mVerticalAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position) {
+                mPresenter.clickScreen(0.5f,0.5f);
+            }
+        });
+        mRecycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                //判断是当前layoutManager是否为LinearLayoutManager
+                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                if(menuLayout.isShow()){
+                    menuLayout.setVisibility(View.GONE);
+                }
+                if(mSwitchModel.isShow()){
+                    mSwitchModel.setVisibility(View.GONE);
+                }
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    //获取最后一个可见view的位置
+                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+                    if(firstItemPosition!=mCurrentPosition){
+                        mCurrentPosition = firstItemPosition;
+                        mSeekbar.setProgress(mCurrentPosition-mPresenter.getmPreloadChapters().getPrelist().size()+1);
+                        int comic_size = mPresenter.getmPreloadChapters().getNowlist().size();
+                        String chapter_title = mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters());
+                        int now_postion = mCurrentPosition - mPresenter.getmPreloadChapters().getPrelist().size();
+                        mPresenter.setTitle(chapter_title,comic_size,now_postion,Constants.UP_TO_DOWN);
+                    }
+                }
+            }
+        });
+
+        //SeekBar初始化
         mSeekbar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int progress, float progressFloat) {
@@ -160,8 +222,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             public void getProgressOnActionUp(int progress, float progressFloat) {
                 if(mAdapter.getDirection() == Constants.RIGHT_TO_LEFT){
                     mViewpager.setCurrentItem(progress+mPresenter.getmPreloadChapters().getNextlist().size()-1);
-                }else{
+                }else if (mAdapter.getDirection() == Constants.LEFT_TO_RIGHT){
                     mViewpager.setCurrentItem(progress+mPresenter.getmPreloadChapters().getPrelist().size()-1);
+                }else{
+                    mRecycleView.smoothScrollToPosition(progress+mPresenter.getmPreloadChapters().getPrelist().size()-1);
                 }
             }
 
@@ -172,12 +236,13 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         });
         //设置加载时候的标题
         mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
+        initReaderModule(mPresenter.getmDirect());
+
         if(Constants.isAD){
             mPresenter.loadDataforAd();
         }else{
             mPresenter.loadData();
         }
-        initReaderModule(mPresenter.getmDirect());
     }
 
     /**
@@ -196,32 +261,46 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
      * 初始化阅读模式做一些处理
      */
     private void initReaderModule(int mDirect) {
-        if(mDirect==Constants.LEFT_TO_RIGHT){
-            mSeekbar.setSeekBarColor(true);
-            mNormal.setBackgroundResource(R.drawable.normal_model_press);
+        if(mDirect==Constants.UP_TO_DOWN){
+
         }else{
-            mSeekbar.setSeekBarColor(false);
-            mJcomic.setBackgroundResource(R.drawable.j_comic_model_press);
-        }
-        if(mDirect == Constants.LEFT_TO_RIGHT){
-            mNormal.setBackgroundResource(R.drawable.normal_model_press);
-            mJcomic.setBackgroundResource(R.drawable.btn_switchmodel_j_comic);
-        }else{
-            mNormal.setBackgroundResource(R.drawable.btn_switchmodel_normal);
-            mJcomic.setBackgroundResource(R.drawable.j_comic_model_press);
+            if(mDirect==Constants.LEFT_TO_RIGHT){
+                mSeekbar.setSeekBarColor(true);
+                mNormal.setBackgroundResource(R.drawable.normal_model_press);
+            }else{
+                mSeekbar.setSeekBarColor(false);
+                mJcomic.setBackgroundResource(R.drawable.j_comic_model_press);
+            }
+            if(mDirect == Constants.LEFT_TO_RIGHT){
+                mNormal.setBackgroundResource(R.drawable.normal_model_press);
+                mJcomic.setBackgroundResource(R.drawable.btn_switchmodel_j_comic);
+            }else{
+                mNormal.setBackgroundResource(R.drawable.btn_switchmodel_normal);
+                mJcomic.setBackgroundResource(R.drawable.j_comic_model_press);
+            }
         }
     }
 
     @Override
     public void fillData(PreloadChapters datas) {
         mPresenter.setmPreloadChapters(datas);
-        mAdapter.setDatas(datas);
-        mSeekbar.setmMax(datas.getNowlist().size());
-        if(mAdapter.getDirection() == Constants.RIGHT_TO_LEFT){
-            mViewpager.setCurrentItem(datas.getNextlist().size()+datas.getNowlist().size()-1,false);//关闭切换动画
+        if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
+            mVerticalAdapter.setDatas(datas);
+            mRecycleView.setVisibility(View.VISIBLE);
+            mViewpager.setVisibility(View.GONE);
+            mRecycleView.scrollToPosition(datas.getPrelist().size());
+            mCurrentPosition = datas.getPrelist().size();
         }else{
-            mViewpager.setCurrentItem(datas.getPrelist().size(),false);
+            mRecycleView.setVisibility(View.GONE);
+            mViewpager.setVisibility(View.VISIBLE);
+            mAdapter.setDatas(datas);
+            if(mAdapter.getDirection() == Constants.RIGHT_TO_LEFT){
+                mViewpager.setCurrentItem(datas.getNextlist().size()+datas.getNowlist().size()-1,false);//关闭切换动画
+            }else{
+                mViewpager.setCurrentItem(datas.getPrelist().size(),false);
+            }
         }
+        mSeekbar.setmMax(datas.getNowlist().size());
         mPresenter.updateComicCurrentChapter();
     }
 
@@ -264,73 +343,101 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     public void nextChapter(PreloadChapters data, int mPosition) {
-        mAdapter.setDatas(data);
-        mViewpager.setCurrentItem(mPosition,false);
-        mSeekbar.setmMax(data.getNowlist().size());
-        //为什么第一页的时候需要单独再设置Progress?因为adapter的LIST并未发生改变，所以调用刷新方法后没有调用onPageSelected方法，故没有设置Progress
-        if(mPresenter.getComic_chapters()==1){
-            if(mAdapter.getDirection()==Constants.LEFT_TO_RIGHT){
-                mSeekbar.setProgress(1);
-            }else{
-                mSeekbar.setProgress(data.getNowlist().size());
+        if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
+
+        }else{
+            mAdapter.setDatas(data);
+            mViewpager.setCurrentItem(mPosition,false);
+            mSeekbar.setmMax(data.getNowlist().size());
+            //为什么第一页的时候需要单独再设置Progress?因为adapter的LIST并未发生改变，所以调用刷新方法后没有调用onPageSelected方法，故没有设置Progress
+            if(mPresenter.getComic_chapters()==1){
+                if(mAdapter.getDirection()==Constants.LEFT_TO_RIGHT){
+                    mSeekbar.setProgress(1);
+                }else{
+                    mSeekbar.setProgress(data.getNowlist().size());
+                }
             }
+            mPresenter.updateComicCurrentChapter();
         }
-        mPresenter.updateComicCurrentChapter();
+
     }
 
     @Override
     public void preChapter(PreloadChapters data, int mPosition) {
-        mAdapter.setDatas(data);
-        mViewpager.setCurrentItem(mPosition,false);
-        mSeekbar.setmMax(data.getNowlist().size());
-        //为什么第一页的时候需要单独再设置Progress?因为adapter的LIST并未发生改变，所以调用刷新方法后没有调用onPageSelected方法，故没有设置Progress
-        if(mPresenter.getComic_chapters()==0){
-            if(mAdapter.getDirection()==Constants.LEFT_TO_RIGHT){
-                mSeekbar.setProgress(data.getNowlist().size());
-            }else{
-                mSeekbar.setProgress(1);
+        if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
+
+        }else {
+            mAdapter.setDatas(data);
+            mViewpager.setCurrentItem(mPosition,false);
+            mSeekbar.setmMax(data.getNowlist().size());
+            //为什么第一页的时候需要单独再设置Progress?因为adapter的LIST并未发生改变，所以调用刷新方法后没有调用onPageSelected方法，故没有设置Progress
+            if(mPresenter.getComic_chapters()==0){
+                if(mAdapter.getDirection()==Constants.LEFT_TO_RIGHT){
+                    mSeekbar.setProgress(data.getNowlist().size());
+                }else{
+                    mSeekbar.setProgress(1);
+                }
             }
+            mPresenter.updateComicCurrentChapter();
         }
-        mPresenter.updateComicCurrentChapter();
+
     }
 
     @Override
     public void SwitchModel(int mDirect) {
         if(mAdapter.getDirection()!=mDirect){
-            int nowposition = mViewpager.getCurrentItem();
-            //必须重新new 一个adapter 否则在接近页面的时候，会有缓存，图片切换会有问题
-            mAdapter = new ChapterViewpagerAdapter(this,mPresenter.getmPreloadChapters(),mDirect);
-            mAdapter.setListener(new ChapterViewpagerAdapter.OnceClickListener() {
-                @Override
-                public void onClick(View view, float x, float y) {
-                    mPresenter.clickScreen(x,y);
-                }
-            });
-            mViewpager.setAdapter(mAdapter);
-            mPresenter.setmDirect(mDirect);
-            mSwitchModel.setVisibility(View.GONE,mDirect);
-            initReaderModule(mDirect);
-            mViewpager.setCurrentItem(mPresenter.getmPreloadChapters().getDataSize()-nowposition-1,false);
+            if(mDirect == Constants.UP_TO_DOWN){
+                mRecycleView.setVisibility(View.VISIBLE);
+                mViewpager.setVisibility(View.GONE);
+
+            }else{
+                mRecycleView.setVisibility(View.GONE);
+                mViewpager.setVisibility(View.VISIBLE);
+
+                int nowposition = mViewpager.getCurrentItem();
+                //必须重新new 一个adapter 否则在接近页面的时候，会有缓存，图片切换会有问题
+                mAdapter = new ChapterViewpagerAdapter(this,mPresenter.getmPreloadChapters(),mDirect);
+                mAdapter.setListener(new ChapterViewpagerAdapter.OnceClickListener() {
+                    @Override
+                    public void onClick(View view, float x, float y) {
+                        mPresenter.clickScreen(x,y);
+                    }
+                });
+                mViewpager.setAdapter(mAdapter);
+                mPresenter.setmDirect(mDirect);
+                mSwitchModel.setVisibility(View.GONE,mDirect);
+                initReaderModule(mDirect);
+                mViewpager.setCurrentItem(mPresenter.getmPreloadChapters().getDataSize()-nowposition-1,false);
+            }
         }
     }
 
     @Override
     public void prePage() {
-        int postion = mViewpager.getCurrentItem()-1;
-        if(postion>=0){
-            mViewpager.setCurrentItem(postion);
+        if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
+
         }else{
-            showToast("没有了");
+            int postion = mViewpager.getCurrentItem()-1;
+            if(postion>=0){
+                mViewpager.setCurrentItem(postion);
+            }else{
+                showToast("没有了");
+            }
         }
+
     }
 
     @Override
     public void nextPage() {
-        int postion = mViewpager.getCurrentItem()+1;
-        if(postion<mAdapter.getCount()){
-            mViewpager.setCurrentItem(postion);
-        }else{
-            showToast("没有了");
+        if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
+
+        }else {
+            int postion = mViewpager.getCurrentItem()+1;
+            if(postion<mAdapter.getCount()){
+                mViewpager.setCurrentItem(postion);
+            }else{
+                showToast("没有了");
+            }
         }
     }
 
@@ -376,4 +483,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     public void SwitchToRightToLeft(View view){
         mPresenter.setReaderModuel(Constants.RIGHT_TO_LEFT);
     }
+
+    @OnClick(R.id.iv_down_model)
+    public void SwitchToUpToDown(View view){
+        mPresenter.setReaderModuel(Constants.UP_TO_DOWN);
+    }
+
 }

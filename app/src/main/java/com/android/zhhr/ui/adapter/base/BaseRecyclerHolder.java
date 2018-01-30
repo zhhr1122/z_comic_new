@@ -1,6 +1,7 @@
 package com.android.zhhr.ui.adapter.base;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -11,14 +12,20 @@ import android.graphics.Bitmap;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.w3c.dom.Text;
+
+import uk.co.senab.photoview.PhotoView;
 
 /**
  * 万能的RecyclerView的ViewHolder
@@ -120,6 +127,29 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
     public BaseRecyclerHolder setImageByUrl(int viewId,String url){
         ImageView iv = getView(viewId);
         GlideImageLoader.loadImage(context,url,iv);
+        return this;
+    }
+
+    public BaseRecyclerHolder setPhotoViewImageByUrl(int viewId, final String url){
+        final ImageView iv = getView(viewId);
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        Glide.with(context)
+                .load(url)
+                .asBitmap()//强制Glide返回一个Bitmap对象
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        float scale = ((float) height)/width;
+                        iv.setLayoutParams(new RelativeLayout.LayoutParams(1080,(int)(scale*1080)));
+                        Glide.with(context)
+                                .load(url)
+                                .placeholder(R.mipmap.pic_default)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv);
+                    }
+                });
         return this;
     }
 }

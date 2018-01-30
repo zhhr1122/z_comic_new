@@ -56,8 +56,10 @@ public class ElasticScrollView extends ScrollView {
     protected void onFinishInflate() {
         if (getChildCount() > 0) {
             inner = (ViewGroup) getChildAt(0);
-            mLoadingTop = inner.findViewById(R.id.iv_loading_top);
-            initAnimation();
+            if(inner.getChildCount()!=1){
+                mLoadingTop = inner.findViewById(R.id.iv_loading_top);
+                initAnimation();
+            }
         }
         setOverScrollMode(OVER_SCROLL_NEVER);//取消5.0效果
     }

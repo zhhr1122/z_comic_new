@@ -275,7 +275,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     public void setTitle(String comic_chapter_title, int comic_size, int position,int Direct){
         String title = null;
-        if(Direct == Constants.LEFT_TO_RIGHT){
+        if(Direct == Constants.LEFT_TO_RIGHT||Direct == Constants.UP_TO_DOWN){
             title = comic_chapter_title+"-"+(position+1)+"/"+comic_size;
         }else{
             title = comic_chapter_title+"-"+(comic_size-position)+"/"+comic_size;

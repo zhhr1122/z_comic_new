@@ -259,7 +259,7 @@ public class TencentComicAnalysis {
             if(Element_isJ!=null&&Element_isJ.size()!=0){
                 comic.setReadType(Constants.RIGHT_TO_LEFT);
             }else{
-                comic.setReadType(Constants.LEFT_TO_RIGHT);
+                comic.setReadType(Constants.UP_TO_DOWN);
             }
         }catch (Exception e){
 

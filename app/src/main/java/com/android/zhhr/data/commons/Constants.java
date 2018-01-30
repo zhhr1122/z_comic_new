@@ -14,6 +14,7 @@ public class Constants {
     public final static String COMIC = "comic";
     public final static int RIGHT_TO_LEFT =0;
     public final static int LEFT_TO_RIGHT =1;
+    public final static int UP_TO_DOWN = 2;
     public final static String DB_NAME = "comic";
     /**
      * 表示当前章节的状态
