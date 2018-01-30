@@ -64,7 +64,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Bind(R.id.v_actionbar_bg)
     View mActionBarBg;
 
-    private ZAdComponent ad;
 
 
 
@@ -249,8 +248,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                 ShowToast("更多排行开发中");
                 break;
             case Constants.TYPE_RECOMMEND:
-                ad= ZAdSdk.getInstance().createAd(getActivity(), ZAdType.VIDEO, "1004");
-                ZAdSdk.getInstance().getLoader().loadAd(ad);
                 ShowToast("更多热门推荐开发中");
                 break;
             default:
@@ -261,9 +258,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     @Override
     public void onDestroy() {
-        if(ad!=null){
-            ad.release();
-        }
         super.onDestroy();
     }
 

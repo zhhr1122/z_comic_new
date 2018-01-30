@@ -45,8 +45,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     //加载过程中进行的翻页
     private int loadingPosition = 0;
 
-    private ZAdComponent ad;
-    private ZAdComponent pre_AD;
+    private ZAdComponent mReWardAd;
+    private ZAdComponent mPreAd;
+    private ZAdComponent mVideoAd;
 
     public ComicChapterPresenter(Activity context, IChapterView view) {
         super(context, view);
@@ -118,8 +119,10 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     public void loadDataforAd(){
         if(comic_chapter_title.size()-10<=comic_chapters){
-            ad = ZAdSdk.getInstance().createAd(mContext, ZAdType.VIDEO_REWARD, "1003");
-            ad.setRewardListener(new ZAdRewardListener() {
+            if(mReWardAd==null){
+                mReWardAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO_REWARD, "1003");
+            }
+            mReWardAd.setRewardListener(new ZAdRewardListener() {
                 @Override
                 public void onReward(RewardBean rewardBean) {
                     Log.d("zhhr1122","onReward");
@@ -132,13 +135,18 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     }
                 }
             });
-            ZAdSdk.getInstance().getLoader().loadAd(ad);
+            ZAdSdk.getInstance().getLoader().loadAd(mReWardAd);
         }else{
-            pre_AD= ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1004");
-            if(ZAdSdk.getInstance().getLoader().readyForPreloadAd(pre_AD)){
-                ZAdSdk.getInstance().getLoader().showPreloadAd(pre_AD);
+            if(mPreAd==null){
+                mPreAd= ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1004");
+            }
+            if(ZAdSdk.getInstance().getLoader().readyForPreloadAd(mPreAd)){
+                ZAdSdk.getInstance().getLoader().showPreloadAd(mPreAd);
             }else{
-                mView.ShowToast("预加载广告未完成");
+                if(mVideoAd==null){
+                    mVideoAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1004");
+                }
+                ZAdSdk.getInstance().getLoader().loadAd(mVideoAd);
             }
             loadData();
         }
@@ -354,14 +362,5 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 }
             }
         });
-    }
-
-    public void releseAd(){
-        if(ad!=null){
-            ad.release();
-        }
-        if(pre_AD!=null){
-            pre_AD.release();
-        }
     }
 }

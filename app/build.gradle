@@ -68,7 +68,7 @@ dependencies {
     compile 'com.commit451:PhotoView:1.2.4'
 
     compile 'cn.jiguang.sdk:jpush:3.0.3'  // 此处以JPush 3.0.3 版本为例。
-    compile 'cn.jiguang.sdk:jcore:1.1.1'  // 此处以JCore 1.1.1 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.1'  // 此处以JCore 1.1.1 版本为例。 
 
     compile 'com.xw.repo:bubbleseekbar:3.4-lite'
     compile 'com.zhy:base-rvadapter:3.0.3'

@@ -46,7 +46,9 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView>{
     }
 
     public void getAdSuccess(int i){
-        IntentUtil.ToMainActivity(mContext);
+        if(i == 10000){
+            IntentUtil.ToMainActivity(mContext);
+        }
     }
 
     public void ShowAdSuccess(boolean b){

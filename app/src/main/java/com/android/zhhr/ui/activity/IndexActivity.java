@@ -13,6 +13,7 @@ import com.android.zhhr.presenter.IndexPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.DetailAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
+import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.view.IIndexView;
 import com.android.zhhr.utils.IntentUtil;
 
@@ -55,11 +56,13 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
         intent = getIntent();
         mAdapter = new DetailAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(this,1);
+        layoutManager.setScrollEnabled(false);
+        mRecycleView.setLayoutManager(layoutManager);
         mAdapter.updateWithClear(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
         mAdapter.setOnItemClickListener(this);
         mTitle.setText(intent.getStringExtra(Constants.COMIC_TITLE));
-        mChapterNum.setText(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size());
+        mChapterNum.setText("共"+intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size()+"话");
         mDownload.setVisibility(View.VISIBLE);
     }
 

@@ -24,33 +24,24 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     private ArrayList<String> mChapters;
 
     private HashMap<Integer,Integer> map;
+    private boolean isSelectedAll ;
+    private int SelectedNum = 0;
 
-    /*public ArrayList<Integer> getSelectedChapters() {
-        return SelectedChapters;
+    public int getSelectedNum() {
+        return SelectedNum;
     }
 
-    public void setSelectedChapters(ArrayList<Integer> selectedChapters) {
-        SelectedChapters = selectedChapters;
-    }
-
-    public ArrayList<Integer> getDownloadedChapters() {
-        return DownloadedChapters;
-    }
-
-    public void setDownloadedChapters(ArrayList<Integer> downloadedChapters) {
-        DownloadedChapters = downloadedChapters;
-    }
-*/
-    public SelectDownloadPresenter(Activity context, ISelectDownloadView view,ArrayList<String> mChapters) {
+    public SelectDownloadPresenter(Activity context, ISelectDownloadView view, ArrayList<String> mChapters) {
         super(context, view);
         this.mChapters = mChapters;
+        isSelectedAll  = false;
         initData();
     }
 
     private void initData() {
         /*SelectedChapters = new ArrayList<>();
         DownloadedChapters = new ArrayList<>();*/
-        map = new HashMap<Integer, Integer>();
+        map = new HashMap<>();
         if(mChapters!=null&&mChapters.size()!=0){
             for(int i=0;i<mChapters.size();i++){
                 map.put(i, Constants.CHAPTER_FREE);
@@ -61,10 +52,40 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     public void uptdateToSelected(int position){
         //SelectedChapters.add(position);
         if(map.get(position).equals(Constants.CHAPTER_FREE)){
+            SelectedNum++;
             map.put(position,Constants.CHAPTER_SELECTED);
         }else if(map.get(position).equals(Constants.CHAPTER_SELECTED)){
             map.put(position,Constants.CHAPTER_FREE);
+            SelectedNum--;
+            isSelectedAll = false;
+            mView.removeAll();
         }
+        mView.updateDownloadList(map);
+    }
+
+    public void SelectOrMoveAll(){
+        if(!isSelectedAll){
+            if(mChapters!=null&&mChapters.size()!=0){
+                for(int i=0;i<mChapters.size();i++){
+                    if(map.get(i) == Constants.CHAPTER_FREE){
+                        map.put(i, Constants.CHAPTER_SELECTED);
+                        SelectedNum++;
+                    }
+                }
+                mView.addAll();
+            }
+        }else{
+            if(mChapters!=null&&mChapters.size()!=0){
+                for(int i=0;i<mChapters.size();i++){
+                    if(map.get(i) == Constants.CHAPTER_SELECTED){
+                        map.put(i, Constants.CHAPTER_FREE);
+                    }
+                }
+                SelectedNum = 0;
+                mView.removeAll();
+            }
+        }
+        isSelectedAll = !isSelectedAll;
         mView.updateDownloadList(map);
     }
 

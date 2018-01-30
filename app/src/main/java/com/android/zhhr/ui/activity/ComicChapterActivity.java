@@ -336,7 +336,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     protected void onDestroy() {
-        mPresenter.releseAd();
         super.onDestroy();
     }
 

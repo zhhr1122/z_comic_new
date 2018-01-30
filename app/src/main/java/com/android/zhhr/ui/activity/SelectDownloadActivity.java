@@ -41,9 +41,18 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
     @Bind(R.id.iv_order)
     ImageView mOrder;
 
+    @Bind(R.id.tv_select_all)
+    TextView mSelected;
+
+    @Bind(R.id.iv_select)
+    ImageView mSelectedIcon;
+    @Bind(R.id.tv_selected)
+    TextView mSelectedNum;
+
     private ArrayList<String> chapters;
 
     private SelectDownloadAdapter mAdapter;
+
 
     @Override
     protected void initPresenter(Intent intent) {
@@ -66,11 +75,10 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                if(mAdapter.isOrder){
-                    mPresenter.uptdateToSelected(position);
-                }else{
-                    mPresenter.uptdateToSelected(chapters.size()-position-1);
+                if(!mAdapter.isOrder){
+                    position = chapters.size()-position-1;
                 }
+                mPresenter.uptdateToSelected(position);
             }
         });
         mRecycleView.setAdapter(mAdapter);
@@ -107,16 +115,20 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
     public void updateDownloadList(HashMap map) {
         mAdapter.setMap(map);
         mAdapter.notifyDataSetChanged();
+        mSelectedNum.setText("已选择"+mPresenter.getSelectedNum()+"话");
+
     }
 
     @Override
     public void addAll() {
-
+        mSelected.setText("取消全选");
+        mSelectedIcon.setImageResource(R.mipmap.btn_cancel_select);
     }
 
     @Override
     public void removeAll() {
-
+        mSelected.setText("全选");
+        mSelectedIcon.setImageResource(R.mipmap.btn_select);
     }
 
     @OnClick(R.id.iv_back_color)
@@ -132,5 +144,10 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
         }else{
             mOrder.setImageResource(R.mipmap.zhengxu);
         }
+    }
+
+    @OnClick(R.id.rl_select)
+    public void SelectAll(View view){
+        mPresenter.SelectOrMoveAll();
     }
 }

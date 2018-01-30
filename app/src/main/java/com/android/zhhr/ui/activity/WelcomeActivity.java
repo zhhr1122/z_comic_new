@@ -60,9 +60,6 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements I
     @Override
     protected void onDestroy() {
         mPresenter.onDestory();
-        if(ad!=null){
-            ad.release();
-        }
         super.onDestroy();
     }
 
