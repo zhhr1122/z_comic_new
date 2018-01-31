@@ -32,17 +32,17 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_z_comic"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_z_comic"
         android:supportsRtl="true"
         android:name=".application.MyApplication"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="libzadsdk_app_key"
-            android:value="ODUJ1JbD+5L38a7jJ38oD7B8hEvoYGjyG9jishjj/n0=" />
+            android:value="U79a4+p45ANnIeLDYsXXpjpV2Dm4cMagr1fMZd9gJ4w" />
 
-        <activity android:name=".ui.activity.WelcomeActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,7 +54,7 @@
             android:launchMode="singleTask"/>
         <activity android:name=".ui.activity.IndexActivity"/>
         <activity android:name=".ui.activity.SelectDownloadActivity"/>
-        <activity android:name=".ui.activity.MainActivity"/>
+        <activity android:name=".ui.activity.WelcomeActivity"/>
 
 
         <!-- Required SDK 核心功能-->

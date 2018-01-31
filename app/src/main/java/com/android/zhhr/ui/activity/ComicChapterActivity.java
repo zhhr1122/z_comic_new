@@ -395,20 +395,23 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     public void SwitchModel(int mDirect) {
         if(mPresenter.getmDirect()!=mDirect){
+            //切换到卷轴模式
             if(mDirect == Constants.UP_TO_DOWN){
                 mRecycleView.setVisibility(View.VISIBLE);
                 mViewpager.setVisibility(View.GONE);
                 int nowposition = mViewpager.getCurrentItem();
                 mVerticalAdapter.setDatas(mPresenter.getmPreloadChapters());
+                //从左往右切换到卷轴
                 if(mPresenter.getmDirect()==Constants.LEFT_TO_RIGHT){
                     mRecycleView.scrollToPosition(nowposition);
                     mCurrentPosition = nowposition;
-                }else if(mPresenter.getmDirect()==Constants.RIGHT_TO_LEFT){
+                }else if(mPresenter.getmDirect()==Constants.RIGHT_TO_LEFT){ //从右往左切换到卷轴
                     mRecycleView.scrollToPosition(mPresenter.getmPreloadChapters().getDataSize()-nowposition-1);
                     mCurrentPosition = mPresenter.getmPreloadChapters().getDataSize()-nowposition-1;
                 }
                 mSeekbar.setProgress(mCurrentPosition-mPresenter.getmPreloadChapters().getPreSize()+1);
             }else{
+                //切换到横版模式
                 mRecycleView.setVisibility(View.GONE);
                 mViewpager.setVisibility(View.VISIBLE);
                 int nowposition;

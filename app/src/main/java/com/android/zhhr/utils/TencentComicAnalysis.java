@@ -154,16 +154,15 @@ public class TencentComicAnalysis {
      */
     public static List<SmallHomeItem> TransToGirlsComic(Document doc){
         List<SmallHomeItem> mdats = new ArrayList<SmallHomeItem>();
-        Random random =new Random();
         Element detail = doc.getElementsByAttributeValue("class","in-girl-list mod-cover-list clearfix").get(0);
-        List<Element> boys = detail.getElementsByTag("li");
-        for(int i=0;i<boys.size();i++){
+        List<Element> girls = detail.getElementsByTag("li");
+        for(int i=0;i<girls.size();i++){
             SmallHomeItem comic = new SmallHomeItem();
-            comic.setTitle(boys.get(i).select("img").attr("alt"));
-            comic.setCover(boys.get(i).select("img").attr("data-original"));
-            Element ElementDescribe = boys.get(i).getElementsByAttributeValue("class","mod-cover-list-intro").get(0);
+            comic.setTitle(girls.get(i).select("img").attr("alt"));
+            comic.setCover(girls.get(i).select("img").attr("data-original"));
+            Element ElementDescribe = girls.get(i).getElementsByAttributeValue("class","mod-cover-list-intro").get(0);
             comic.setDescribe(ElementDescribe.select("p").text());
-            comic.setId(Long.parseLong(getID(boys.get(i).select("a").attr("href"))));
+            comic.setId(Long.parseLong(getID(girls.get(i).select("a").attr("href"))));
             mdats.add(comic);
         }
         return mdats;
@@ -257,7 +256,7 @@ public class TencentComicAnalysis {
             //设置阅读方式
             List<Element> Element_isJ = doc.getElementsByAttributeValue("src","http://q2.qlogo.cn/g?b=qq&k=hMPm8WLLDbcdk0Vs4epHxA&s=100&t=561");
             if(Element_isJ!=null&&Element_isJ.size()!=0){
-                comic.setReadType(Constants.RIGHT_TO_LEFT);
+                comic.setReadType(Constants.UP_TO_DOWN);
             }else{
                 comic.setReadType(Constants.UP_TO_DOWN);
             }

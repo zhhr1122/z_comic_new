@@ -2,6 +2,7 @@ package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
@@ -14,6 +15,8 @@ import com.zonst.libzadsdk.ZAdSdk;
 import com.zonst.libzadsdk.ZAdType;
 import com.zonst.libzadsdk.listener.ZAdDisplayListener;
 import com.zonst.libzadsdk.listener.ZAdLoadListener;
+
+import butterknife.Bind;
 
 /**
  * Created by 张皓然 on 2018/1/29.
@@ -36,7 +39,9 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements I
         mPresenter.init();
         //add start for adsdk
         if(Constants.isAD){
-            ad = ZAdSdk.getInstance().createAd(this, ZAdType.FULL_SCREEN, "1002");
+            if(ad==null){
+                ad = ZAdSdk.getInstance().createAd(this, ZAdType.FULL_SCREEN, "1002");
+            }
             ad.setDisplayListener(new ZAdDisplayListener() {
                 @Override
                 public void onDisplay(boolean b) {

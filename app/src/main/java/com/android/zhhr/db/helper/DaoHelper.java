@@ -29,7 +29,7 @@ public class DaoHelper<T> {
     }
     // 插入增加
     public boolean insert(T t) {
-        return manager.getDaoSession().insert(t) != -1 ? true : false;
+        return manager.getDaoSession().insert(t) != -1;
     }
     //插入集合
     public boolean insertList(final List<T> datas) {
@@ -71,7 +71,7 @@ public class DaoHelper<T> {
     }
     //列出所有
     public List<T> listAll() {
-        return (List<T>) manager.getDaoSession().loadAll(getClazz());
+        return manager.getDaoSession().loadAll(getClazz());
     }
 
     public List<Comic> listComicAll() {
