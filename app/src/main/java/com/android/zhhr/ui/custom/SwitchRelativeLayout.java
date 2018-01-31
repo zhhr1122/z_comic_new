@@ -53,8 +53,10 @@ public class SwitchRelativeLayout extends RelativeLayout{
         int id = 0;
         if(mDirect == Constants.LEFT_TO_RIGHT){
             id = R.mipmap.succ_left_to_right;
-        }else{
+        }else if(mDirect == Constants.RIGHT_TO_LEFT){
             id = R.mipmap.succ_right_to_left;
+        }else{
+            id = R.mipmap.succ_up_to_down;
         }
         switch (visibility){
             case View.GONE:
