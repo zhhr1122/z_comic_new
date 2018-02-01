@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:id="@+id/rl_actionbar"
         android:background="@color/colorBgDark"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -19,20 +20,39 @@
                 android:layout_width="match_parent"
                 android:background="@drawable/sarchbar_bg"
                 />
-            <LinearLayout
-                android:layout_centerVertical="true"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp">
-                <ImageView
-                    android:layout_marginLeft="16dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@mipmap/search_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
 
-            </LinearLayout>
+            <ImageView
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/search_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_marginRight="60dp"
+                android:layout_marginLeft="40dp"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="输入作品名或作者名"
+                android:textSize="14dp"
+                android:textColor="@color/colorTextBlack"
+                android:background="@null"
+                android:ellipsize="start"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textColorHint="@color/colorTextColorLight"/>
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_clear"
+                android:layout_marginRight="60dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/clear_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
             <TextView
                 android:layout_marginRight="10dp"
                 android:textColor="@color/colorTextBlack"
@@ -44,9 +64,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
-
         </RelativeLayout>
 
     </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/rl_actionbar"
+        android:id="@+id/iv_dynamic_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

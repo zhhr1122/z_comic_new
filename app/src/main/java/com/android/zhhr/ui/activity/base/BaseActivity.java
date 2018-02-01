@@ -56,7 +56,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         initPresenter(getIntent());
         checkPresenterIsNull();
         initView();
-        Log.d("zhhr1133","onCreate");
     }
 
 

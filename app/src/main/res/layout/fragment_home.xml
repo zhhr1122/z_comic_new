@@ -281,6 +281,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/iv_search"
                 android:layout_marginRight="20dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"

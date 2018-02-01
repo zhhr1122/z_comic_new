@@ -246,6 +246,16 @@ public class ComicModule {
                 .subscribe(subscriber);
 
     }
+    //搜索相关
+
+    //搜索相关
+    public void getDynamicResult(String title,Subscriber subscriber){
+        comicService.getDynamicSearchResult(Url.TencentSearchUrl+title)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 
     //操作数据库相关方法
 

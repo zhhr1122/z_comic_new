@@ -66,7 +66,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
 
 
-
     @Override
     protected void initPresenter() {
         mPresenter = new HomePresenter(getActivity(),this);
@@ -266,6 +265,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         mErrorView.setVisibility(View.GONE);
         //mPresenter.refreshData();
         mPresenter.LoadData();
+    }
+
+    @OnClick(R.id.iv_search)
+    public void ToSearch(View view){
+        IntentUtil.ToSearch(getActivity());
     }
 
     @OnClick({ R.id.ll_category1, R.id.ll_category2, R.id.ll_category3, R.id.ll_category4,R.id.ll_category5 })

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_dynamic_search"
+        android:text="title"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:textSize="16dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:textColor="@color/colorTextColorDark"
+        />
+    <View
+        android:background="@color/colorBottom"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+
+</LinearLayout>

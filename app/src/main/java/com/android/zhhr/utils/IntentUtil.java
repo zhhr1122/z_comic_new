@@ -10,6 +10,7 @@ import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.MainActivity;
+import com.android.zhhr.ui.activity.SearchActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
 import com.zonst.libzadsdk.ZAdComponent;
 import com.zonst.libzadsdk.ZAdSdk;
@@ -73,6 +74,11 @@ public class IntentUtil {
         Intent intent = new Intent(context, SelectDownloadActivity.class);
         intent.putExtra(Constants.COMIC_ID,mComic.getId());
         intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
+        context.startActivity(intent);
+    }
+
+    public static void ToSearch(Context context){
+        Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
     }
 }

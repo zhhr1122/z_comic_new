@@ -106,12 +106,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mLoadingText.setText("正在加载,请稍后...");
         initPresenter(intent);
         initView();
-        Log.d("zhhr1133","onNewIntent");
     }
 
     @Override
     protected void initView() {
-        Log.d("zhhr1133","initView");
         setNavigation();
         mLoading.setImageResource(R.drawable.loading);
         AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
@@ -247,7 +245,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         initReaderModule(mPresenter.getmDirect());
 
         if(Constants.isAD){
-            Log.d("zhhr1133","loadDataforAd");
             mPresenter.loadDataforAd();
         }else{
             mPresenter.loadData();
@@ -522,9 +519,4 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mPresenter.setReaderModuel(Constants.UP_TO_DOWN);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Log.d("zhhr1133","onConfigurationChanged");
-    }
 }
