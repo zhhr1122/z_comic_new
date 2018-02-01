@@ -42,7 +42,7 @@
             android:name="libzadsdk_app_key"
             android:value="U79a4+p45ANnIeLDYsXXpjpV2Dm4cMagr1fMZd9gJ4w" />
 
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,7 +54,7 @@
             android:launchMode="singleTask"/>
         <activity android:name=".ui.activity.IndexActivity"/>
         <activity android:name=".ui.activity.SelectDownloadActivity"/>
-        <activity android:name=".ui.activity.WelcomeActivity"/>
+        <activity android:name=".ui.activity.MainActivity"/>
 
 
         <!-- Required SDK 核心功能-->

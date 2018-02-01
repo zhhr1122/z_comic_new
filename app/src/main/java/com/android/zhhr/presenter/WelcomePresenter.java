@@ -6,7 +6,10 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.android.zhhr.ui.view.IWelcomeView;
+import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.IntentUtil;
+import com.zonst.libzadsdk.ZAdError;
+import com.zonst.libzadsdk.ZAdType;
 
 /**
  * Created by 张皓然 on 2018/1/29.
@@ -46,7 +49,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView>{
     }
 
     public void getAdSuccess(int i){
-        if(i == 10000){
+        if(i == ZAdError.OK){
             IntentUtil.ToMainActivity(mContext);
         }
     }
@@ -54,7 +57,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView>{
     public void ShowAdSuccess(boolean b){
         mhandler.removeCallbacks(runnable);
         isShowAd = true;
-        if(b){
+        if(!b){
             mContext.finish();
         }
     }
