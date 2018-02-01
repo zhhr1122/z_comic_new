@@ -4,13 +4,46 @@
     <RelativeLayout
         android:background="@color/colorBgDark"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         >
         <RelativeLayout
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             >
+            <ImageView
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_height="35dp"
+                android:layout_width="match_parent"
+                android:background="@drawable/sarchbar_bg"
+                />
+            <LinearLayout
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp">
+                <ImageView
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/search_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+            <TextView
+                android:layout_marginRight="10dp"
+                android:textColor="@color/colorTextBlack"
+                android:layout_centerVertical="true"
+                android:textSize="16dp"
+                android:layout_alignParentRight="true"
+                android:text="取消"
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
 
         </RelativeLayout>
 

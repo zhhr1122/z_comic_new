@@ -42,19 +42,31 @@
             android:name="libzadsdk_app_key"
             android:value="U79a4+p45ANnIeLDYsXXpjpV2Dm4cMagr1fMZd9gJ4w" />
 
-        <activity android:name=".ui.activity.WelcomeActivity">
+        <activity android:name=".ui.activity.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.ComicDetaiActivity"/>
+        <activity android:name=".ui.activity.ComicDetaiActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".ui.activity.ComicChapterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
-        <activity android:name=".ui.activity.IndexActivity"/>
-        <activity android:name=".ui.activity.SelectDownloadActivity"/>
-        <activity android:name=".ui.activity.MainActivity"/>
+        <activity android:name=".ui.activity.IndexActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.SelectDownloadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
 
 
         <!-- Required SDK 核心功能-->

@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
+import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -142,7 +143,7 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
                         int width = bitmap.getWidth();
                         int height = bitmap.getHeight();
                         float scale = ((float) height)/width;
-                        iv.setLayoutParams(new RelativeLayout.LayoutParams(1080,(int)(scale*1080)));
+                        iv.setLayoutParams(new RelativeLayout.LayoutParams(DisplayUtil.getScreenWidth(context),(int)(scale*DisplayUtil.getScreenWidth(context))));
                         Glide.with(context)
                                 .load(url)
                                 .placeholder(R.mipmap.pic_default)

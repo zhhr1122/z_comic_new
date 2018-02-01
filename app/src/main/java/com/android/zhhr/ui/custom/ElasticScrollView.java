@@ -57,7 +57,7 @@ public class ElasticScrollView extends ScrollView {
         if (getChildCount() > 0) {
             inner = (ViewGroup) getChildAt(0);
             if(inner.getChildCount()!=1){
-                mLoadingTop = inner.findViewById(R.id.iv_loading_top);
+                mLoadingTop = (ImageView) inner.findViewById(R.id.iv_loading_top);
                 initAnimation();
             }
         }

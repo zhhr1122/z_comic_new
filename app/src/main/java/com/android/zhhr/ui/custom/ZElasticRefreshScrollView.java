@@ -115,7 +115,7 @@ public class ZElasticRefreshScrollView extends ScrollView {
         //mListView = mMoveView.getChildAt(2);
         mLoadingBottom = mMoveView.getChildAt(3);
         setOverScrollMode(OVER_SCROLL_NEVER);//取消5.0效果
-        mLoadingTopImg = inner.findViewById(R.id.iv_loading_top);
+        mLoadingTopImg = (ImageView) inner.findViewById(R.id.iv_loading_top);
         initAnimation();
     }
 
@@ -270,7 +270,7 @@ public class ZElasticRefreshScrollView extends ScrollView {
         ta.setDuration(300);
         mMoveView.startAnimation(ta);
         // 设置回到正常的布局位置
-        mMoveView.layout(normal.left, normal.top+160, normal.right, normal.bottom+160);
+        mMoveView.layout(normal.left, normal.top+DisplayUtil.dip2px(getContext(),53), normal.right, normal.bottom+DisplayUtil.dip2px(getContext(),53));
         //normal.setEmpty();
     }
 

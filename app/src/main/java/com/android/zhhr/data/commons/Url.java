@@ -21,7 +21,9 @@ public class Url {
     //抓取腾讯漫画详情页面
     public static String TencentDetail = "http://ac.qq.com/Comic/comicInfo/id/";
     //抓取详细的漫画阅读界面 2018/1/30更换为滴滴云
-    public static String TencentComicChapters ="http://116.85.46.229:5000";
+    public static String TencentComicChapters1 ="http://116.85.46.229:5000";
+
+    public static String TencentComicChapters = "http://chengmboy.xin:5001";
 
 }
 

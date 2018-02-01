@@ -94,6 +94,14 @@ public class DisplayUtil {
         return outMetrics.heightPixels;
     }
 
+    public static int getScreenWidth(Context context)
+    {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
+    }
+
     /**
      * 将px值转换为dip或dp值，保证尺寸大小不变
      * @param context

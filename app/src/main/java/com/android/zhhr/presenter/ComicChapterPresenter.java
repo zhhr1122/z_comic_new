@@ -144,7 +144,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 ZAdSdk.getInstance().getLoader().showPreloadAd(mPreAd);
             }else{
                 if(mVideoAd==null){
-                    mVideoAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1004");
+                    mVideoAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1005");
                 }
                 ZAdSdk.getInstance().getLoader().loadAd(mVideoAd);
             }
