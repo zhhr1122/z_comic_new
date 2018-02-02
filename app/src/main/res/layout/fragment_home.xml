@@ -190,30 +190,6 @@
                     android:src="@mipmap/bottom"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"/>
-                <RelativeLayout
-                    android:visibility="gone"
-                    android:id="@+id/rl_error_view"
-                    android:background="@color/colorBgDark"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    >
-                    <ImageView
-                        android:id="@+id/iv_error_bg"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/error_bg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <ImageView
-                        android:layout_centerInParent="true"
-                        android:id="@+id/iv_error"
-                        android:layout_below="@id/iv_error_bg"
-                        android:src="@mipmap/btn_reload"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-
-                </RelativeLayout>
             </RelativeLayout>
             <com.youth.banner.Banner
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -290,6 +266,30 @@
                 android:layout_height="wrap_content"
                 />
         </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_error_view"
+        android:background="@color/colorBgDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ImageView
+            android:id="@+id/iv_error_bg"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/error_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/iv_error"
+            android:layout_below="@id/iv_error_bg"
+            android:src="@mipmap/btn_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
     </RelativeLayout>
 
 

@@ -27,5 +27,7 @@ public class Url {
     //腾讯漫画搜索接口
     public static String TencentSearchUrl  = "http://m.ac.qq.com/search/smart?word=";
 
+    public static String TencentSearchResultUrl = "http://m.ac.qq.com/search/result?word=";
+
 }
 

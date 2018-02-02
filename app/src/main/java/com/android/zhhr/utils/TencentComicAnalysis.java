@@ -84,6 +84,29 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
+    public static List<Comic> TransToSearchResultComic(Document doc){
+        List<Comic> mdats = new ArrayList<>();
+        List<Element> detail = doc.getElementsByAttributeValue("class","comic-item");
+        for(int i=0;i<detail.size();i++){
+            Comic comic = new Comic();
+            comic.setTitle(detail.get(i).select("strong").text());
+            comic.setCover(detail.get(i).select("img").attr("src"));
+            comic.setId(Long.parseLong(getID(detail.get(i).select("a").attr("href"))));
+            List<Element> info = detail.get(i).select("small");
+            comic.setUpdates(info.get(0).text());
+            String descriptions = info.get(1).text();
+            String mdescriptions[] = descriptions.split("：");
+            List<String> tags = new ArrayList<>();
+            for(int j=0;j<mdescriptions.length;j++){
+                tags.add(mdescriptions[j]);
+            }
+            comic.setTags(tags);
+            comic.setAuthor(info.get(2).text());
+            mdats.add(comic);
+        }
+        return mdats;
+    }
+
     //处理漫画列表
     public static List<FullHomeItem> TransToJapanComic(Document doc){
         List<FullHomeItem> mdats = new ArrayList<>();

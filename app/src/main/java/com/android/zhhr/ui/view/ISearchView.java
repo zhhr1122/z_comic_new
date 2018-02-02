@@ -1,5 +1,7 @@
 package com.android.zhhr.ui.view;
 
+import com.android.zhhr.data.entity.SearchResult;
+
 import java.util.List;
 
 /**
@@ -9,9 +11,11 @@ import java.util.List;
 public interface ISearchView<T> extends ILoadDataView<T>{
     void clearText();
     //动态搜索
-    void fillDynamicResult(T t);
+    void fillDynamicResult(SearchResult t);
     //搜索结果
     void fillResult(T t);
 
     void fillHotRank(List<String> ranks);
+
+    String getSearchText();
 }

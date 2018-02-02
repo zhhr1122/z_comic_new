@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout
+    android:windowSoftInputMode="adjustPan"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/rl_actionbar"
@@ -68,11 +70,18 @@
 
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:layout_below="@id/rl_actionbar"
         android:id="@+id/iv_dynamic_recycle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+    </android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
+        android:layout_below="@id/rl_actionbar"
+        android:id="@+id/iv_result_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

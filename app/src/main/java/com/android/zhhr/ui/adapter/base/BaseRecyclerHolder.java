@@ -1,6 +1,7 @@
 package com.android.zhhr.ui.adapter.base;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 
@@ -82,6 +83,16 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
             tv.setVisibility(View.GONE);
         }else{
             tv.setText(text);
+        }
+        return this;
+    }
+
+    public BaseRecyclerHolder setHtmlText(int viewId,String text){
+        TextView tv = getView(viewId);
+        if(text==null){
+            tv.setVisibility(View.GONE);
+        }else{
+            tv.setText(Html.fromHtml(text));
         }
         return this;
     }
