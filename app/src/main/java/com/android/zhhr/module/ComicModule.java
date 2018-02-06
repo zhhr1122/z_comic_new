@@ -276,8 +276,27 @@ public class ComicModule {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
 
-
+    public void getTopResult(Subscriber subscriber) {
+        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+            @Override
+            public void call(Subscriber<? super List<Comic>> subscriber) {
+                try {
+                    Document doc = Jsoup.connect(Url.TencentSearchRecommend).get();
+                    List<Comic> mdats = TencentComicAnalysis.TransToSearchTopComic(doc);
+                    subscriber.onNext(mdats);
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                    e.printStackTrace();
+                } finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
     //操作数据库相关方法

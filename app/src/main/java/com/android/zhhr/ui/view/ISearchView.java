@@ -15,7 +15,7 @@ public interface ISearchView<T> extends ILoadDataView<T>{
     //搜索结果
     void fillResult(T t);
 
-    void fillHotRank(List<String> ranks);
+    void fillTopSearch(T t);
 
     String getSearchText();
 }

@@ -84,7 +84,8 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Bind(R.id.rv_chapters)
     RecyclerView mRecycleView;
 
-    ChapterRecycleAdapter mVerticalAdapter;
+    private ChapterRecycleAdapter mVerticalAdapter;
+    private LinearLayoutManager manager;
     int mCurrentPosition = 0;
 
 
@@ -145,7 +146,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                     mSeekbar.setProgress(position-mPresenter.getmPreloadChapters().getNextlist().size()+1);
                 }
 
-                mPresenter.loadMoreData(position,mAdapter.getDirection());
+                mPresenter.loadMoreData(position,mAdapter.getDirection(),0);
             }
 
             @Override
@@ -172,7 +173,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         });
         //卷轴阅读初始化
         mVerticalAdapter = new ChapterRecycleAdapter(this,R.layout.item_comic_reader);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayout.VERTICAL);
         mRecycleView.setLayoutManager(manager);
         mRecycleView.setAdapter(mVerticalAdapter);
@@ -182,10 +183,14 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 mPresenter.clickScreen(0.5f,0.5f);
             }
         });
-        mRecycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                View topView = recyclerView.getChildAt(0);          //获取可视的第一个view
+                int lastOffset = topView.getTop();
+                Log.d("zhhr1122","offset="+lastOffset);
+                mPresenter.setLoadingDy(lastOffset);
             }
 
             @Override
@@ -208,7 +213,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                     if(firstItemPosition!=mCurrentPosition){
                         mCurrentPosition = firstItemPosition;
                         mSeekbar.setProgress(mCurrentPosition-mPresenter.getmPreloadChapters().getPrelist().size()+1);
-                        mPresenter.loadMoreData(mCurrentPosition,Constants.UP_TO_DOWN);
+                        mPresenter.loadMoreData(mCurrentPosition,Constants.UP_TO_DOWN,0);
                         if(firstItemPosition == 0||lastItemPosition == mPresenter.getmPreloadChapters().getDataSize()-1){
                             showToast("没有了");
                         }
@@ -347,10 +352,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
 
     @Override
-    public void nextChapter(PreloadChapters data, int mPosition) {
+    public void nextChapter(PreloadChapters data, int mPosition,int offset) {
+        showToast("加载完成"+offset);
         if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
             mVerticalAdapter.setDatas(data);
-            mRecycleView.scrollToPosition(mPosition);
+            manager.scrollToPositionWithOffset(mPosition,offset);
             //为什么在这里要设置progress而其他的不用，因为没有viewpager的onPageSelected方法
             mSeekbar.setProgress(mPosition-data.getPreSize());
         }else{
@@ -371,10 +377,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
 
     @Override
-    public void preChapter(PreloadChapters data, int mPosition) {
+    public void preChapter(PreloadChapters data, int mPosition,int offset) {
         if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
             mVerticalAdapter.setDatas(data);
-            mRecycleView.scrollToPosition(mPosition);
+            manager.scrollToPositionWithOffset(mPosition,offset);
             //为什么在这里要设置progress而其他的不用，因为没有viewpager的onPageSelected方法
             mSeekbar.setProgress(mPosition-data.getPreSize());
         }else {

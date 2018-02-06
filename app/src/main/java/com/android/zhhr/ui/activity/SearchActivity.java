@@ -3,6 +3,7 @@ package com.android.zhhr.ui.activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,7 +23,9 @@ import com.android.zhhr.presenter.SearchPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.SearchDynamicAdapter;
 import com.android.zhhr.ui.adapter.SearchResultAdapter;
+import com.android.zhhr.ui.adapter.SearchTopAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
+import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.view.ISearchView;
 import com.android.zhhr.utils.IntentUtil;
 
@@ -45,9 +48,12 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
 
     @Bind(R.id.iv_result_recycle)
     RecyclerView mResultRecycle;
+    @Bind(R.id.iv_top_search_recycle)
+    RecyclerView mTopRecycle;
 
     SearchDynamicAdapter mDynaicAdapter;
     SearchResultAdapter mResultAdapter;
+    SearchTopAdapter mTopAdapter;
 
 
     @Override
@@ -73,6 +79,18 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
         mResultRecycle.setLayoutManager(manager);
         mResultRecycle.setAdapter(mResultAdapter);
 
+        NoScrollStaggeredGridLayoutManager staggeredGridLayoutManager = new NoScrollStaggeredGridLayoutManager(4,StaggeredGridLayoutManager.HORIZONTAL);
+        staggeredGridLayoutManager.setScrollEnabled(false);
+        mTopAdapter = new SearchTopAdapter(this,R.layout.item_top_search);
+        mTopRecycle.setLayoutManager(staggeredGridLayoutManager);
+        mTopRecycle.setAdapter(mTopAdapter);
+        mPresenter.getTopSearch();
+
+
+        setListener();
+    }
+    //设置监听器
+    private void setListener() {
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,18 +106,24 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
             public void afterTextChanged(Editable s) {
                 //Log.d("zhhr1122","Editable="+s.toString());
                 mResultRecycle.setVisibility(View.GONE);
-                 if(s.length()!=0){
+                if(s.length()!=0){
                     //文字改变，动态获取搜索结果
-                     mResultAdapter.setKey(s.toString());
-                     mDynaicAdapter.setKey(s.toString());
+                    mResultAdapter.setKey(s.toString());
+                    mDynaicAdapter.setKey(s.toString());
                     mDynamicRecycle.setVisibility(View.VISIBLE);
                     mPresenter.getDynamicResult(s.toString());
                     mClearText.setVisibility(View.VISIBLE);
                 }else{
-                     mDynamicRecycle.setVisibility(View.GONE);
-                     mClearText.setVisibility(View.GONE);
+                    mDynamicRecycle.setVisibility(View.GONE);
+                    mClearText.setVisibility(View.GONE);
                 }
-
+            }
+        });
+        mTopAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position) {
+                Comic comic = mTopAdapter.getItems(position);
+                IntentUtil.ToComicDetail(SearchActivity.this,comic.getId()+"",comic.getTitle());
             }
         });
         mDynaicAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -107,7 +131,6 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
             public void onItemClick(RecyclerView parent, View view, int position) {
                 SearchBean searchBean = mDynaicAdapter.getItems(position);
                 IntentUtil.ToComicDetail(SearchActivity.this,searchBean.getId()+"",searchBean.getTitle());
-                SearchActivity.this.finish();
             }
         });
         mResultAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -115,7 +138,6 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
             public void onItemClick(RecyclerView parent, View view, int position) {
                 Comic comic = mResultAdapter.getItems(position);
                 IntentUtil.ToComicDetail(SearchActivity.this,comic.getId()+"",comic.getTitle());
-                SearchActivity.this.finish();
             }
         });
         //设置搜索监听事件
@@ -162,15 +184,18 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
     }
 
     @Override
+    public void fillTopSearch(List<Comic> comics) {
+        if(comics!=null&&comics.size()!=0){
+            mTopAdapter.updateWithClear(comics);
+            mTopAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public String getSearchText() {
         return mSearchText.getText().toString();
     }
 
-
-    @Override
-    public void fillHotRank(List ranks) {
-
-    }
 
     @Override
     public void showErrorView(String throwable) {

@@ -90,4 +90,28 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
             });
         }
     }
+
+    public void getTopSearch() {
+        mModel.getTopResult(new Subscriber<List<Comic>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                //mView.ShowToast(throwable.toString());
+                Log.d("zhhr1122","throwable="+throwable.toString());
+
+            }
+
+            @Override
+            public void onNext(List<Comic> comics) {
+                if(comics!=null&&comics.size()!=0){
+                    mView.fillTopSearch(comics);
+                }
+            }
+        });
+
+    }
 }

@@ -25,9 +25,13 @@ public class Url {
     //更换为阿里云
     public static String TencentComicChapters1 = "http://chengmboy.xin:5001";
     //腾讯漫画搜索接口
-    public static String TencentSearchUrl  = "http://m.ac.qq.com/search/smart?word=";
+    public static String TencentSearchBase = "http://m.ac.qq.com/search/";
 
-    public static String TencentSearchResultUrl = "http://m.ac.qq.com/search/result?word=";
+    public static String TencentSearchUrl  = TencentSearchBase + "smart?word=";
+
+    public static String TencentSearchResultUrl = TencentSearchBase+"result?word=";
+
+    public static String TencentSearchRecommend = TencentSearchBase+"index";
 
 }
 

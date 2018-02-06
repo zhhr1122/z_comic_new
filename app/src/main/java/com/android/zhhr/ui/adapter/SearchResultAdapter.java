@@ -19,6 +19,7 @@ public class SearchResultAdapter extends BaseRecyclerAdapter<Comic> {
     public SearchResultAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
     }
+    //设置关键字
     public void setKey(String key){
         this.key = key;
     }
