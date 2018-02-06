@@ -36,6 +36,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         this.recyclerView = null;
     }
 
+
+
     /**
      * 定义一个点击事件接口回调
      */

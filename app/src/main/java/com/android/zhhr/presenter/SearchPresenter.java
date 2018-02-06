@@ -46,7 +46,6 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 @Override
                 public void onError(Throwable throwable) {
-                    mView.ShowToast(throwable.toString());
                     isDynamicLoading = false;
                 }
 
@@ -66,7 +65,6 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
     public void getSearchResult() {
        String title =  mView.getSearchText();
-        Log.d("zhhr1122","title="+title);
         if(title!=null){
             mModel.getSearchResult(title, new Subscriber<List<Comic>>() {
                 @Override
@@ -88,10 +86,81 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
                     }
                 }
             });
+            mModel.updateSearchResultToDB(title, new Subscriber<Boolean>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                }
+
+                @Override
+                public void onNext(Boolean aBoolean) {
+                }
+            });
         }
     }
 
-    public void getTopSearch() {
+    public void getSearchResult(String title) {
+        mView.setSearchText(title);
+        if(title!=null){
+            mModel.getSearchResult(title, new Subscriber<List<Comic>>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onNext(List<Comic> comics) {
+                    if(comics!=null&&comics.size()!=0){
+                        mView.fillResult(comics);
+                    }
+                }
+            });
+            mModel.updateSearchResultToDB(title, new Subscriber<Boolean>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                }
+
+                @Override
+                public void onNext(Boolean aBoolean) {
+                }
+            });
+        }
+    }
+
+    public void getHistorySearch(){
+        mModel.getHistorySearch(new Subscriber<List<Comic>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onNext(List<Comic> comics) {
+                mView.fillData(comics);
+            }
+        });
+    }
+
+    public void getSearch() {
         mModel.getTopResult(new Subscriber<List<Comic>>() {
             @Override
             public void onCompleted() {
@@ -111,6 +180,29 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
                     mView.fillTopSearch(comics);
                 }
             }
+        });
+        getHistorySearch();
+    }
+
+    public void clearHistory() {
+        mModel.clearSearchHistory(new Subscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if(aBoolean){
+                    mView.fillData(null);
+                }
+            }
+
         });
 
     }

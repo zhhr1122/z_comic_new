@@ -28,7 +28,7 @@ public class SearchResult extends BaseBean{
 
     @Override
     public String toString() {
-        return "SearchResult{" +
+        return "DBSearchResult{" +
                 "status=" + status +
                 ", data=" + data +
                 '}';

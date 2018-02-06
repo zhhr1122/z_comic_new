@@ -3,8 +3,10 @@ package com.android.zhhr.db.helper;
 import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhr.greendao.gen.ComicDao;
+import com.android.zhr.greendao.gen.DBSearchResultDao;
 import com.android.zhr.greendao.gen.DaoMaster;
 import com.android.zhr.greendao.gen.DaoSession;
 
@@ -69,6 +71,16 @@ public class DaoHelper<T> {
         }
         return false;
     }
+
+    public boolean deleteAllSearch() {
+        try {
+            manager.getDaoSession().getDBSearchResultDao().deleteAll();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     //列出所有
     public List<T> listAll() {
         return manager.getDaoSession().loadAll(getClazz());
@@ -84,6 +96,11 @@ public class DaoHelper<T> {
     public T findComic(long id) {
         return (T) manager.getDaoSession().getComicDao().load(id);
     }
+
+    public List<T> findSearchByTitle(String title) {
+        return (List<T>) manager.getDaoSession().getDBSearchResultDao().queryBuilder().where(DBSearchResultDao.Properties.Title.eq(title));
+    }
+
     //更新
     public boolean update(T t) {
         try {
@@ -100,6 +117,13 @@ public class DaoHelper<T> {
                 .where(ComicDao.Properties.IsCollected.eq(true))
                 .limit(10000)
                 .orderAsc(ComicDao.Properties.CrateTime)
+                .list();
+        return list;
+    }
+
+    public List<DBSearchResult> querySearch(){
+        List<DBSearchResult> list= manager.getDaoSession().getDBSearchResultDao().queryBuilder()
+                .orderDesc(DBSearchResultDao.Properties.Search_time)
                 .list();
         return list;
     }

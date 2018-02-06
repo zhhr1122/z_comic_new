@@ -69,6 +69,85 @@
         </RelativeLayout>
 
     </RelativeLayout>
+    <ScrollView
+        android:layout_below="@id/rl_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:background="@color/colorBg"
+            android:id="@+id/rl_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/rl_search_top"
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:textSize="12dp"
+                    android:text="热门搜索"
+                    android:textColor="@color/colorTextColorLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorBottom"
+                    />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:padding="5dp"
+                android:layout_below="@id/rl_search_top"
+                android:id="@+id/iv_top_search_recycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+            <View
+                android:id="@+id/v_padding"
+                android:layout_below="@id/iv_top_search_recycle"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/colorBgDark"
+                />
+            <RelativeLayout
+                android:layout_below="@id/v_padding"
+                android:id="@+id/rl_search_history"
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:textSize="12dp"
+                    android:text="最近搜索"
+                    android:textColor="@color/colorTextColorLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorBottom"
+                    />
+                <ImageView
+                    android:id="@+id/iv_clear_history"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/delete_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/rl_search_history"
+                android:id="@+id/iv_history_recycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </ScrollView>
+
     <android.support.v7.widget.RecyclerView
         android:visibility="gone"
         android:layout_below="@id/rl_actionbar"
@@ -83,5 +162,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
+
 
 </RelativeLayout>

@@ -17,5 +17,7 @@ public interface ISearchView<T> extends ILoadDataView<T>{
 
     void fillTopSearch(T t);
 
+    void setSearchText(String title);
+
     String getSearchText();
 }

@@ -4,11 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.db.manager.DaoManager;
-import com.android.zhhr.db.manager.GreenDaoManager;
 import com.zonst.libzadsdk.ZAdSdk;
-
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * For developer startup JPush SDK

@@ -7,9 +7,11 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HomeTitle;
+import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.net.MainFactory;
+import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
 
 import org.jsoup.Jsoup;
@@ -456,4 +458,81 @@ public class ComicModule {
 
     }
 
+    /**
+     * 插入搜索结果到数据库
+     * @param title
+     * @param subscriber
+     */
+    public void updateSearchResultToDB(final String title, Subscriber<Boolean> subscriber) {
+        Observable.create(new Observable.OnSubscribe<Boolean>() {
+
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                try{
+                    final java.util.Date date = new java.util.Date();
+                    long datetime = date.getTime();
+                    DBSearchResult result = new DBSearchResult();
+                    result.setTitle(title);
+                    result.setSearch_time(datetime);
+                    if(mHelper.insert(result)){
+                        subscriber.onNext(true);
+                    }else{
+                        subscriber.onNext(false);
+                    }
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+    public void getHistorySearch(Subscriber<List<Comic>> subscriber) {
+        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+
+            @Override
+            public void call(Subscriber<? super List<Comic>> subscriber) {
+                try{
+                    List<DBSearchResult> results = mHelper.querySearch();
+                    List<Comic> comics = DBEntityUtils.transSearchToComic(results);
+                    subscriber.onNext(comics);
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+    public void clearSearchHistory(Subscriber subscriber) {
+        Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                try{
+                    if(mHelper.deleteAllSearch()){
+                        subscriber.onNext(true);
+                    }else{
+                        subscriber.onNext(false);
+                    }
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }finally {
+                    subscriber.onCompleted();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }
