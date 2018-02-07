@@ -28,4 +28,9 @@ public class TextUtils {
         }
         return title;
     }
+
+    public static String getSearchErrorText(String key){
+        String title = "没有找到"+"<font color='#ff9a6a'>"+key+"</font>"+"相关的漫画";
+        return title;
+    }
 }

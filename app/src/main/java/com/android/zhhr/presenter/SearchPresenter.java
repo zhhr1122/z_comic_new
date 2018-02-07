@@ -8,6 +8,7 @@ import com.android.zhhr.data.entity.SearchResult;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.ISearchView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,10 +25,12 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     private ComicModule mModel;
     private boolean isDynamicLoading;
     private SearchResult mDynamicResult;
+    private List<Comic> mHistroys;
     public SearchPresenter(Activity context, ISearchView view) {
         super(context, view);
         mModel = new ComicModule(context);
         isDynamicLoading = false;
+        mHistroys = new ArrayList<>();
     }
 
     public SearchResult getmDynamicResult() {
@@ -64,7 +67,7 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     }
 
     public void getSearchResult() {
-       String title =  mView.getSearchText();
+       final String title =  mView.getSearchText();
         if(title!=null){
             mModel.getSearchResult(title, new Subscriber<List<Comic>>() {
                 @Override
@@ -74,9 +77,7 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 @Override
                 public void onError(Throwable throwable) {
-                    //mView.ShowToast(throwable.toString());
-                    Log.d("zhhr1122","throwable="+throwable.toString());
-
+                    mView.showErrorView(title);
                 }
 
                 @Override
@@ -98,12 +99,16 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 @Override
                 public void onNext(Boolean aBoolean) {
+                    Comic comic = new Comic();
+                    comic.setTitle(title);
+                    mHistroys.add(0,comic);
+                    mView.fillData(mHistroys);
                 }
             });
         }
     }
 
-    public void getSearchResult(String title) {
+    public void getSearchResult(final String title) {
         mView.setSearchText(title);
         if(title!=null){
             mModel.getSearchResult(title, new Subscriber<List<Comic>>() {
@@ -114,7 +119,7 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 @Override
                 public void onError(Throwable throwable) {
-
+                    mView.showErrorView(title);
                 }
 
                 @Override
@@ -136,6 +141,10 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 @Override
                 public void onNext(Boolean aBoolean) {
+                    Comic comic = new Comic();
+                    comic.setTitle(title);
+                    mHistroys.add(0,comic);
+                    mView.fillData(mHistroys);
                 }
             });
         }
@@ -155,6 +164,7 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
             @Override
             public void onNext(List<Comic> comics) {
+                mHistroys = comics;
                 mView.fillData(comics);
             }
         });

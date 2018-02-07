@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
@@ -29,6 +31,7 @@ import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.view.ISearchView;
 import com.android.zhhr.utils.IntentUtil;
+import com.android.zhhr.utils.TextUtils;
 
 import java.util.List;
 
@@ -53,6 +56,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
     RecyclerView mTopRecycle;
     @Bind(R.id.iv_history_recycle)
     RecyclerView mHistoryRecycle;
+    @Bind(R.id.rl_normal)
+    RelativeLayout mNormal;
+    @Bind(R.id.tv_error)
+    TextView mError;
 
     SearchDynamicAdapter mDynaicAdapter;
     SearchResultAdapter mResultAdapter;
@@ -179,11 +186,14 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
         mSearchText.setText("");
         mResultRecycle.setVisibility(View.GONE);
         mDynamicRecycle.setVisibility(View.GONE);
+        mNormal.setVisibility(View.VISIBLE);
+        mError.setVisibility(View.GONE);
     }
 
     @Override
     public void fillDynamicResult(SearchResult searchResult) {
         mDynamicRecycle.setVisibility(View.VISIBLE);
+        mError.setVisibility(View.GONE);
         List<SearchBean> list = searchResult.getData();
         if(list!=null&&list.size()!=0){
             mDynaicAdapter.updateWithClear(searchResult.getData());
@@ -193,19 +203,17 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
     @Override
     public void fillResult(List<Comic> comics) {
         mResultRecycle.setVisibility(View.VISIBLE);
-        if(comics!=null&&comics.size()!=0){
-            mResultAdapter.updateWithClear(comics);
-            mResultAdapter.notifyDataSetChanged();
-        }
-        mPresenter.getHistorySearch();
+        mDynamicRecycle.setVisibility(View.GONE);
+        mError.setVisibility(View.GONE);
+        mNormal.setVisibility(View.GONE);
+        mResultAdapter.updateWithClear(comics);
+        mResultAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void fillTopSearch(List<Comic> comics) {
-        if(comics!=null&&comics.size()!=0){
-            mTopAdapter.updateWithClear(comics);
-            mTopAdapter.notifyDataSetChanged();
-        }
+        mTopAdapter.updateWithClear(comics);
+        mTopAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -222,8 +230,9 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
 
 
     @Override
-    public void showErrorView(String throwable) {
-
+    public void showErrorView(String title) {
+        mError.setVisibility(View.VISIBLE);
+        mError.setText(Html.fromHtml(TextUtils.getSearchErrorText(title)));
     }
 
     @Override
