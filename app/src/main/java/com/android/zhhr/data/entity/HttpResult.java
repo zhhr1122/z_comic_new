@@ -6,9 +6,9 @@ import java.util.List;
  * Created by 张皓然 on 2018/2/1.
  */
 
-public class SearchResult extends BaseBean{
+public class HttpResult<T>{
     public int status;
-    public List<SearchBean> data;
+    public T data;
 
     public int getStatus() {
         return status;
@@ -18,11 +18,11 @@ public class SearchResult extends BaseBean{
         this.status = status;
     }
 
-    public List<SearchBean> getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(List<SearchBean> data) {
+    public void setData(T data) {
         this.data = data;
     }
 

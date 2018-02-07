@@ -70,6 +70,7 @@
 
     </RelativeLayout>
     <ScrollView
+        android:overScrollMode="never"
         android:layout_below="@id/rl_actionbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -101,6 +102,7 @@
                 android:padding="5dp"
                 android:layout_below="@id/rl_search_top"
                 android:id="@+id/iv_top_search_recycle"
+                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </android.support.v7.widget.RecyclerView>
@@ -147,11 +149,11 @@
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
     </ScrollView>
-
     <android.support.v7.widget.RecyclerView
         android:visibility="gone"
         android:layout_below="@id/rl_actionbar"
         android:id="@+id/iv_dynamic_recycle"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
@@ -159,9 +161,22 @@
         android:visibility="gone"
         android:layout_below="@id/rl_actionbar"
         android:id="@+id/iv_result_recycle"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:layout_below="@id/rl_actionbar"
+        android:gravity="center"
+        android:id="@+id/tv_error"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="没有搜索到的相关结果哦"
+        android:textSize="14dp"
+        android:textColor="@color/colorTextColorLight"
+        android:background="@color/colorBg"
+        />
 
 
 </RelativeLayout>

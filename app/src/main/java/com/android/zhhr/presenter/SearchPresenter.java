@@ -4,18 +4,18 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.SearchResult;
+import com.android.zhhr.data.entity.HttpResult;
+import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.ISearchView;
+import com.android.zhhr.utils.DBEntityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Subscriber;
-import rx.observers.Subscribers;
+
+import static com.android.zhhr.utils.DBEntityUtils.transDynamicSearchToComic;
 
 /**
  * Created by 张皓然 on 2018/2/1.
@@ -24,7 +24,6 @@ import rx.observers.Subscribers;
 public class SearchPresenter extends BasePresenter<ISearchView>{
     private ComicModule mModel;
     private boolean isDynamicLoading;
-    private SearchResult mDynamicResult;
     private List<Comic> mHistroys;
     public SearchPresenter(Activity context, ISearchView view) {
         super(context, view);
@@ -33,13 +32,10 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
         mHistroys = new ArrayList<>();
     }
 
-    public SearchResult getmDynamicResult() {
-        return mDynamicResult;
-    }
 
     public void getDynamicResult(String title) {
         if(!isDynamicLoading){
-            mModel.getDynamicResult(title,new Subscriber<SearchResult>(){
+            mModel.getDynamicResult(title,new Subscriber<List<SearchBean>>(){
 
                 @Override
                 public void onCompleted() {
@@ -53,12 +49,9 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
                 }
 
                 @Override
-                public void onNext(SearchResult searchResult) {
-                    isDynamicLoading = false;
-                    //Log.d("zhhr1122",searchResult.toString());
-                    if(searchResult.status == 2){
-                        mDynamicResult = searchResult;
-                        mView.fillDynamicResult(searchResult);
+                public void onNext(List<SearchBean> searchBeen) {
+                    if(searchBeen!=null&&searchBeen.size()!=0){
+                        mView.fillDynamicResult(DBEntityUtils.transDynamicSearchToComic(searchBeen));
                     }
                 }
             });

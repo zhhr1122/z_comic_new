@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.SearchBean;
-import com.android.zhhr.data.entity.SearchResult;
 import com.android.zhhr.presenter.SearchPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.SearchDynamicAdapter;
@@ -147,8 +146,8 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
         mDynaicAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                SearchBean searchBean = mDynaicAdapter.getItems(position);
-                IntentUtil.ToComicDetail(SearchActivity.this,searchBean.getId()+"",searchBean.getTitle());
+                Comic comic = mDynaicAdapter.getItems(position);
+                IntentUtil.ToComicDetail(SearchActivity.this,comic.getId()+"",comic.getTitle());
             }
         });
         mResultAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -191,13 +190,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
     }
 
     @Override
-    public void fillDynamicResult(SearchResult searchResult) {
+    public void fillDynamicResult(List<Comic> comics) {
         mDynamicRecycle.setVisibility(View.VISIBLE);
         mError.setVisibility(View.GONE);
-        List<SearchBean> list = searchResult.getData();
-        if(list!=null&&list.size()!=0){
-            mDynaicAdapter.updateWithClear(searchResult.getData());
-        }
+        mDynaicAdapter.updateWithClear(comics);
     }
 
     @Override

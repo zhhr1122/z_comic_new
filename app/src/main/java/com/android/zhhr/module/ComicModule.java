@@ -7,10 +7,14 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HomeTitle;
+import com.android.zhhr.data.entity.HttpResult;
+import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
+import com.android.zhhr.net.HttpResultFunc;
 import com.android.zhhr.net.MainFactory;
+import com.android.zhhr.utils.ApiException;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
 
@@ -24,6 +28,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -253,11 +258,14 @@ public class ComicModule {
     //搜索相关
     public void getDynamicResult(String title,Subscriber subscriber){
         comicService.getDynamicSearchResult(Url.TencentSearchUrl+title)
+                .map(new HttpResultFunc<List<SearchBean>>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+
 
     public void getSearchResult(final String title, Subscriber subscriber) {
         Observable.create(new Observable.OnSubscribe<List<Comic>>() {
