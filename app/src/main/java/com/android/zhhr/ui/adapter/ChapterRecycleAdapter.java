@@ -26,6 +26,11 @@ public class ChapterRecycleAdapter extends BaseRecyclerAdapter<String>{
         notifyDataSetChanged();
     }
 
+    public void clearList(){
+        this.list.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void convert(BaseRecyclerHolder holder, String item, int position) {
         holder.setPhotoViewImageByUrl(R.id.pv_comic,item);

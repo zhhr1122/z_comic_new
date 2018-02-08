@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.db.manager.DaoManager;
+import com.squareup.leakcanary.LeakCanary;
 import com.zonst.libzadsdk.ZAdSdk;
 
 import cn.jpush.android.api.JPushInterface;
@@ -29,6 +30,8 @@ public class MyApplication extends Application {
             ZAdSdk.initialize(getApplicationContext());
             ZAdSdk.getInstance().setEnableLog(true);
         }
+        LeakCanary.install(this);
+
     }
 
 }

@@ -406,6 +406,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             if(mDirect == Constants.UP_TO_DOWN){
                 mRecycleView.setVisibility(View.VISIBLE);
                 mViewpager.setVisibility(View.GONE);
+                mAdapter.clearList();
                 int nowposition = mViewpager.getCurrentItem();
                 mVerticalAdapter.setDatas(mPresenter.getmPreloadChapters());
                 //从左往右切换到卷轴
@@ -421,6 +422,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 //切换到横版模式
                 mRecycleView.setVisibility(View.GONE);
                 mViewpager.setVisibility(View.VISIBLE);
+                mVerticalAdapter.clearList();
                 int nowposition;
                 if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
                     if(mDirect==Constants.RIGHT_TO_LEFT){

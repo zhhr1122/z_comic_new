@@ -19,7 +19,7 @@ public class DaoManager {
     private static DaoSession daoSession;
     private Context mContext;
     private DaoManager(Context context) {
-        this.mContext = context;
+        this.mContext = context.getApplicationContext();
     }
     public static DaoManager getInstance(Context context) {
         if (manager == null) {

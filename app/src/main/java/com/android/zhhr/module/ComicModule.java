@@ -1,5 +1,6 @@
 package com.android.zhhr.module;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,6 +18,9 @@ import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.utils.ApiException;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
+import com.trello.rxlifecycle.ActivityEvent;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle.components.support.RxFragment;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,8 +43,9 @@ public class ComicModule {
     public static final ComicService comicService = MainFactory.getComicServiceInstance();
     public Context context;
     private DaoHelper mHelper;
-    public ComicModule(Context context){
-        this.context = context;
+    private RxAppCompatActivity rxAppCompatActivity;
+    public ComicModule(Activity context){
+        rxAppCompatActivity = (RxAppCompatActivity) context;
         mHelper = new DaoHelper(context);
     }
     //首页相关
@@ -90,6 +95,7 @@ public class ComicModule {
         Observable.merge(ComicListObservable, ComicBannerObservable).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -183,6 +189,7 @@ public class ComicModule {
         ComicListObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -204,6 +211,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
 
     }
@@ -233,6 +241,7 @@ public class ComicModule {
         }).subscribeOn(Schedulers.io())
                .unsubscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
+               .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                .subscribe(subscriber);
     }
 
@@ -242,6 +251,7 @@ public class ComicModule {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -250,6 +260,7 @@ public class ComicModule {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
 
     }
@@ -262,6 +273,7 @@ public class ComicModule {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -285,6 +297,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -306,6 +319,7 @@ public class ComicModule {
         }).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -334,6 +348,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -365,6 +380,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -392,6 +408,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -419,6 +436,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -442,6 +460,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 
@@ -462,6 +481,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
 
     }
@@ -496,6 +516,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<Boolean>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
 
     }
@@ -518,6 +539,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<List<Comic>>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
 
     }
@@ -541,6 +563,7 @@ public class ComicModule {
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(subscriber);
     }
 }

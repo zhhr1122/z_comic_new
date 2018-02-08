@@ -1,11 +1,13 @@
 package com.android.zhhr.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;
@@ -29,6 +32,7 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
     private Context mContext;
     private OnceClickListener listener;
     private int Direction = Constants.LEFT_TO_RIGHT;
+    private LinkedList<View> mViews = null;
 
     public OnceClickListener getListener() {
         return listener;
@@ -42,6 +46,7 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
     public ChapterViewpagerAdapter(Context context) {
         mdatas = new ArrayList<>();
         this.mContext = context;
+        mViews = new LinkedList<>();
     }
     public ChapterViewpagerAdapter(Context context,PreloadChapters preloadChapters,int mDirect) {
         this(context);
@@ -65,6 +70,11 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
         this.mdatas.addAll(preloadChapters.getPrelist());
         this.mdatas.addAll(preloadChapters.getNowlist());
         this.mdatas.addAll(preloadChapters.getNextlist());
+        notifyDataSetChanged();
+    }
+
+    public void clearList(){
+        this.mdatas.clear();
         notifyDataSetChanged();
     }
 
@@ -93,19 +103,29 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {//必须实现，实例化
-        PhotoView imageView = new PhotoView(mContext);
+        View convertView = null;
+        ViewHolder holder = null;
+        if (mViews.size() == 0) {
+            holder = new ViewHolder();
+            convertView = ((Activity)mContext).getLayoutInflater().inflate(R.layout.item_chapters, null);
+            holder.imageView = (PhotoView) convertView.findViewById(R.id.pv_comic);
+            convertView.setTag(holder);
+        } else {
+            convertView = mViews.removeFirst();
+            holder = (ViewHolder) convertView.getTag();
+        }
         if(Direction == Constants.RIGHT_TO_LEFT){
             Glide.with(mContext)
                     .load(mdatas.get(mdatas.size()-position-1))
                     .placeholder(R.mipmap.pic_default_vertical)
-                    .into(imageView);
+                    .into(holder.imageView);
         }else{
             Glide.with(mContext)
                     .load(mdatas.get(position))
                     .placeholder(R.mipmap.pic_default_vertical)
-                    .into(imageView);
+                    .into(holder.imageView);
         }
-        imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+        holder.imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
                 if(listener!=null){
@@ -113,8 +133,12 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
                 }
             }
         });
-        container.addView(imageView);
-        return imageView;
+        container.addView(convertView);
+        return convertView;
+    }
+
+    public class ViewHolder {
+        public PhotoView imageView = null;
     }
 
     @Override

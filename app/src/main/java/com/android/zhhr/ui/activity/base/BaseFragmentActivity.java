@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.fragment.BaseFragment;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by 皓然 on 2017/8/6.
  */
 
-public abstract class BaseFragmentActivity extends AppCompatActivity {
+public abstract class BaseFragmentActivity extends RxAppCompatActivity {
     protected FragmentManager fragmentManager;
     protected FragmentTransaction fragmentTransaction;
     protected List<Fragment> fragments;
