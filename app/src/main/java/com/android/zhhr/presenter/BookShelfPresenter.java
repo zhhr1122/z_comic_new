@@ -9,7 +9,9 @@ import com.android.zhhr.utils.ShowErrorTextUtil;
 
 import java.util.List;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by 皓然 on 2017/8/14.
@@ -26,15 +28,21 @@ public class BookShelfPresenter extends BasePresenter<IBookShelfView>{
 
 
     public void loadData(){
-        mModel.getCollectedComicList(new Subscriber<List<Comic>>() {
-            @Override
-            public void onCompleted() {
-                mView.getDataFinish();
-            }
+        mModel.getCollectedComicList(new Observer<List<Comic>>() {
 
             @Override
             public void onError(Throwable e) {
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override

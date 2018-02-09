@@ -2,24 +2,17 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 
-import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IHomeView;
 import com.android.zhhr.utils.ShowErrorTextUtil;
-import com.android.zhhr.utils.TencentComicAnalysis;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by 皓然 on 2017/6/15.
@@ -46,15 +39,20 @@ public class HomePresenter extends BasePresenter<IHomeView> {
     }
 
     public void LoadData() {
-        mModel.getData(new Subscriber<List<Comic>>() {
+        mModel.getData(new Observer<List<Comic>>() {
             @Override
-            public void onCompleted() {
+            public void onError(Throwable e) {
+                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
                 mView.getDataFinish();
             }
 
             @Override
-            public void onError(Throwable e) {
-                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override
@@ -72,15 +70,21 @@ public class HomePresenter extends BasePresenter<IHomeView> {
     }
 
     public void refreshData() {
-        mModel.refreshData(new Subscriber<List<Comic>>() {
-            @Override
-            public void onCompleted() {
-                mView.onRefreshFinish();
-            }
+        mModel.refreshData(new Observer<List<Comic>>() {
 
             @Override
             public void onError(Throwable e) {
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override
@@ -93,15 +97,21 @@ public class HomePresenter extends BasePresenter<IHomeView> {
 
 
     public void loadMoreData(int page) {
-        mModel.getMoreComicList(page, new Subscriber<List<Comic>>() {
-            @Override
-            public void onCompleted() {
-                mView.getDataFinish();
-            }
+        mModel.getMoreComicList(page, new Observer<List<Comic>>() {
 
             @Override
             public void onError(Throwable e) {
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override

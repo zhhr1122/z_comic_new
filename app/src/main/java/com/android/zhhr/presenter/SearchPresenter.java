@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.ISearchView;
@@ -13,9 +12,9 @@ import com.android.zhhr.utils.DBEntityUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
-
-import static com.android.zhhr.utils.DBEntityUtils.transDynamicSearchToComic;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by 张皓然 on 2018/2/1.
@@ -35,17 +34,21 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
     public void getDynamicResult(String title) {
         if(!isDynamicLoading){
-            mModel.getDynamicResult(title,new Subscriber<List<SearchBean>>(){
+            mModel.getDynamicResult(title,new Observer<List<SearchBean>>(){
+                @Override
+                public void onError(Throwable throwable) {
+                    isDynamicLoading = false;
+                }
 
                 @Override
-                public void onCompleted() {
+                public void onComplete() {
                     mView.getDataFinish();
                     isDynamicLoading = false;
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
-                    isDynamicLoading = false;
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -62,15 +65,20 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     public void getSearchResult() {
        final String title =  mView.getSearchText();
         if(title!=null){
-            mModel.getSearchResult(title, new Subscriber<List<Comic>>() {
+            mModel.getSearchResult(title, new Observer<List<Comic>>() {
                 @Override
-                public void onCompleted() {
+                public void onError(Throwable throwable) {
+                    mView.showErrorView(title);
+                }
+
+                @Override
+                public void onComplete() {
 
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
-                    mView.showErrorView(title);
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -80,14 +88,19 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
                     }
                 }
             });
-            mModel.updateSearchResultToDB(title, new Subscriber<Boolean>() {
+            mModel.updateSearchResultToDB(title, new Observer<Boolean>() {
                 @Override
-                public void onCompleted() {
+                public void onError(Throwable throwable) {
+                }
+
+                @Override
+                public void onComplete() {
 
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -104,15 +117,20 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     public void getSearchResult(final String title) {
         mView.setSearchText(title);
         if(title!=null){
-            mModel.getSearchResult(title, new Subscriber<List<Comic>>() {
+            mModel.getSearchResult(title, new Observer<List<Comic>>() {
                 @Override
-                public void onCompleted() {
+                public void onError(Throwable throwable) {
+                    mView.showErrorView(title);
+                }
+
+                @Override
+                public void onComplete() {
 
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
-                    mView.showErrorView(title);
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -122,14 +140,19 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
                     }
                 }
             });
-            mModel.updateSearchResultToDB(title, new Subscriber<Boolean>() {
+            mModel.updateSearchResultToDB(title, new Observer<Boolean>() {
                 @Override
-                public void onCompleted() {
+                public void onError(Throwable throwable) {
+                }
+
+                @Override
+                public void onComplete() {
 
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -144,14 +167,19 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     }
 
     public void getHistorySearch(){
-        mModel.getHistorySearch(new Subscriber<List<Comic>>() {
+        mModel.getHistorySearch(new Observer<List<Comic>>() {
             @Override
-            public void onCompleted() {
+            public void onError(Throwable throwable) {
 
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
 
             }
 
@@ -164,16 +192,21 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     }
 
     public void getSearch() {
-        mModel.getTopResult(new Subscriber<List<Comic>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
+        mModel.getTopResult(new Observer<List<Comic>>() {
             @Override
             public void onError(Throwable throwable) {
                 //mView.ShowToast(throwable.toString());
                 Log.d("zhhr1122","throwable="+throwable.toString());
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
 
             }
 
@@ -188,14 +221,19 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     }
 
     public void clearHistory() {
-        mModel.clearSearchHistory(new Subscriber<Boolean>() {
+        mModel.clearSearchHistory(new Observer<Boolean>() {
             @Override
-            public void onCompleted() {
+            public void onError(Throwable throwable) {
 
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
 
             }
 

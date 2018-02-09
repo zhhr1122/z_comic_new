@@ -56,18 +56,25 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     testCompile 'junit:junit:4.12'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+    //RX系列大家族套餐
+    compile "io.reactivex.rxjava2:rxjava:2.1.1"
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
+    compile "com.github.VictorAlbertos.RxCache:runtime:1.8.1-2.x"
+    compile "io.reactivex.rxjava2:rxjava:2.0.6"
+    compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
+
+
     compile 'com.google.code.gson:gson:2.7'
     compile 'org.jsoup:jsoup:1.9.2'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile 'com.commit451:PhotoView:1.2.4'
 
     compile 'cn.jiguang.sdk:jpush:3.0.3'  // 此处以JPush 3.0.3 版本为例。
-    compile 'cn.jiguang.sdk:jcore:1.1.1'  // 此处以JCore 1.1.1 版本为例。 
+    compile 'cn.jiguang.sdk:jcore:1.1.1'  // 此处以JCore 1.1.1 版本为例。
 
     compile 'com.xw.repo:bubbleseekbar:3.4-lite'
     compile 'com.zhy:base-rvadapter:3.0.3'
@@ -76,6 +83,12 @@ dependencies {
 
     compile 'org.greenrobot:greendao:3.0.1'
     compile 'org.greenrobot:greendao-generator:3.0.0'
+
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
 
     compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }

@@ -7,10 +7,7 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.module.ComicModule;
-import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.view.IChapterView;
-import com.android.zhhr.utils.ADUtils;
-import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 import com.zonst.libzadsdk.ZAdComponent;
 import com.zonst.libzadsdk.ZAdSdk;
@@ -20,7 +17,9 @@ import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import java.util.List;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by 皓然 on 2017/7/20.
@@ -163,15 +162,21 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     }
 
     public void loadData(){
-        mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Subscriber<PreloadChapters>() {
-            @Override
-            public void onCompleted() {
-                mView.getDataFinish();
-            }
+        mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Observer<PreloadChapters>() {
 
             @Override
             public void onError(Throwable e) {
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override
@@ -187,15 +192,21 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * 保存当前章节数目到数据库
      */
     public void updateComicCurrentChapter() {
-        mModel.updateComicCurrentChapter(comic_id+"",comic_chapters, new Subscriber<Boolean>() {
-            @Override
-            public void onCompleted() {
-
-            }
+        mModel.updateComicCurrentChapter(comic_id+"",comic_chapters, new Observer<Boolean>() {
 
             @Override
             public void onError(Throwable e) {
                 mView.ShowToast(e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override
@@ -326,17 +337,23 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      */
     public void loadNextData(String id, int chapter, final int offset){
 
-        mModel.getChaptersList(id,(chapter+2),new Subscriber<Chapters>() {
-            @Override
-            public void onCompleted() {
-                isLoadingdata = false;
-                mView.getDataFinish();
-            }
+        mModel.getChaptersList(id,(chapter+2),new Observer<Chapters>() {
 
             @Override
             public void onError(Throwable e) {
                 isLoadingdata = false;
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
+                isLoadingdata = false;
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override
@@ -366,17 +383,23 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param chapter
      */
     public void loadPreData(String id, int chapter, final int offset){
-        mModel.getChaptersList(id,chapter-2,new Subscriber<Chapters>() {
-            @Override
-            public void onCompleted() {
-                isLoadingdata = false;
-                mView.getDataFinish();
-            }
+        mModel.getChaptersList(id,chapter-2,new Observer<Chapters>() {
 
             @Override
             public void onError(Throwable e) {
                 isLoadingdata = false;
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+            }
+
+            @Override
+            public void onComplete() {
+                isLoadingdata = false;
+                mView.getDataFinish();
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override

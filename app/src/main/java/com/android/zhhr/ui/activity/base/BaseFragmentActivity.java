@@ -13,7 +13,7 @@ import android.view.WindowManager;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.fragment.BaseFragment;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.List;
 

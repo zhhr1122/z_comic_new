@@ -36,7 +36,7 @@ public class Constants {
     /**
      * 控制广告的开关
      */
-    public final static boolean isAD = true;
+    public final static boolean isAD = false;
 
 
 }

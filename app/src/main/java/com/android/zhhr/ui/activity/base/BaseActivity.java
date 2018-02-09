@@ -14,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.zhhr.presenter.BasePresenter;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import butterknife.ButterKnife;
 

@@ -15,14 +15,16 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
-import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 import com.zonst.libzadsdk.ZAdComponent;
 import com.zonst.libzadsdk.ZAdSdk;
 import com.zonst.libzadsdk.ZAdType;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+
 
 /**
  * Created by 皓然 on 2017/7/12.
@@ -76,15 +78,21 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             mView.ShowToast("获取ID失败");
         }else{
             mComicId =  Long.parseLong(comic_id);
-            mModel.getComicDetail(comic_id,new Subscriber<Comic>() {
-                @Override
-                public void onCompleted() {
-                    mView.getDataFinish();
-                }
+            mModel.getComicDetail(comic_id,new Observer<Comic>() {
 
                 @Override
                 public void onError(Throwable throwable) {
                     mView.showErrorView(ShowErrorTextUtil.ShowErrorText(throwable));
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+
+                @Override
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -96,14 +104,20 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     //mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
                 }
             });
-            mModel.isCollected(mComicId, new Subscriber<Boolean>() {
+            mModel.isCollected(mComicId, new Observer<Boolean>() {
+
                 @Override
-                public void onCompleted() {
+                public void onError(Throwable e) {
 
                 }
 
                 @Override
-                public void onError(Throwable e) {
+                public void onComplete() {
+
+                }
+
+                @Override
+                public void onSubscribe(@NonNull Disposable disposable) {
 
                 }
 
@@ -118,15 +132,21 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     public void getCurrentChapters(){
-        mModel.getComicFromDB(mComicId, new Subscriber<Comic>() {
-            @Override
-            public void onCompleted() {
-
-            }
+        mModel.getComicFromDB(mComicId, new Observer<Comic>() {
 
             @Override
             public void onError(Throwable e) {
                 //mView.ShowToast("获取当前章节数目失败"+e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override
@@ -145,15 +165,21 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         mComic.setCrateTime(datetime);
         mComic.setIsCollected(true);
         if(!isCollected){
-            mModel.updateComicToDB(mComic, new Subscriber<Boolean>() {
-                @Override
-                public void onCompleted() {
-
-                }
+            mModel.updateComicToDB(mComic, new Observer<Boolean>() {
 
                 @Override
                 public void onError(Throwable e) {
                     mView.ShowToast("已经收藏");
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+
+                @Override
+                public void onSubscribe(@NonNull Disposable disposable) {
+
                 }
 
                 @Override
@@ -171,15 +197,21 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     public void SaveComicToDB(Comic mComic){
-        mModel.saveComicToDB(mComic, new Subscriber<Boolean>() {
-            @Override
-            public void onCompleted() {
-
-            }
+        mModel.saveComicToDB(mComic, new Observer<Boolean>() {
 
             @Override
             public void onError(Throwable e) {
                 //mView.ShowToast("保存到数据库失败"+e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable disposable) {
+
             }
 
             @Override

@@ -6,21 +6,22 @@ import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
+import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.HttpResult;
+import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.net.HttpResultFunc;
 import com.android.zhhr.net.MainFactory;
-import com.android.zhhr.utils.ApiException;
+import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
-import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-import com.trello.rxlifecycle.components.support.RxFragment;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,11 +30,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
+
 
 /**
  * Created by 皓然 on 2017/7/31.
@@ -49,10 +56,10 @@ public class ComicModule {
         mHelper = new DaoHelper(context);
     }
     //首页相关
-    public void getData(Subscriber subscriber){
-        Observable ComicListObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getData(Observer<List<Comic>> observer){
+        Observable ComicListObservable = Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     List<Comic>  mdats = new ArrayList<>();
                     Document recommend = Jsoup.connect(Url.TencentHomePage).get();
@@ -68,27 +75,28 @@ public class ComicModule {
                     HomeTitle homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("");
                     mdats.add(homeTitle);
-                    subscriber.onNext(mdats);
+                    observableEmitter.onNext(mdats);
                 } catch (IOException e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         });
-        Observable ComicBannerObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+        Observable ComicBannerObservable = Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     Document doc = Jsoup.connect(Url.TencentBanner).get();
                     List<Comic>  mdats = TencentComicAnalysis.TransToBanner(doc);
-                    subscriber.onNext(mdats);
+                    observableEmitter.onNext(mdats);
                 } catch (IOException e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
         });
@@ -96,7 +104,7 @@ public class ComicModule {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
     /**
@@ -158,10 +166,10 @@ public class ComicModule {
 
     }
 
-    public void refreshData(Subscriber subscriber){
-        Observable ComicListObservable = Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void refreshData(Observer<List<Comic>> observer){
+        Observable ComicListObservable = Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     List<Comic>  mdats = new ArrayList<>();
                     HomeTitle homeTitle = new HomeTitle();
@@ -177,185 +185,195 @@ public class ComicModule {
                     homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("");
                     mdats.add(homeTitle);
-                    subscriber.onNext(mdats);
+                    observableEmitter.onNext(mdats);
                 } catch (IOException e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
+
             }
         });
         ComicListObservable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void getMoreComicList(final int page, Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getMoreComicList(final int page, Observer<List<Comic>> observer){
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     Document doc = Jsoup.connect(Url.TencentTopUrl+page).get();
                     List<Comic> mdats = TencentComicAnalysis.TransToComic(doc);
-                    subscriber.onNext(mdats);
+                    observableEmitter.onNext(mdats);
                 } catch (IOException e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe((Consumer<? super Object>) observer);
 
     }
 
     //详情页相关
-    public void getComicDetail(final String mComicId,Subscriber subscriber){
-       Observable.create(new Observable.OnSubscribe<Comic>() {
-            @Override
-            public void call(Subscriber<? super Comic> subscriber) {
-                try {
-                    Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
-                    Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,context);
-                    Comic comicFromDB = (Comic) mHelper.findComic(Long.parseLong(mComicId));
-                    if(comicFromDB!=null) {
-                        mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
-                    }else{
-                        mComic.setCurrentChapter(0);
-                    }
-                    subscriber.onNext(mComic);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                    e.printStackTrace();
-                }finally {
-                    subscriber.onCompleted();
-                }
-            }
+    public void getComicDetail(final String mComicId,Observer observer){
+       Observable.create(new ObservableOnSubscribe<Comic>() {
+           @Override
+           public void subscribe(@NonNull ObservableEmitter<Comic> observableEmitter) throws Exception {
+               try {
+                   Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
+                   Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,context);
+                   Comic comicFromDB = (Comic) mHelper.findComic(Long.parseLong(mComicId));
+                   if(comicFromDB!=null) {
+                       mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
+                   }else{
+                       mComic.setCurrentChapter(0);
+                   }
+                   observableEmitter.onNext(mComic);
+               } catch (Exception e) {
+                   observableEmitter.onError(e);
+                   e.printStackTrace();
+               }finally {
+                   observableEmitter.onComplete();
+               }
+           }
         }).subscribeOn(Schedulers.io())
                .unsubscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-               .subscribe(subscriber);
+               .subscribe(observer);
     }
 
     //阅读相关
-    public void getPreNowChapterList(String comic_id,int comic_chapters,Subscriber subscriber){
-        comicService.getPreNowChapterList(comic_id,comic_chapters+"")
+    public void getPreNowChapterList(String comic_id,int comic_chapters,Observer observer){
+        Observable<PreloadChapters> Observable = comicService.getPreNowChapterList(comic_id,comic_chapters+"");
+        CacheProviders.getComicCache()
+                .getPreNowChapterList(Observable,new DynamicKey(comic_id+comic_chapters+"all"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void getChaptersList(String comic_id,int comic_chapters,Subscriber subscriber){
-        comicService.getChapters(comic_id,comic_chapters+"")
+    public void getChaptersList(String comic_id,int comic_chapters,Observer observer){
+        Observable<Chapters> Observable = comicService.getChapters(comic_id,comic_chapters+"");
+        CacheProviders.getComicCache()
+                .getChapters(Observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
+                .subscribe(observer);
 
     }
     //搜索相关
 
     //搜索相关
-    public void getDynamicResult(String title,Subscriber subscriber){
-        comicService.getDynamicSearchResult(Url.TencentSearchUrl+title)
+    public void getDynamicResult(String title,Observer observer){
+        Observable<HttpResult<List<SearchBean>>> Observable = comicService.getDynamicSearchResult(Url.TencentSearchUrl+title);
+        CacheProviders.getComicCache()
+                .getDynamicSearchResult(Observable,new DynamicKey(Url.TencentSearchUrl+title),new EvictDynamicKey(false))
                 .map(new HttpResultFunc<List<SearchBean>>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
 
 
-    public void getSearchResult(final String title, Subscriber subscriber) {
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getSearchResult(final String title, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     Document doc = Jsoup.connect(Url.TencentSearchResultUrl+title).get();
                     List<Comic> mdats = TencentComicAnalysis.TransToSearchResultComic(doc);
-                    subscriber.onNext(mdats);
+                    observableEmitter.onNext(mdats);
                 } catch (Exception e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void getTopResult(Subscriber subscriber) {
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getTopResult(Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     Document doc = Jsoup.connect(Url.TencentSearchRecommend).get();
                     List<Comic> mdats = TencentComicAnalysis.TransToSearchTopComic(doc);
-                    subscriber.onNext(mdats);
+                    observableEmitter.onNext(mdats);
                 } catch (Exception e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 } finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
     //操作数据库相关方法
 
-    public void saveComicToDB(final Comic comic,Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public void saveComicToDB(final Comic comic,Observer observer){
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     if(mHelper.findComic(comic.getId())==null){
                         if(mHelper.insert(comic)){
-                            subscriber.onNext(true);
+                            observableEmitter.onNext(true);
                         }else{
-                            subscriber.onNext(false);
+                            observableEmitter.onNext(false);
                         }
                     }else{
-                        subscriber.onNext(false);
+                        observableEmitter.onNext(false);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void updateComicCurrentChapter(final String comic_id, final int current_chapters, Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public void updateComicCurrentChapter(final String comic_id, final int current_chapters, Observer observer){
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     Comic mComic = (Comic) mHelper.findComic(Long.parseLong(comic_id));
                     final java.util.Date date = new java.util.Date();
@@ -364,138 +382,139 @@ public class ComicModule {
                         mComic.setCurrentChapter(current_chapters+1);
                         mComic.setUpdateTime(datetime);
                         if(mHelper.update(mComic)){
-                            subscriber.onNext(true);
+                            observableEmitter.onNext(true);
                         }else{
-                            subscriber.onNext(false);
+                            observableEmitter.onNext(false);
                         }
                     }else{
-                        subscriber.onNext(false);
+                        observableEmitter.onNext(false);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void updateComicToDB(final Comic mComic, Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public void updateComicToDB(final Comic mComic, Observer observer){
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     Comic comic = (Comic) mHelper.findComic(mComic.getId());
                     if(comic!=null){
                         if(mHelper.update(mComic)){
-                            subscriber.onNext(true);
+                            observableEmitter.onNext(true);
                         }else{
-                            subscriber.onNext(false);
+                            observableEmitter.onNext(false);
                         }
                     }else{
-                        subscriber.onNext(false);
+                        observableEmitter.onNext(false);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void isCollected(final long id,Subscriber subscriber) {
-        Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public void isCollected(final long id,Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>()  {
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     Comic mComic = (Comic) mHelper.findComic(id);
                     if(mComic!=null) {
                         if(mComic.getIsCollected()){
-                            subscriber.onNext(false);
+                            observableEmitter.onNext(false);
                         }else{
-                            subscriber.onNext(true);
+                            observableEmitter.onNext(true);
                         }
                     }else{
-                        subscriber.onNext(true);
+                        observableEmitter.onNext(true);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void getComicFromDB(final long id,Subscriber subscriber) {
-        Observable.create(new Observable.OnSubscribe<Comic>() {
+    public void getComicFromDB(final long id,Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Comic>() {
             @Override
-            public void call(Subscriber<? super Comic> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Comic> observableEmitter) throws Exception {
                 try{
                     Comic mComic = (Comic) mHelper.findComic(id);
                     if(mComic!=null) {
-                        subscriber.onNext(mComic);
+                        observableEmitter.onNext(mComic);
                     }else{
-                        subscriber.onNext(null);
+                        observableEmitter.onNext(null);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
-    public void getCollectedComicList(Subscriber subscriber){
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getCollectedComicList(Observer observer){
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     List<Comic> comics = mHelper.queryCollect();
-                    subscriber.onNext(comics);
+                    observableEmitter.onNext(comics);
                 } catch (Exception e) {
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
 
     }
 
     /**
      * 插入搜索结果到数据库
      * @param title
-     * @param subscriber
+     * @param observer
      */
-    public void updateSearchResultToDB(final String title, Subscriber<Boolean> subscriber) {
-        Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public void updateSearchResultToDB(final String title, Observer<Boolean> observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
 
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     final java.util.Date date = new java.util.Date();
                     long datetime = date.getTime();
@@ -503,67 +522,70 @@ public class ComicModule {
                     result.setTitle(title);
                     result.setSearch_time(datetime);
                     if(mHelper.insert(result)){
-                        subscriber.onNext(true);
+                        observableEmitter.onNext(true);
                     }else{
-                        subscriber.onNext(false);
+                        observableEmitter.onNext(false);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.<Boolean>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
 
     }
 
-    public void getHistorySearch(Subscriber<List<Comic>> subscriber) {
-        Observable.create(new Observable.OnSubscribe<List<Comic>>() {
+    public void getHistorySearch(Observer<List<Comic>> observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
 
             @Override
-            public void call(Subscriber<? super List<Comic>> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try{
                     List<DBSearchResult> results = mHelper.querySearch();
                     List<Comic> comics = DBEntityUtils.transSearchToComic(results);
-                    subscriber.onNext(comics);
+                    observableEmitter.onNext(comics);
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.<List<Comic>>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
 
     }
 
-    public void clearSearchHistory(Subscriber subscriber) {
-        Observable.create(new Observable.OnSubscribe<Boolean>() {
+    public void clearSearchHistory(Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     if(mHelper.deleteAllSearch()){
-                        subscriber.onNext(true);
+                        observableEmitter.onNext(true);
                     }else{
-                        subscriber.onNext(false);
+                        observableEmitter.onNext(false);
                     }
                 }catch (Exception e){
-                    subscriber.onError(e);
+                    observableEmitter.onError(e);
                 }finally {
-                    subscriber.onCompleted();
+                    observableEmitter.onComplete();
                 }
             }
+
         }) .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 }

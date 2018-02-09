@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.android.zhhr.presenter.BasePresenter;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
-import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 
@@ -19,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by 皓然 on 2017/8/6.
  */
 
-public abstract class BaseFragment<P extends BasePresenter> extends RxFragment {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     protected P mPresenter;
     //初始化Presenter
     protected abstract void initPresenter();
