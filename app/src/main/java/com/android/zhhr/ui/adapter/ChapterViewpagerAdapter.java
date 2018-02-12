@@ -147,7 +147,7 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
     }
 
     public interface OnceClickListener{
-        void onClick(View view,float x, float y);
+        void onClick(View view, float x, float y);
     }
 
 }

@@ -8,6 +8,8 @@ import com.android.zhhr.data.entity.SearchBean;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
@@ -25,4 +27,6 @@ public interface ComicService{
     Observable<PreloadChapters> getPreNowChapterList(@Path("id") String id, @Path("chapter") String chapter);
     @GET
     Observable<HttpResult<List<SearchBean>>> getDynamicSearchResult(@Url String url);
+    @GET
+    Observable<Response<ResponseBody>> downloadFile(@Url String fileUrl);
 }

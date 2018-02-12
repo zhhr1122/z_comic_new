@@ -1,10 +1,14 @@
 package com.android.zhhr.ui.activity;
 
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
@@ -12,6 +16,7 @@ import com.android.zhhr.presenter.WelcomePresenter;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
 import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.IntentUtil;
+import com.android.zhhr.utils.LogUtil;
 import com.zonst.libzadsdk.ZAdComponent;
 import com.zonst.libzadsdk.ZAdSdk;
 import com.zonst.libzadsdk.ZAdType;

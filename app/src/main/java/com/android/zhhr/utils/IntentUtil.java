@@ -8,6 +8,7 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
+import com.android.zhhr.ui.activity.DownloadlistActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.activity.SearchActivity;
@@ -20,6 +21,7 @@ import com.zonst.libzadsdk.listener.ZAdLoadListener;
 import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -72,13 +74,19 @@ public class IntentUtil {
 
     public static void ToSelectDownload(Context context, Comic mComic){
         Intent intent = new Intent(context, SelectDownloadActivity.class);
-        intent.putExtra(Constants.COMIC_ID,mComic.getId());
-        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
+        intent.putExtra(Constants.COMIC,mComic);
         context.startActivity(intent);
     }
 
     public static void ToSearch(Context context){
         Intent intent = new Intent(context, SearchActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void ToDownloadListActivity(Context context,HashMap<Integer,Integer> map,Comic comic) {
+        Intent intent = new Intent(context, DownloadlistActivity.class);
+        intent.putExtra(Constants.COMIC_SELECT_DOWNLOAD,map);
+        intent.putExtra(Constants.COMIC,comic);
         context.startActivity(intent);
     }
 }

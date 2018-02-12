@@ -1,6 +1,7 @@
 package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -56,8 +57,7 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
         intent = getIntent();
         mAdapter = new DetailAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
-        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(this,1);
-        layoutManager.setScrollEnabled(false);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,1);
         mRecycleView.setLayoutManager(layoutManager);
         mAdapter.updateWithClear(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
         mAdapter.setOnItemClickListener(this);

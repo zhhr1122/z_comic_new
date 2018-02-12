@@ -1,10 +1,13 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
+import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.view.ISelectDownloadView;
+import com.android.zhhr.utils.IntentUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,14 +29,36 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     private HashMap<Integer,Integer> map;
     private boolean isSelectedAll ;
     private int SelectedNum = 0;
+    private Comic mComic;
 
     public int getSelectedNum() {
         return SelectedNum;
     }
 
-    public SelectDownloadPresenter(Activity context, ISelectDownloadView view, ArrayList<String> mChapters) {
-        super(context, view);
+    public HashMap<Integer,Integer> getMap(){
+        return map;
+    }
+
+    public ArrayList<String> getmChapters() {
+        return mChapters;
+    }
+
+    public void setmChapters(ArrayList<String> mChapters) {
         this.mChapters = mChapters;
+    }
+
+    public Comic getmComic() {
+        return mComic;
+    }
+
+    public void setmComic(Comic mComic) {
+        this.mComic = mComic;
+    }
+
+    public SelectDownloadPresenter(Activity context, ISelectDownloadView view, Intent intent) {
+        super(context, view);
+        this.mComic = (Comic) intent.getSerializableExtra(Constants.COMIC);
+        this.mChapters = (ArrayList<String>) mComic.getChapters();
         isSelectedAll  = false;
         initData();
     }
@@ -89,4 +114,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
         mView.updateDownloadList(map);
     }
 
+    public void startDownload() {
+        IntentUtil.ToDownloadListActivity(mContext,map,mComic);
+    }
 }

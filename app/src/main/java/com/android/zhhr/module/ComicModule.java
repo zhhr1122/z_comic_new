@@ -257,7 +257,7 @@ public class ComicModule {
     //阅读相关
     public void getPreNowChapterList(String comic_id,int comic_chapters,Observer observer){
         Observable<PreloadChapters> Observable = comicService.getPreNowChapterList(comic_id,comic_chapters+"");
-        CacheProviders.getComicCache()
+        CacheProviders.getComicCacheInstance()
                 .getPreNowChapterList(Observable,new DynamicKey(comic_id+comic_chapters+"all"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -268,7 +268,7 @@ public class ComicModule {
 
     public void getChaptersList(String comic_id,int comic_chapters,Observer observer){
         Observable<Chapters> Observable = comicService.getChapters(comic_id,comic_chapters+"");
-        CacheProviders.getComicCache()
+        CacheProviders.getComicCacheInstance()
                 .getChapters(Observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -282,7 +282,7 @@ public class ComicModule {
     //搜索相关
     public void getDynamicResult(String title,Observer observer){
         Observable<HttpResult<List<SearchBean>>> Observable = comicService.getDynamicSearchResult(Url.TencentSearchUrl+title);
-        CacheProviders.getComicCache()
+        CacheProviders.getComicCacheInstance()
                 .getDynamicSearchResult(Observable,new DynamicKey(Url.TencentSearchUrl+title),new EvictDynamicKey(false))
                 .map(new HttpResultFunc<List<SearchBean>>())
                 .subscribeOn(Schedulers.io())

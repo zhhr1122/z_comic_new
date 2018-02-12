@@ -80,7 +80,7 @@ public class IndexItemView extends LinearLayout{
         ll.addView(Locker,lockerlp);
         ll.addView(mTitle,lp);
         addView(ll,  new LayoutParams(LayoutParams.WRAP_CONTENT, DisplayUtil.dip2px(context,60)));
-        addView(mBottom, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context,0.5f)));
+        addView(mBottom, new LayoutParams(LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context,0.5f)));
         if(position<size-10){
             Locker.setVisibility(View.GONE);
         }

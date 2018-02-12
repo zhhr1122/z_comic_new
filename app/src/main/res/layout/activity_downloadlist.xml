@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl_actionbar"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <ImageView
+            android:id="@+id/iv_back_color"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/btn_back_color"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="12.5dp"
+            />
+        <TextView
+            android:text="标题"
+            android:gravity="center"
+            android:id="@+id/tv_title"
+            android:textSize="15dp"
+            android:textColor="@color/colorTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_order"
+        android:layout_marginTop="60dp"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        >
+        <TextView
+            android:id="@+id/tv_chapters_num"
+            android:textSize="12dp"
+            android:textColor="@color/colorTextColorLight"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="添加更多集数"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+        <ImageView
+            android:layout_marginRight="5dp"
+            android:id="@+id/iv_order"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/zhengxu"
+            android:padding="7.5dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/rl_order"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:id="@+id/rv_index"
+        android:background="@color/colorBg"
+        >
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

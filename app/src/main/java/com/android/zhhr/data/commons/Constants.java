@@ -11,6 +11,7 @@ public class Constants {
     public final static String COMIC_TITLE = "comic_title";
     public final static String COMIC_CHAPER_TITLE = "comic_chapter_title";
     public final static String COMIC_READ_TYPE = "comic_read_type";
+    public final static String COMIC_SELECT_DOWNLOAD = "comic_select_download";
     public final static String COMIC = "comic";
     public final static int RIGHT_TO_LEFT =0;
     public final static int LEFT_TO_RIGHT =1;

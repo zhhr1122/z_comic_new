@@ -353,7 +353,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     public void nextChapter(PreloadChapters data, int mPosition,int offset) {
-        showToast("加载完成"+offset);
         if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
             mVerticalAdapter.setDatas(data);
             manager.scrollToPositionWithOffset(mPosition,offset);
