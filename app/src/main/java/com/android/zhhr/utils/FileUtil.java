@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 文件处理工具类
@@ -16,8 +18,8 @@ import java.io.IOException;
 
 public class FileUtil {
     public static final String SDPATH = Environment.getExternalStorageDirectory().getPath() + "/z_comic/";// 获取文件夹
-    public static final String CACHE = "cache";
-    public static final String COMIC = "comic";
+    public static final String CACHE = "cache/";
+    public static final String COMIC = "comic/";
     public static void init(){
         //创建文件夹
         LogUtil.d("初始化创建文件夹");
@@ -61,6 +63,42 @@ public class FileUtil {
             }
         }
         return true;
+    }
+
+    /**
+     * 保存图片到SD卡
+     * @param is
+     * @param path
+     * @param imgName
+     * @return
+     */
+    public static boolean saveImgToSdCard(InputStream is,String path,String imgName){
+        String sdStatus = Environment.getExternalStorageState();
+        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+            return false;
+        }
+        createDir(path);
+        delFile(path, imgName);//删除本地旧图
+        try {
+            File file = new File(path, imgName);
+            FileOutputStream fos = new FileOutputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(is);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = bis.read(buffer)) != -1) {
+                fos.write(buffer, 0, len);
+                fos.flush();
+            }
+            fos.close();
+            bis.close();
+            is.close();
+            LogUtil.d("下载图片成功"+path+imgName);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            LogUtil.e(e.toString());
+            return false;
+        }
     }
 
     public static File createSDDir(String dirName) throws IOException {

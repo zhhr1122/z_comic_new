@@ -2,6 +2,8 @@ package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
 import android.os.Environment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,9 +13,13 @@ import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.data.entity.SearchBean;
+import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.presenter.DownloadlistPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
+import com.android.zhhr.ui.adapter.base.DownloadlistAdapter;
 import com.android.zhhr.ui.view.IDownloadlistView;
+import com.android.zhhr.utils.FileUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.BufferedInputStream;
@@ -39,9 +45,14 @@ import static com.android.zhhr.net.MainFactory.comicService;
  * Created by DELL on 2018/2/12.
  */
 
-public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> implements IDownloadlistView{
+public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> implements IDownloadlistView<List<DBDownloadItems>>{
     @Bind(R.id.tv_title)
     TextView mTitle;
+    @Bind(R.id.rv_downloadlist)
+    RecyclerView mRecyclerview;
+
+    private DownloadlistAdapter mAdapter;
+
 
     @Override
     protected void initPresenter(Intent intent) {
@@ -56,47 +67,12 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
 
     @Override
     protected void initView() {
-        comicService.downloadFile(Url.test_url)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseBody>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull Response<ResponseBody> responseBody) {
-                        try {
-                            InputStream is = responseBody.body().byteStream();
-                            File file = new File(Environment.getExternalStorageDirectory(), "text_img.png");
-                            FileOutputStream fos = new FileOutputStream(file);
-                            BufferedInputStream bis = new BufferedInputStream(is);
-                            byte[] buffer = new byte[1024];
-                            int len;
-                            while ((len = bis.read(buffer)) != -1) {
-                                fos.write(buffer, 0, len);
-                                fos.flush();
-                            }
-                            fos.close();
-                            bis.close();
-                            is.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        //mPresenter.getComic();
+        mAdapter = new DownloadlistAdapter(this,R.layout.item_downloadlist);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecyclerview.setLayoutManager(manager);
+        mRecyclerview.setAdapter(mAdapter);
+        mPresenter.initData();
     }
 
     @Override
@@ -137,5 +113,21 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
     @OnClick(R.id.iv_back_color)
     public void finish(View view){
         this.finish();
+    }
+
+    @Override
+    public void showErrorView(String throwable) {
+
+    }
+
+    @Override
+    public void fillData(List<DBDownloadItems> data) {
+        mAdapter.updateWithClear(data);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getDataFinish() {
+
     }
 }
