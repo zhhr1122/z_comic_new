@@ -15,6 +15,7 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by 张皓然 on 2018/2/1.
@@ -34,7 +35,7 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
     public void getDynamicResult(String title) {
         if(!isDynamicLoading){
-            mModel.getDynamicResult(title,new Observer<List<SearchBean>>(){
+            mModel.getDynamicResult(title,new DisposableObserver<List<SearchBean>>(){
                 @Override
                 public void onError(Throwable throwable) {
                     isDynamicLoading = false;
@@ -44,11 +45,6 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
                 public void onComplete() {
                     mView.getDataFinish();
                     isDynamicLoading = false;
-                }
-
-                @Override
-                public void onSubscribe(@NonNull Disposable disposable) {
-
                 }
 
                 @Override

@@ -9,6 +9,7 @@ import com.android.zhhr.data.entity.Comic;
 public interface IDownloadlistView<T> extends ILoadDataView<T>{
     void onStartDownload(int chapters);
     void onPausedDownload(int chapters);
+    void onLoadMoreData(T t);
     void onStartAll();
     void onPauseAll();
     void onSelectALL();

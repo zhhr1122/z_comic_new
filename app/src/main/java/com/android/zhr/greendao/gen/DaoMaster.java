@@ -24,6 +24,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ComicDao.createTable(db, ifNotExists);
         DBSearchResultDao.createTable(db, ifNotExists);
         DBDownloadItemsDao.createTable(db, ifNotExists);
+        DownInfoDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -31,6 +32,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ComicDao.dropTable(db, ifExists);
         DBSearchResultDao.dropTable(db, ifExists);
         DBDownloadItemsDao.dropTable(db, ifExists);
+        DownInfoDao.dropTable(db, ifExists);
     }
 
     /**
@@ -52,6 +54,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ComicDao.class);
         registerDaoClass(DBSearchResultDao.class);
         registerDaoClass(DBDownloadItemsDao.class);
+        registerDaoClass(DownInfoDao.class);
     }
 
     public DaoSession newSession() {

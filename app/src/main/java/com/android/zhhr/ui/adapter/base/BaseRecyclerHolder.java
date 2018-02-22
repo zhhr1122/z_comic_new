@@ -20,10 +20,12 @@ import android.widget.TextView;
 import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.GlideImageLoader;
+import com.android.zhhr.utils.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 
 import org.w3c.dom.Text;
 
@@ -84,6 +86,13 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         }else{
             tv.setText(text);
         }
+        return this;
+    }
+
+    public BaseRecyclerHolder setProgress(int viewId,long countLength,long readLength){
+        NumberProgressBar progressBar = getView(viewId);
+        progressBar.setMax((int) countLength/1000);
+        progressBar.setProgress((int) readLength/1000);
         return this;
     }
 

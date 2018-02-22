@@ -8,17 +8,20 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.data.entity.db.DBSearchResult;
+import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.net.HttpResultFunc;
 import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
+import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.TencentComicAnalysis;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -37,6 +40,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
@@ -267,15 +271,47 @@ public class ComicModule {
     }
 
     public void getChaptersList(String comic_id,int comic_chapters,Observer observer){
-        Observable<Chapters> Observable = comicService.getChapters(comic_id,comic_chapters+"");
+        Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
         CacheProviders.getComicCacheInstance()
-                .getChapters(Observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                .map(new Function<Chapters, Object>() {
+                    @Override
+                    public Object apply(@NonNull Chapters chapters) throws Exception {
+                        return chapters.getComiclist();
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
                 .subscribe(observer);
+    }
 
+
+    public void getDownloadChaptersList(final String comic_id, final int comic_chapters, Observer observer){
+        Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
+        CacheProviders.getComicCacheInstance()
+                .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                .map(new Function<Chapters, Object>() {
+
+                    @Override
+                    public Object apply(@NonNull Chapters chapters) throws Exception {
+                        ArrayList<DownInfo> mLists = new ArrayList<>();
+                        for(int i=0;i<chapters.getComiclist().size();i++){
+                            DownInfo item = new DownInfo(chapters.getComiclist().get(i));
+                            item.setId(Long.parseLong(comic_id+comic_chapters+i));
+                            item.setState(DownState.START);
+                            item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+"/"+comic_id+"/"+comic_chapters+"/"+i+".png");
+                            mLists.add(item);
+                        }
+                        return mLists;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
+                .subscribe(observer);
     }
     //搜索相关
 

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/colorBg"
      android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content">
     <View
         android:background="@color/colorBottom"
         android:layout_width="match_parent"
@@ -25,16 +25,18 @@
         android:textColor="@color/colorTextColorLight2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <ProgressBar
-        android:id="@+id/pg_download"
-        android:progress="50"
-        android:max="100"
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:layout_marginBottom="5dp"
         android:layout_below="@id/tv_title"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@color/colorPrimary"
-        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/pg_download"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        custom:progress_text_size="20sp"
         android:layout_width="match_parent"
-        android:layout_height="3dp" />
+        android:layout_height="wrap_content"
+        custom:progress_reached_color = "@color/colorPrimary"
+        custom:progress_text_color = "@color/colorPrimary"
+        />
 
 </RelativeLayout>

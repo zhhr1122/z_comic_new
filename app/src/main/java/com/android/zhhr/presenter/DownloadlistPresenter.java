@@ -5,28 +5,24 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.commons.Url;
+import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.data.entity.DownState;
+import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IDownloadlistView;
-import com.android.zhhr.ui.view.IIndexView;
-import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.LogUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
-
-import static com.android.zhhr.net.MainFactory.comicService;
 
 /**
  * Created by DELL on 2018/2/12.
@@ -36,7 +32,7 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
     private Comic mComic;
     private HashMap<Integer,Integer> mMap;
     private ComicModule mModel;
-    private ArrayList<DBDownloadItems> mLists;
+    private ArrayList<DownInfo> mLists;
 
     public DownloadlistPresenter(Activity context, IDownloadlistView view, Intent intent) {
         super(context, view);
@@ -45,16 +41,27 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
         this.mModel = new ComicModule(context);
     }
 
+    /**
+     * 初始化按照章節下載
+     */
     public void initData() {
         mLists = new ArrayList<>();
-        DBDownloadItems item;
-        for (Map.Entry<Integer, Integer> entry : mMap.entrySet()) {
-            if(entry.getValue() != Constants.CHAPTER_FREE){
-                item = new DBDownloadItems();
-                item.setComic_id(mComic.getId());
-                item.setTitle(mComic.getTitle());
-                item.setChapters(entry.getKey());
-                item.setChapters_title(mComic.getChapters().get(entry.getKey()));
+        DownInfo item;
+        //把hashmap進行排序操作
+        List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
+        Collections.sort(list,new Comparator<Map.Entry<Integer,Integer>>() {
+            public int compare(Map.Entry<Integer, Integer> o1,
+                               Map.Entry<Integer, Integer> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+        });
+        for(Map.Entry<Integer,Integer> mapping:list){
+            System.out.println(mapping.getKey()+":"+mapping.getValue());
+            if(mapping.getValue() != Constants.CHAPTER_FREE){
+                item = new DownInfo("http://sw.bos.baidu.com/sw-search-sp/software/f84db5c1e9853/QQPhoneManager_5.8.1.5162.exe");
+                item.setId(mapping.getKey());
+                item.setState(DownState.START);
+                item.setSavePath(mapping.getKey()+"--"+mComic.getChapters().get(mapping.getKey()));
                 mLists.add(item);
             }
         }
@@ -63,21 +70,32 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
         }
     }
 
-    public void getComic(){
-        comicService.downloadFile(Url.test_url)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseBody>>() {
+    public void initDownInfoData(){
+        //把hashmap進行排序操作
+        List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
+        Collections.sort(list,new Comparator<Map.Entry<Integer,Integer>>() {
+            public int compare(Map.Entry<Integer, Integer> o1,
+                               Map.Entry<Integer, Integer> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+        });
+        for(Map.Entry<Integer,Integer> mapping:list){
+            System.out.println(mapping.getKey()+":"+mapping.getValue());
+            if(mapping.getValue() != Constants.CHAPTER_FREE){
+                mModel.getDownloadChaptersList(mComic.getId()+"",mapping.getKey(),new Observer<ArrayList<DownInfo>>(){
+
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull Response<ResponseBody> responseBody) {
-                        FileUtil.saveImgToSdCard(responseBody.body().byteStream(),FileUtil.SDPATH+FileUtil.COMIC,"a.png");
+                    public void onNext(@NonNull ArrayList<DownInfo> mLists) {
+                        if(mLists!=null&&mLists.size()!=0){
+                            mView.onLoadMoreData(mLists);
+                        }
                     }
+
 
                     @Override
                     public void onError(@NonNull Throwable e) {
@@ -89,5 +107,11 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
 
                     }
                 });
+            }
+        }
+    }
+
+    public void getComic(){
+
     }
 }

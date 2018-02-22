@@ -90,5 +90,7 @@ dependencies {
 
     compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
 
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
+
     compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }

@@ -11,7 +11,9 @@ import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
@@ -27,6 +29,8 @@ public interface ComicService{
     Observable<PreloadChapters> getPreNowChapterList(@Path("id") String id, @Path("chapter") String chapter);
     @GET
     Observable<HttpResult<List<SearchBean>>> getDynamicSearchResult(@Url String url);
+
+    @Streaming/*大文件需要加入这个判断，防止下载过程中写入到内存中*/
     @GET
-    Observable<Response<ResponseBody>> downloadFile(@Url String fileUrl);
+    Observable<ResponseBody> download(@Header("RANGE") String start, @Url String url);
 }

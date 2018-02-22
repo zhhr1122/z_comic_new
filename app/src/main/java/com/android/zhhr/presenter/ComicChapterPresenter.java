@@ -15,6 +15,7 @@ import com.zonst.libzadsdk.ZAdType;
 import com.zonst.libzadsdk.bean.RewardBean;
 import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -337,7 +338,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      */
     public void loadNextData(String id, int chapter, final int offset){
 
-        mModel.getChaptersList(id,(chapter+2),new Observer<Chapters>() {
+        mModel.getChaptersList(id,(chapter+2),new Observer<ArrayList<String>>() {
 
             @Override
             public void onError(Throwable e) {
@@ -357,11 +358,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             }
 
             @Override
-            public void onNext(Chapters result) {
+            public void onNext(@NonNull ArrayList<String> strings) {
                 if(isLoadingdata){
                     mPreloadChapters.setPrelist(mPreloadChapters.getNowlist());
                     mPreloadChapters.setNowlist(mPreloadChapters.getNextlist());
-                    mPreloadChapters.setNextlist(result.getComiclist());
+                    mPreloadChapters.setNextlist(strings);
                     comic_chapters++;
                     int mPosition;
                     if(mDirect == Constants.RIGHT_TO_LEFT){
@@ -383,7 +384,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param chapter
      */
     public void loadPreData(String id, int chapter, final int offset){
-        mModel.getChaptersList(id,chapter-2,new Observer<Chapters>() {
+        mModel.getChaptersList(id,chapter-2,new Observer<ArrayList<String>>() {
 
             @Override
             public void onError(Throwable e) {
@@ -403,11 +404,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             }
 
             @Override
-            public void onNext(Chapters result) {
+            public void onNext(@NonNull ArrayList<String> strings) {
                 if(isLoadingdata){
                     mPreloadChapters.setNextlist(mPreloadChapters.getNowlist());
                     mPreloadChapters.setNowlist(mPreloadChapters.getPrelist());
-                    mPreloadChapters.setPrelist(result.getComiclist());
+                    mPreloadChapters.setPrelist(strings);
                     comic_chapters--;
                     int mPosition = 0;
                     if(mDirect == Constants.RIGHT_TO_LEFT){
