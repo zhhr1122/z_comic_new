@@ -301,9 +301,18 @@ public class ComicModule {
                             DownInfo item = new DownInfo(chapters.getComiclist().get(i));
                             item.setId(Long.parseLong(comic_id+comic_chapters+i));
                             item.setState(DownState.START);
-                            item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+"/"+comic_id+"/"+comic_chapters+"/"+i+".png");
+                            item.setComic_id(Long.parseLong(comic_id));
+                            item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+comic_id+"/"+comic_chapters+"/"+i+".png");
+                            mHelper.insert(item);//保存到数据库
                             mLists.add(item);
                         }
+                        /*DownInfo item = new DownInfo("http://gdown.baidu.com/data/wisegame/38670983c7bf51b4/tengxunshipin_14297.apk");
+                        item.setId(Long.parseLong(comic_id));
+                        item.setState(DownState.START);
+                        item.setComic_id(Long.parseLong(comic_id));
+                        item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+comic_id+"/"+comic_chapters+"/test"+".apk");
+                        mHelper.insert(item);//保存到数据库
+                        mLists.add(item);*/
                         return mLists;
                     }
                 })
@@ -611,6 +620,28 @@ public class ComicModule {
                     }else{
                         observableEmitter.onNext(false);
                     }
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void getDownItemFromDB(final long comic_id, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<DownInfo>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<DownInfo>> observableEmitter) throws Exception {
+                try{
+                    List<DownInfo> results = mHelper.queryDownInfo(comic_id);
+                    observableEmitter.onNext(results);
                 }catch (Exception e){
                     observableEmitter.onError(e);
                 }finally {

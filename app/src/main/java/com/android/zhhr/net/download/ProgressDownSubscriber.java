@@ -1,8 +1,11 @@
 package com.android.zhhr.net.download;
 
 
+import android.content.Context;
+
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DownInfo;
+import com.android.zhhr.db.helper.DaoHelper;
 
 import java.lang.ref.SoftReference;
 
@@ -26,11 +29,15 @@ public class ProgressDownSubscriber<T> extends DisposableObserver<T> implements 
     private SoftReference<HttpDownOnNextListener> mSubscriberOnNextListener;
     /*下载数据*/
     private DownInfo downInfo;
+    private Context context;
+    private DaoHelper mHelper;
 
 
-    public ProgressDownSubscriber(DownInfo downInfo) {
+    public ProgressDownSubscriber(DownInfo downInfo,Context context) {
         this.mSubscriberOnNextListener = new SoftReference<>(downInfo.getListener());
         this.downInfo=downInfo;
+        this.context = context;
+        mHelper = new DaoHelper(context);
     }
 
 
@@ -60,9 +67,9 @@ public class ProgressDownSubscriber<T> extends DisposableObserver<T> implements 
         if(mSubscriberOnNextListener.get()!=null){
             mSubscriberOnNextListener.get().onComplete();
         }
-        HttpDownManager.getInstance().remove(downInfo);
+        HttpDownManager.getInstance(context).remove(downInfo);
         downInfo.setState(DownState.FINISH);
-       // DbDownUtil.getInstance().update(downInfo);
+        mHelper.update(downInfo);
     }
 
     /**
@@ -76,9 +83,9 @@ public class ProgressDownSubscriber<T> extends DisposableObserver<T> implements 
         if(mSubscriberOnNextListener.get()!=null){
             mSubscriberOnNextListener.get().onError(e);
         }
-        HttpDownManager.getInstance().remove(downInfo);
+        HttpDownManager.getInstance(context).remove(downInfo);
         downInfo.setState(DownState.ERROR);
-        //DbDownUtil.getInstance().update(downInfo);
+        mHelper.update(downInfo);
     }
 
     /**

@@ -1,9 +1,12 @@
 package com.android.zhhr.net.download;
 
+import android.content.Context;
+
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DownInfo;
+import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
 import com.android.zhhr.utils.ApiException;
 import com.android.zhhr.utils.LogUtil;
@@ -42,11 +45,13 @@ public class HttpDownManager {
     private volatile static HttpDownManager INSTANCE;
     /*数据库类*/
     //private DbDownUtil db;
+    private DaoHelper mHelper;
 
-    private HttpDownManager() {
+    private HttpDownManager(Context context) {
         downInfos = new HashSet<>();
         subMap = new HashMap<>();
         //db = DbDownUtil.getInstance();
+        mHelper = new DaoHelper(context);
     }
 
     /**
@@ -54,11 +59,11 @@ public class HttpDownManager {
      *
      * @return
      */
-    public static HttpDownManager getInstance() {
+    public static HttpDownManager getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (HttpDownManager.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new HttpDownManager();
+                    INSTANCE = new HttpDownManager(context);
                 }
             }
         }
@@ -69,14 +74,14 @@ public class HttpDownManager {
     /**
      * 开始下载
      */
-    public void startDown(final DownInfo info) {
+    public void startDown(final DownInfo info,Context context) {
         /*正在下载不处理*/
         if (info == null || subMap.get(info.getUrl()) != null) {
             subMap.get(info.getUrl()).setDownInfo(info);
             return;
         }
         /*添加回调处理类*/
-        ProgressDownSubscriber subscriber = new ProgressDownSubscriber(info);
+        ProgressDownSubscriber subscriber = new ProgressDownSubscriber(info,context);
         /*记录回调sub*/
         subMap.put(info.getUrl(), subscriber);
         /*获取service，多次请求公用一个sercie*/
@@ -136,7 +141,7 @@ public class HttpDownManager {
             subMap.remove(info.getUrl());
         }
         /*保存数据库信息和本地文件*/
-        //db.save(info);
+        mHelper.insert(info);
     }
 
 
@@ -156,7 +161,12 @@ public class HttpDownManager {
             subMap.remove(info.getUrl());
         }
         /*这里需要讲info信息写入到数据中，可自由扩展，用自己项目的数据库*/
-        //db.update(info);
+        mHelper.update(info);
+    }
+
+
+    public void upDateToDb(DownInfo info){
+        mHelper.update(info);
     }
 
     /**

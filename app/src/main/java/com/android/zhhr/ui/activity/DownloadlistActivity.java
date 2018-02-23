@@ -34,7 +34,6 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
     RecyclerView mRecyclerview;
 
     private DownloadlistAdapter mAdapter;
-    private HttpDownManager manager;
 
 
     @Override
@@ -51,35 +50,47 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
     @Override
     protected void initView() {
         //mPresenter.getComic();
-        manager = HttpDownManager.getInstance();
         mAdapter = new DownloadlistAdapter(this,R.layout.item_downloadlist);
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
         mRecyclerview.setLayoutManager(layoutmanager);
         mRecyclerview.setAdapter(mAdapter);
         //mPresenter.initData();
+        mPresenter.initDbData();
         mPresenter.initDownInfoData();
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 DownInfo info = mAdapter.getItems(position);
-                if(info.getState() == DownState.DOWN){
-                    manager.pause(info);
-                }else{
-                    manager.startDown(info);
+                switch (info.getState()){
+                    case START:
+                        mPresenter.startDown(info);
+                        break;
+                    case PAUSE:
+                        mPresenter.startDown(info);
+                        break;
+                    case DOWN:
+                        mPresenter.pause(info);
+                        break;
+                    case STOP:
+                        mPresenter.startDown(info);
+                        break;
+                    case ERROR:
+                        mPresenter.startDown(info);
+                        break;
+                    case  FINISH:
+                        showToast("已下载");
+                        break;
                 }
-
             }
         });
     }
 
     @Override
-    public void onStartDownload(int chapters) {
-
-    }
-
-    @Override
-    public void onPausedDownload(int chapters) {
-
+    protected void onDestroy() {
+        super.onDestroy();
+        for (DownInfo downInfo : mAdapter.getLists()) {
+            mPresenter.update(downInfo);
+        }
     }
 
     @Override
@@ -90,12 +101,12 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
 
     @Override
     public void onStartAll() {
-
+        mPresenter.startAll();
     }
 
     @Override
     public void onPauseAll() {
-
+        mPresenter.paseAll();
     }
 
     @Override

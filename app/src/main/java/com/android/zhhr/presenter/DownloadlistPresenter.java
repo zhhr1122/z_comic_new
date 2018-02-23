@@ -10,6 +10,8 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.net.download.HttpDownManager;
+import com.android.zhhr.ui.activity.DownloadlistActivity;
 import com.android.zhhr.ui.view.IDownloadlistView;
 import com.android.zhhr.utils.LogUtil;
 
@@ -33,12 +35,14 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
     private HashMap<Integer,Integer> mMap;
     private ComicModule mModel;
     private ArrayList<DownInfo> mLists;
+    private HttpDownManager manager;
 
     public DownloadlistPresenter(Activity context, IDownloadlistView view, Intent intent) {
         super(context, view);
         mComic= (Comic) intent.getSerializableExtra(Constants.COMIC);
         mMap = (HashMap<Integer, Integer>) intent.getSerializableExtra(Constants.COMIC_SELECT_DOWNLOAD);
-        this.mModel = new ComicModule(context);
+        manager = HttpDownManager.getInstance(mContext.getApplicationContext());
+        this.mModel = new ComicModule(mContext);
     }
 
     /**
@@ -70,6 +74,9 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
         }
     }
 
+    /**
+     * 获取每一张图片的下载地址
+     */
     public void initDownInfoData(){
         //把hashmap進行排序操作
         List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
@@ -80,7 +87,7 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
             }
         });
         for(Map.Entry<Integer,Integer> mapping:list){
-            System.out.println(mapping.getKey()+":"+mapping.getValue());
+            //System.out.println(mapping.getKey()+":"+mapping.getValue());
             if(mapping.getValue() != Constants.CHAPTER_FREE){
                 mModel.getDownloadChaptersList(mComic.getId()+"",mapping.getKey(),new Observer<ArrayList<DownInfo>>(){
 
@@ -113,5 +120,68 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
 
     public void getComic(){
 
+    }
+
+    /**
+     * 从数据库中拉取信息
+     */
+    public void initDbData() {
+        mModel.getDownItemFromDB(mComic.getId(), new Observer<List<DownInfo>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull List<DownInfo> mLists) {
+                if(mLists!=null&&mLists.size()!=0){
+                    mView.fillData(mLists);
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+    }
+
+    public void update(DownInfo info) {
+        manager.upDateToDb(info);
+    }
+
+    /**
+     * 开始所有下载
+     */
+    public void startAll() {
+
+    }
+
+    /**
+     * 暂停某个下载
+     * @param info
+     */
+    public void pause(DownInfo info) {
+        manager.pause(info);
+    }
+
+    /**
+     * 开始某个下载
+     * @param info
+     */
+    public void startDown(DownInfo info) {
+        manager.startDown(info,mContext.getApplicationContext());
+    }
+
+    /**
+     * 暂停所有下载
+     */
+    public void paseAll() {
     }
 }

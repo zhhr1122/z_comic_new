@@ -25,12 +25,13 @@ public class DownInfoDao extends AbstractDao<DownInfo, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
-        public final static Property SavePath = new Property(1, String.class, "savePath", false, "SAVE_PATH");
-        public final static Property CountLength = new Property(2, long.class, "countLength", false, "COUNT_LENGTH");
-        public final static Property ReadLength = new Property(3, long.class, "readLength", false, "READ_LENGTH");
-        public final static Property ConnectonTime = new Property(4, int.class, "connectonTime", false, "CONNECTON_TIME");
-        public final static Property StateInte = new Property(5, int.class, "stateInte", false, "STATE_INTE");
-        public final static Property Url = new Property(6, String.class, "url", false, "URL");
+        public final static Property Comic_id = new Property(1, long.class, "comic_id", false, "COMIC_ID");
+        public final static Property SavePath = new Property(2, String.class, "savePath", false, "SAVE_PATH");
+        public final static Property CountLength = new Property(3, long.class, "countLength", false, "COUNT_LENGTH");
+        public final static Property ReadLength = new Property(4, long.class, "readLength", false, "READ_LENGTH");
+        public final static Property ConnectonTime = new Property(5, int.class, "connectonTime", false, "CONNECTON_TIME");
+        public final static Property StateInte = new Property(6, int.class, "stateInte", false, "STATE_INTE");
+        public final static Property Url = new Property(7, String.class, "url", false, "URL");
     };
 
 
@@ -47,12 +48,13 @@ public class DownInfoDao extends AbstractDao<DownInfo, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DOWN_INFO\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
-                "\"SAVE_PATH\" TEXT," + // 1: savePath
-                "\"COUNT_LENGTH\" INTEGER NOT NULL ," + // 2: countLength
-                "\"READ_LENGTH\" INTEGER NOT NULL ," + // 3: readLength
-                "\"CONNECTON_TIME\" INTEGER NOT NULL ," + // 4: connectonTime
-                "\"STATE_INTE\" INTEGER NOT NULL ," + // 5: stateInte
-                "\"URL\" TEXT);"); // 6: url
+                "\"COMIC_ID\" INTEGER NOT NULL ," + // 1: comic_id
+                "\"SAVE_PATH\" TEXT," + // 2: savePath
+                "\"COUNT_LENGTH\" INTEGER NOT NULL ," + // 3: countLength
+                "\"READ_LENGTH\" INTEGER NOT NULL ," + // 4: readLength
+                "\"CONNECTON_TIME\" INTEGER NOT NULL ," + // 5: connectonTime
+                "\"STATE_INTE\" INTEGER NOT NULL ," + // 6: stateInte
+                "\"URL\" TEXT);"); // 7: url
     }
 
     /** Drops the underlying database table. */
@@ -65,19 +67,20 @@ public class DownInfoDao extends AbstractDao<DownInfo, Long> {
     protected final void bindValues(DatabaseStatement stmt, DownInfo entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
+        stmt.bindLong(2, entity.getComic_id());
  
         String savePath = entity.getSavePath();
         if (savePath != null) {
-            stmt.bindString(2, savePath);
+            stmt.bindString(3, savePath);
         }
-        stmt.bindLong(3, entity.getCountLength());
-        stmt.bindLong(4, entity.getReadLength());
-        stmt.bindLong(5, entity.getConnectonTime());
-        stmt.bindLong(6, entity.getStateInte());
+        stmt.bindLong(4, entity.getCountLength());
+        stmt.bindLong(5, entity.getReadLength());
+        stmt.bindLong(6, entity.getConnectonTime());
+        stmt.bindLong(7, entity.getStateInte());
  
         String url = entity.getUrl();
         if (url != null) {
-            stmt.bindString(7, url);
+            stmt.bindString(8, url);
         }
     }
 
@@ -85,19 +88,20 @@ public class DownInfoDao extends AbstractDao<DownInfo, Long> {
     protected final void bindValues(SQLiteStatement stmt, DownInfo entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
+        stmt.bindLong(2, entity.getComic_id());
  
         String savePath = entity.getSavePath();
         if (savePath != null) {
-            stmt.bindString(2, savePath);
+            stmt.bindString(3, savePath);
         }
-        stmt.bindLong(3, entity.getCountLength());
-        stmt.bindLong(4, entity.getReadLength());
-        stmt.bindLong(5, entity.getConnectonTime());
-        stmt.bindLong(6, entity.getStateInte());
+        stmt.bindLong(4, entity.getCountLength());
+        stmt.bindLong(5, entity.getReadLength());
+        stmt.bindLong(6, entity.getConnectonTime());
+        stmt.bindLong(7, entity.getStateInte());
  
         String url = entity.getUrl();
         if (url != null) {
-            stmt.bindString(7, url);
+            stmt.bindString(8, url);
         }
     }
 
@@ -110,12 +114,13 @@ public class DownInfoDao extends AbstractDao<DownInfo, Long> {
     public DownInfo readEntity(Cursor cursor, int offset) {
         DownInfo entity = new DownInfo( //
             cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // savePath
-            cursor.getLong(offset + 2), // countLength
-            cursor.getLong(offset + 3), // readLength
-            cursor.getInt(offset + 4), // connectonTime
-            cursor.getInt(offset + 5), // stateInte
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // url
+            cursor.getLong(offset + 1), // comic_id
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // savePath
+            cursor.getLong(offset + 3), // countLength
+            cursor.getLong(offset + 4), // readLength
+            cursor.getInt(offset + 5), // connectonTime
+            cursor.getInt(offset + 6), // stateInte
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // url
         );
         return entity;
     }
@@ -123,12 +128,13 @@ public class DownInfoDao extends AbstractDao<DownInfo, Long> {
     @Override
     public void readEntity(Cursor cursor, DownInfo entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
-        entity.setSavePath(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCountLength(cursor.getLong(offset + 2));
-        entity.setReadLength(cursor.getLong(offset + 3));
-        entity.setConnectonTime(cursor.getInt(offset + 4));
-        entity.setStateInte(cursor.getInt(offset + 5));
-        entity.setUrl(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setComic_id(cursor.getLong(offset + 1));
+        entity.setSavePath(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCountLength(cursor.getLong(offset + 3));
+        entity.setReadLength(cursor.getLong(offset + 4));
+        entity.setConnectonTime(cursor.getInt(offset + 5));
+        entity.setStateInte(cursor.getInt(offset + 6));
+        entity.setUrl(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

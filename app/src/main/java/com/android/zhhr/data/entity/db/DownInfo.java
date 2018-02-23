@@ -18,23 +18,25 @@ import org.greenrobot.greendao.annotation.Generated;
 public class DownInfo extends BaseBean{
 
     @Id
-    private long id;
+    protected long id;
+    /*漫画ID*/
+    protected long comic_id;
     /*存储位置*/
-    private String savePath;
+    protected String savePath;
     /*文件总长度*/
-    private long countLength;
+    protected long countLength;
     /*下载长度*/
-    private long readLength;
+    protected long readLength;
     /*下载唯一的HttpService*/
     @Transient
-    private ComicService service;
+    protected ComicService service;
     /*回调监听*/
     @Transient
-    private HttpDownOnNextListener listener;
+    protected HttpDownOnNextListener listener;
     /*超时设置*/
-    private  int connectonTime=6;
+    protected  int connectonTime=6;
     /*state状态数据库保存*/
-    private int stateInte;
+    protected int stateInte;
     /*url*/
     private String url;
     public String getUrl() {
@@ -79,10 +81,11 @@ public class DownInfo extends BaseBean{
     public void setId(long id) {
         this.id = id;
     }
-    @Generated(hash = 656702907)
-    public DownInfo(long id, String savePath, long countLength, long readLength,
-            int connectonTime, int stateInte, String url) {
+    @Generated(hash = 588015662)
+    public DownInfo(long id, long comic_id, String savePath, long countLength,
+            long readLength, int connectonTime, int stateInte, String url) {
         this.id = id;
+        this.comic_id = comic_id;
         this.savePath = savePath;
         this.countLength = countLength;
         this.readLength = readLength;
@@ -139,6 +142,12 @@ public class DownInfo extends BaseBean{
 
     public void setState(DownState state) {
         setStateInte(state.getState());
+    }
+    public long getComic_id() {
+        return this.comic_id;
+    }
+    public void setComic_id(long comic_id) {
+        this.comic_id = comic_id;
     }
 
 }

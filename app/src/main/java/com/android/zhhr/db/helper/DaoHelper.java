@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.db.DBSearchResult;
+import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhr.greendao.gen.ComicDao;
 import com.android.zhr.greendao.gen.DBSearchResultDao;
 import com.android.zhr.greendao.gen.DaoMaster;
 import com.android.zhr.greendao.gen.DaoSession;
+import com.android.zhr.greendao.gen.DownInfoDao;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -127,6 +129,14 @@ public class DaoHelper<T> {
                 .list();
         return list;
     }
+
+    public List<DownInfo> queryDownInfo(long comic_id){
+        List<DownInfo> list= manager.getDaoSession().getDownInfoDao().queryBuilder()
+                .where(DownInfoDao.Properties.Comic_id.eq(comic_id))
+                .list();
+        return list;
+    }
+
     //queryRaw查询
     public List<T> queryAll(String where, String... selectionArgs) {
         List<T> list = manager.getDaoSession().queryRaw(clazz, where, selectionArgs);

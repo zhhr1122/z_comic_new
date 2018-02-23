@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_download_item"
     android:background="@color/colorBg"
      android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -13,7 +14,7 @@
         android:textSize="14dp"
         android:text="标题"
         android:textColor="@color/colorTextColorDark"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -21,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="15dp"
         android:textSize="14dp"
-        android:text="15/15已完成"
+        android:text="点击下载"
         android:textColor="@color/colorTextColorLight2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
