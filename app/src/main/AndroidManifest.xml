@@ -73,6 +73,9 @@
         <activity android:name=".ui.activity.DownloadlistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.DownloadChapterlistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
 
 
         <!-- Required SDK 核心功能-->

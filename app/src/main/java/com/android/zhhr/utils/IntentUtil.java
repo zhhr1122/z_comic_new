@@ -8,6 +8,7 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
+import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
 import com.android.zhhr.ui.activity.DownloadlistActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.MainActivity;
@@ -84,7 +85,7 @@ public class IntentUtil {
     }
 
     public static void ToDownloadListActivity(Context context,HashMap<Integer,Integer> map,Comic comic) {
-        Intent intent = new Intent(context, DownloadlistActivity.class);
+        Intent intent = new Intent(context, DownloadChapterlistActivity.class);
         intent.putExtra(Constants.COMIC_SELECT_DOWNLOAD,map);
         intent.putExtra(Constants.COMIC,comic);
         context.startActivity(intent);

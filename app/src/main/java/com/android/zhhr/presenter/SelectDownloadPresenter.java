@@ -6,6 +6,8 @@ import android.content.Intent;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.ISelectDownloadView;
 import com.android.zhhr.utils.IntentUtil;
 
@@ -13,6 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by 张皓然 on 2018/1/24.
@@ -30,6 +36,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     private boolean isSelectedAll ;
     private int SelectedNum = 0;
     private Comic mComic;
+    private ComicModule mModel;
 
     public int getSelectedNum() {
         return SelectedNum;
@@ -59,7 +66,8 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
         super(context, view);
         this.mComic = (Comic) intent.getSerializableExtra(Constants.COMIC);
         this.mChapters = (ArrayList<String>) mComic.getChapters();
-        isSelectedAll  = false;
+        this.mModel = new ComicModule(mContext);
+        this.isSelectedAll  = false;
         initData();
     }
 
@@ -74,12 +82,40 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
         }
     }
 
+    public void getDataFormDb(){
+        mModel.getDownloadItemsFromDB(mComic.getId(), new Observer<List<DBDownloadItems>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull List<DBDownloadItems> items) {
+                for(int i=0;i<items.size();i++){
+                    map.put(items.get(i).getChapters(), Constants.CHAPTER_DOWNLOAD);
+                    mView.updateDownloadList(map);
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     public void uptdateToSelected(int position){
         //SelectedChapters.add(position);
-        if(map.get(position).equals(Constants.CHAPTER_FREE)){
+
+        if(map.get(position)!=null&&map.get(position).equals(Constants.CHAPTER_FREE)){
             SelectedNum++;
             map.put(position,Constants.CHAPTER_SELECTED);
-        }else if(map.get(position).equals(Constants.CHAPTER_SELECTED)){
+        }else if(map.get(position)!=null&&map.get(position).equals(Constants.CHAPTER_SELECTED)){
             map.put(position,Constants.CHAPTER_FREE);
             SelectedNum--;
             isSelectedAll = false;

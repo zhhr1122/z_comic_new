@@ -13,6 +13,7 @@ import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
+import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.helper.DaoHelper;
@@ -22,6 +23,7 @@ import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.FileUtil;
+import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.TencentComicAnalysis;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -641,6 +643,29 @@ public class ComicModule {
             public void subscribe(@NonNull ObservableEmitter<List<DownInfo>> observableEmitter) throws Exception {
                 try{
                     List<DownInfo> results = mHelper.queryDownInfo(comic_id);
+                    observableEmitter.onNext(results);
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void getDownloadItemsFromDB(final long comic_id, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
+                try{
+                    LogUtil.d("操作数据库");
+                    List<DBDownloadItems> results = mHelper.queryDownloaditmes(comic_id);
                     observableEmitter.onNext(results);
                 }catch (Exception e){
                     observableEmitter.onError(e);

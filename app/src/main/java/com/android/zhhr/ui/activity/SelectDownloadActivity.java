@@ -138,4 +138,10 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
     public void SelectAll(View view){
         mPresenter.SelectOrMoveAll();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.getDataFormDb();
+    }
 }

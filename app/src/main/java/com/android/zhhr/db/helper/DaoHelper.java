@@ -3,10 +3,12 @@ package com.android.zhhr.db.helper;
 import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhr.greendao.gen.ComicDao;
+import com.android.zhr.greendao.gen.DBDownloadItemsDao;
 import com.android.zhr.greendao.gen.DBSearchResultDao;
 import com.android.zhr.greendao.gen.DaoMaster;
 import com.android.zhr.greendao.gen.DaoSession;
@@ -133,6 +135,13 @@ public class DaoHelper<T> {
     public List<DownInfo> queryDownInfo(long comic_id){
         List<DownInfo> list= manager.getDaoSession().getDownInfoDao().queryBuilder()
                 .where(DownInfoDao.Properties.Comic_id.eq(comic_id))
+                .list();
+        return list;
+    }
+
+    public List<DBDownloadItems> queryDownloaditmes(long comic_id){
+        List<DBDownloadItems> list= manager.getDaoSession().getDBDownloadItemsDao().queryBuilder()
+                .where(DBDownloadItemsDao.Properties.Comic_id.eq(comic_id))
                 .list();
         return list;
     }

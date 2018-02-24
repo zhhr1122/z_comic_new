@@ -1,19 +1,25 @@
 package com.android.zhhr.data.entity.db;
 
 import com.android.zhhr.data.entity.BaseBean;
+import com.android.zhhr.data.entity.Chapters;
+import com.android.zhhr.data.entity.DownState;
+import com.android.zhhr.db.utils.StringConverter;
 
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+
+import java.util.List;
 
 /**
  * Created by 张皓然 on 2018/2/13.
  */
 @Entity
 public class DBDownloadItems extends BaseBean{
-    @Id(autoincrement = true)
+    @Id
     protected Long id;
-
+    //漫画ID
     protected Long comic_id;
     //漫画标题
     protected String title;
@@ -29,6 +35,11 @@ public class DBDownloadItems extends BaseBean{
     protected Long create_time;
     //最后更新时间
     protected Long update_time;
+    /*state状态数据库保存*/
+    protected int stateInte;
+    @Convert(columnType = String.class, converter = StringConverter.class)
+    protected List<String> chapters_url;
+
     public Long getUpdate_time() {
         return this.update_time;
     }
@@ -83,10 +94,17 @@ public class DBDownloadItems extends BaseBean{
     public void setId(Long id) {
         this.id = id;
     }
-    @Generated(hash = 366649375)
+    public int getStateInte() {
+        return this.stateInte;
+    }
+    public void setStateInte(int stateInte) {
+        this.stateInte = stateInte;
+    }
+    @Generated(hash = 853266354)
     public DBDownloadItems(Long id, Long comic_id, String title,
             String chapters_title, int chapters, int num, int current_num,
-            Long create_time, Long update_time) {
+            Long create_time, Long update_time, int stateInte,
+            List<String> chapters_url) {
         this.id = id;
         this.comic_id = comic_id;
         this.title = title;
@@ -96,8 +114,39 @@ public class DBDownloadItems extends BaseBean{
         this.current_num = current_num;
         this.create_time = create_time;
         this.update_time = update_time;
+        this.stateInte = stateInte;
+        this.chapters_url = chapters_url;
     }
     @Generated(hash = 1311776000)
     public DBDownloadItems() {
     }
+
+    public DownState getState() {
+        switch (getStateInte()){
+            case 0:
+                return DownState.START;
+            case 1:
+                return DownState.DOWN;
+            case 2:
+                return DownState.PAUSE;
+            case 3:
+                return DownState.STOP;
+            case 4:
+                return DownState.ERROR;
+            case 5:
+            default:
+                return DownState.FINISH;
+        }
+    }
+
+    public void setState(DownState state) {
+        setStateInte(state.getState());
+    }
+    public List<String> getChapters_url() {
+        return this.chapters_url;
+    }
+    public void setChapters_url(List<String> chapters_url) {
+        this.chapters_url = chapters_url;
+    }
+
 }
