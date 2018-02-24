@@ -59,6 +59,30 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
+                DBDownloadItems info = mAdapter.getItems(position);
+                switch (info.getState()){
+                    case NONE:
+                        mPresenter.startDown(info);
+                        break;
+                    case START:
+                        //mPresenter.startDown(info);
+                        break;
+                    case PAUSE:
+                        mPresenter.startDown(info);
+                        break;
+                    case DOWN:
+                        mPresenter.pause(info);
+                        break;
+                    case STOP:
+                        mPresenter.startDown(info);
+                        break;
+                    case ERROR:
+                        mPresenter.startDown(info);
+                        break;
+                    case  FINISH:
+                        showToast("已下载");
+                        break;
+                }
 
             }
         });
@@ -67,6 +91,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mPresenter.pauseAll();
     }
 
     @Override
@@ -81,7 +106,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
 
     @Override
     public void onPauseAll() {
-        mPresenter.paseAll();
+        mPresenter.pauseAll();
     }
 
     @Override
@@ -117,6 +142,6 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
 
     @Override
     public void getDataFinish() {
-
+        mAdapter.notifyDataSetChanged();
     }
 }

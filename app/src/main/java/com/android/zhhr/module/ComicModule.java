@@ -31,7 +31,9 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
+import okhttp3.ResponseBody;
 
 
 /**
@@ -294,8 +297,7 @@ public class ComicModule {
         Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
         CacheProviders.getComicCacheInstance()
                 .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
-                .map(new Function<Chapters, Object>() {
-
+               /* .map(new Function<Chapters, Object>() {
                     @Override
                     public Object apply(@NonNull Chapters chapters) throws Exception {
                         ArrayList<DownInfo> mLists = new ArrayList<>();
@@ -303,19 +305,18 @@ public class ComicModule {
                             DownInfo item = new DownInfo(chapters.getComiclist().get(i));
                             item.setId(Long.parseLong(comic_id+comic_chapters+i));
                             item.setState(DownState.START);
-                            item.setComic_id(Long.parseLong(comic_id));
+                            item.setComic_id(Long.parseLong(comic_id+comic_chapters));
                             item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+comic_id+"/"+comic_chapters+"/"+i+".png");
                             mHelper.insert(item);//保存到数据库
                             mLists.add(item);
                         }
-                        /*DownInfo item = new DownInfo("http://gdown.baidu.com/data/wisegame/38670983c7bf51b4/tengxunshipin_14297.apk");
-                        item.setId(Long.parseLong(comic_id));
-                        item.setState(DownState.START);
-                        item.setComic_id(Long.parseLong(comic_id));
-                        item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+comic_id+"/"+comic_chapters+"/test"+".apk");
-                        mHelper.insert(item);//保存到数据库
-                        mLists.add(item);*/
                         return mLists;
+                    }
+                })*/
+                .map(new Function<Chapters, Object>() {
+                    @Override
+                    public Object apply(@NonNull Chapters chapters) throws Exception {
+                        return chapters.getComiclist();
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -678,6 +679,31 @@ public class ComicModule {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void download(String url, final String filePath, final String fileName, Observer observer) {
+        comicService.download("bytes=0" + "-", url)
+                /*指定线程*/
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, InputStream>() {
+
+                    @Override
+                    public InputStream apply(@NonNull ResponseBody responseBody) throws Exception {
+                        return responseBody.byteStream();
+                    }
+                })
+                .observeOn(Schedulers.computation()) // 用于计算任务
+                .doOnNext(new Consumer<InputStream>() {
+                    @Override
+                    public void accept(@NonNull InputStream inputStream) throws Exception {
+                        FileUtil.saveImgToSdCard(inputStream, filePath,fileName);
+                    }
+                })
+                /*回调线程*/
+                .observeOn(AndroidSchedulers.mainThread())
+                /*数据回调*/
                 .subscribe(observer);
     }
 }

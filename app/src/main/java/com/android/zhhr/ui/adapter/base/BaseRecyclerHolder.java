@@ -91,8 +91,8 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
 
     public BaseRecyclerHolder setProgress(int viewId,long countLength,long readLength){
         NumberProgressBar progressBar = getView(viewId);
-        progressBar.setMax((int) countLength/1000);
-        progressBar.setProgress((int) readLength/1000);
+        progressBar.setMax((int) countLength);
+        progressBar.setProgress((int) readLength);
         return this;
     }
 

@@ -134,6 +134,9 @@ public class DBDownloadItems extends BaseBean{
             case 4:
                 return DownState.ERROR;
             case 5:
+                return DownState.FINISH;
+            case 6:
+                return DownState.NONE;
             default:
                 return DownState.FINISH;
         }

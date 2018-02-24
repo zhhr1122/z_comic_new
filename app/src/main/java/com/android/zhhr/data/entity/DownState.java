@@ -10,7 +10,8 @@ public enum  DownState {
     PAUSE(2),
     STOP(3),
     ERROR(4),
-    FINISH(5);
+    FINISH(5),
+    NONE(6);
     private int state;
 
     public int getState() {
