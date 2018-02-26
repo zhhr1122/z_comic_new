@@ -2,18 +2,13 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteConstraintException;
-import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
-import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
-import com.android.zhhr.net.download.HttpDownManager;
-import com.android.zhhr.net.download.ProgressDownSubscriber;
 import com.android.zhhr.ui.view.IDownloadlistView;
 import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.LogUtil;
@@ -21,12 +16,11 @@ import com.android.zhhr.utils.ShowErrorTextUtil;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
@@ -45,6 +39,10 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     private DaoHelper helper;
     //下载队列
     private LinkedHashMap<String, DownloadComicDisposableObserver> subMap;
+    //下载章节数，同时允许存在四个
+    private TreeMap<Integer,DBDownloadItems> downloadMap;
+
+    private final static int downloadNum = 4;
 
     public DownloadChapterlistPresenter(Activity context, IDownloadlistView view, Intent intent) {
         super(context, view);
@@ -54,6 +52,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         helper = new DaoHelper(context);
         mLists = new ArrayList<>();
         subMap = new LinkedHashMap<>();
+        downloadMap = new TreeMap<>();
     }
 
     /**
@@ -94,7 +93,28 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 开始所有下载
      */
     public void startAll() {
+        //找出最前面四个可以下载的bean
+        for(int i=0;i<mLists.size();i++){
+            if(mLists.get(i).getState()==DownState.PAUSE||mLists.get(i).getState()==DownState.NONE){
+                if(downloadMap.size()<downloadNum){
+                    startDown(mLists.get(i),i);
+                }
+            }
+        }
+    }
 
+    public void ReStartAll() {
+        //找出最前面四个可以下载的bean
+        for(int i=0;i<mLists.size();i++){
+            if(mLists.get(i).getState()!=DownState.FINISH){
+                mLists.get(i).setState(DownState.NONE);
+                if(downloadMap.size()<downloadNum){
+                    startDown(mLists.get(i),i);
+                }else{
+                    mView.getDataFinish();
+                }
+            }
+        }
     }
 
     /**
@@ -112,7 +132,38 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
             subMap.remove(url);
             LogUtil.v(url+":暂停下载");
         }
-        /*这里需要讲info信息写入到数据中，可自由扩展，用自己项目的数据库*/
+        helper.update(info);
+        mView.updateView(position);
+    }
+
+    /**
+     * 暂停某个下载
+     * @param info
+     * @param position
+     * @param isContinue 是否继续下载
+     */
+    public void stop(DBDownloadItems info,int position,boolean isContinue) {
+        if (info == null) return;
+        info.setState(DownState.STOP);
+        String url = info.getChapters_url().get(info.getCurrent_num()+1);
+        //中断单张图片的下载
+        if (subMap.containsKey(url)){
+            DownloadComicDisposableObserver subscriber = subMap.get(url);
+            subscriber.dispose();//解除请求
+            subMap.remove(url);
+            LogUtil.v(url+":停止下载");
+        }
+        //中断整个章节的下载，并且切换章节
+        if (downloadMap.containsKey(position)&&isContinue){
+            downloadMap.remove(position);
+            for(int i=0;i<mLists.size();i++){
+                if(mLists.get(i).getState()==DownState.PAUSE||mLists.get(i).getState()==DownState.NONE){
+                    downloadMap.put(i,mLists.get(i));
+                    startDown(mLists.get(i),i);
+                    break;
+                }
+            }
+        }
         helper.update(info);
         mView.updateView(position);
     }
@@ -122,6 +173,8 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * @param info
      */
     public void startDown(final DBDownloadItems info, final int position) {
+        //加入到下载队列中
+        downloadMap.put(position,info);
         //首先判断是否已经获取过下载地址
         if(info.getNum()==0){
             //获取下载地址
@@ -137,17 +190,19 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                 @Override
                 public void onNext(@NonNull ArrayList<String> mLists) {
                     //修改状态
-                    info.setState(DownState.DOWN);
-                    //设置下载地址
-                    info.setChapters_url(mLists);
-                    info.setNum(mLists.size());
-                    info.setCurrent_num(0);
-                    //把获取到的下载地址存进数据库
-                    helper.update(info);
-                    mView.updateView(position);
-                    if(mLists!=null&&mLists.size()!=0){
-                        DownloadChapter(info,info.getCurrent_num(),position);
-                    }
+                   if(info.getState()!=DownState.STOP){
+                       info.setState(DownState.DOWN);
+                       //设置下载地址
+                       info.setChapters_url(mLists);
+                       info.setNum(mLists.size());
+                       info.setCurrent_num(0);
+                       //把获取到的下载地址存进数据库
+                       helper.update(info);
+                       mView.updateView(position);
+                       if(mLists!=null&&mLists.size()!=0){
+                           DownloadChapter(info,info.getCurrent_num(),position);
+                       }
+                   }
                 }
 
 
@@ -179,6 +234,24 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         DownloadComicDisposableObserver observer = new DownloadComicDisposableObserver(info,page,postion);
         mModel.download(info.getChapters_url().get(page), FileUtil.SDPATH + FileUtil.COMIC + mComic.getId() + "/" + info.getChapters()+"/", page+".png", observer);
         subMap.put(info.getChapters_url().get(page),observer);
+    }
+
+    /**
+     * 设置为可以下载的等待状态
+     * @param items
+     * @param position
+     */
+    public void ready(DBDownloadItems items, int position) {
+        if (items.getState() == DownState.STOP){
+            if(downloadMap.size()<downloadNum){
+                startDown(items,position);
+            }else{
+                items.setState(DownState.PAUSE);
+                helper.update(items);
+                mView.updateView(position);
+            }
+        }
+
     }
 
     public class DownloadComicDisposableObserver extends DisposableObserver<InputStream> {
@@ -213,6 +286,14 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                 }
             }else {
                 info.setState(DownState.FINISH);
+                downloadMap.remove(postion);
+                for(int i=0;i<mLists.size();i++){
+                    if(mLists.get(i).getState()==DownState.PAUSE||mLists.get(i).getState()==DownState.NONE){
+                        downloadMap.put(i,mLists.get(i));
+                        startDown(mLists.get(i),i);
+                        break;
+                    }
+                }
             }
             //把已经下载完成的写入
             info.setCurrent_num(page+1);
@@ -234,5 +315,23 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                 helper.update(items);
             }
         }
+    }
+
+    /**
+     * 停止所有下载
+     */
+    public void stopAll() {
+        for(int i=0;i<mLists.size();i++){
+            DBDownloadItems items = mLists.get(i);
+            if (items.getState() == DownState.DOWN||items.getState() == DownState.PAUSE||items.getState() == DownState.NONE||items.getState() == DownState.START){
+                items.setState(DownState.STOP);
+                if(items.getState() == DownState.DOWN){
+                    stop(items,i,false);
+                }
+                downloadMap.clear();
+                //helper.update(items);
+            }
+        }
+        mView.getDataFinish();
     }
 }

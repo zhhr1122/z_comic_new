@@ -45,9 +45,12 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     ImageView mReload;
     @Bind(R.id.iv_loading)
     ImageView mLoading;
+    @Bind(R.id.tv_download)
+    TextView mDownloadText;
 
     private DownloadChapterlistAdapter mAdapter;
     private int recycleState = 0;
+    private boolean isAllDownload = true;
 
 
     @Override
@@ -87,23 +90,24 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
             public void onItemClick(RecyclerView parent, View view, int position) {
                 DBDownloadItems info = mAdapter.getItems(position);
                 switch (info.getState()){
-                    case NONE:
+                   case NONE:
                         mPresenter.startDown(info,position);
                         break;
                     case START:
                         //mPresenter.startDown(info);
                         break;
                     case PAUSE:
-                        mPresenter.startDown(info,position);
+                        //mPresenter.startDown(info,position);
                         break;
                     case DOWN:
-                        mPresenter.pause(info,position);
+                        mPresenter.stop(info,position,true);
                         break;
                     case STOP:
-                        mPresenter.startDown(info,position);
+                        mPresenter.ready(info,position);
+                        //mPresenter.startDown(info,position);
                         break;
                     case ERROR:
-                        mPresenter.startDown(info,position);
+                        //mPresenter.startDown(info,position);
                         break;
                     case  FINISH:
                         showToast("已下载");
@@ -142,9 +146,17 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         mPresenter.startAll();
     }
 
+    @OnClick(R.id.rl_all)
     @Override
     public void onPauseAll() {
-        mPresenter.pauseAll();
+        if(isAllDownload){
+            mPresenter.stopAll();
+            mDownloadText.setText("全部开始");
+        }else{
+            mPresenter.ReStartAll();
+            mDownloadText.setText("全部停止");
+        }
+        isAllDownload = !isAllDownload;
     }
 
     @Override
@@ -179,6 +191,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         if(mLists!=null&&mLists.size()!=0){
             mAdapter.updateWithClear(mLists);
             mAdapter.notifyDataSetChanged();
+            mPresenter.startAll();
         }
         mRLloading.setVisibility(View.GONE);
 

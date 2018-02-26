@@ -33,7 +33,7 @@ public class DownloadChapterlistAdapter extends BaseRecyclerAdapter<DBDownloadIt
         switch (item.getState()){
             case NONE:
                 /*起始状态*/
-                holder.setText(R.id.tv_progress,"点击下载");
+                holder.setText(R.id.tv_progress,"等待下载");
                 break;
             case START:
                 /*起始状态*/
