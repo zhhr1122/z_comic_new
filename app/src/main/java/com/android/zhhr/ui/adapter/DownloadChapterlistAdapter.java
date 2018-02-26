@@ -40,19 +40,19 @@ public class DownloadChapterlistAdapter extends BaseRecyclerAdapter<DBDownloadIt
                 holder.setText(R.id.tv_progress,"解析下载地址");
                 break;
             case PAUSE:
-                holder.setText(R.id.tv_progress,"下载暂停");
+                holder.setText(R.id.tv_progress,"下载暂停:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
             case DOWN:
                 holder.setText(R.id.tv_progress,"正在下载:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
             case STOP:
-                holder.setText(R.id.tv_progress,"下载停止");
+                holder.setText(R.id.tv_progress,"下载停止:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
             case ERROR:
-                holder.setText(R.id.tv_progress,"下载错误");
+                holder.setText(R.id.tv_progress,"下载错误:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
             case FINISH:
-                holder.setText(R.id.tv_progress,"下载完成");
+                holder.setText(R.id.tv_progress,"下载完成:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
         }
     }

@@ -2,6 +2,7 @@ package com.android.zhhr.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
@@ -35,7 +36,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -667,6 +672,54 @@ public class ComicModule {
                 try{
                     LogUtil.d("操作数据库");
                     List<DBDownloadItems> results = mHelper.queryDownloaditmes(comic_id);
+                    observableEmitter.onNext(results);
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void getDownloadItemsFromDB(final Comic mComic, final HashMap<Integer,Integer> mMap, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
+                try{
+                    DBDownloadItems item;
+                    //把hashmap進行排序操作
+                    List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
+                    Collections.sort(list,new Comparator<Map.Entry<Integer,Integer>>() {
+                        public int compare(Map.Entry<Integer, Integer> o1,
+                                           Map.Entry<Integer, Integer> o2) {
+                            return o1.getKey().compareTo(o2.getKey());
+                        }
+                    });
+                    //遍历map
+                    for(Map.Entry<Integer,Integer> mapping:list){
+                        if(mapping.getValue() == Constants.CHAPTER_SELECTED){
+                            item = new DBDownloadItems();
+                            item.setId(mComic.getId()+mapping.getKey());
+                            item.setChapters_title(mComic.getChapters().get(mapping.getKey()));
+                            item.setComic_id(mComic.getId());
+                            item.setChapters(mapping.getKey());
+                            item.setState(DownState.NONE);
+                            try{
+                                //把数据先存入数据库
+                                mHelper.insert(item);
+                            }catch (SQLiteConstraintException exception){
+                                LogUtil.e("请不要插入重复值");
+                            }
+                        }
+                    }
+                    List<DBDownloadItems> results = mHelper.queryDownloaditmes(mComic.getId());
                     observableEmitter.onNext(results);
                 }catch (Exception e){
                     observableEmitter.onError(e);

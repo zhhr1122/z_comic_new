@@ -100,6 +100,11 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
     }
 
     @Override
+    public void updateView(int postion) {
+
+    }
+
+    @Override
     public void onStartAll() {
         mPresenter.startAll();
     }
