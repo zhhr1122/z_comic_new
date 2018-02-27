@@ -16,6 +16,7 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by 皓然 on 2017/6/15.
@@ -42,7 +43,7 @@ public class HomePresenter extends BasePresenter<IHomeView> {
     }
 
     public void LoadData() {
-        mModel.getData(new Observer<List<Comic>>() {
+        mModel.getData(new DisposableObserver<List<Comic>>() {
             @Override
             public void onError(Throwable e) {
                 mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
@@ -51,11 +52,6 @@ public class HomePresenter extends BasePresenter<IHomeView> {
             @Override
             public void onComplete() {
                 mView.getDataFinish();
-            }
-
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
-
             }
 
             @Override
