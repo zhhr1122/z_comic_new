@@ -19,12 +19,12 @@ import io.rx_cache2.LifeCache;
 
 public interface ComicCacheProviders {
 
-    @LifeCache(duration = 1,timeUnit = TimeUnit.MINUTES)
+    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
     Observable<PreloadChapters> getPreNowChapterList(Observable<PreloadChapters> comics, DynamicKey key, EvictDynamicKey evictDynamicKey);
 
-    @LifeCache(duration = 1,timeUnit = TimeUnit.MINUTES)
+    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
     Observable<Chapters> getChapters(Observable<Chapters> comics, DynamicKey key, EvictDynamicKey evictDynamicKey);
 
-    @LifeCache(duration = 1,timeUnit = TimeUnit.MINUTES)
+    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
     Observable<HttpResult<List<SearchBean>>> getDynamicSearchResult(Observable<HttpResult<List<SearchBean>>> Result, DynamicKey key, EvictDynamicKey evictDynamicKey);
 }

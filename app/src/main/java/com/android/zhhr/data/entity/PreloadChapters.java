@@ -62,7 +62,7 @@ public class PreloadChapters extends BaseBean{
         return prelist.size();
     }
 
-    public int geNextSize(){
+    public int getNextSize(){
         return nextlist.size();
     }
 

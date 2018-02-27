@@ -3,6 +3,7 @@ package com.android.zhhr.presenter;
 import android.app.Activity;
 import android.util.Log;
 
+import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.PreloadChapters;
@@ -216,7 +217,20 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
                 @Override
                 public void onError(@NonNull Throwable e) {
-                    mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                    //mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                    ArrayList<String> temp = new ArrayList<>();
+                    if(mPreloadChapters.getPrelist()==null){
+                        mPreloadChapters.setPrelist(temp);
+                    }
+                    if(mPreloadChapters.getNowlist()==null){
+                        mPreloadChapters.setNowlist(temp);
+                    }
+                    if(mPreloadChapters.getNextlist()==null){
+                        mPreloadChapters.setNextlist(temp);
+                    }
+                    mView.fillData(mPreloadChapters);
+                    mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
+                    mView.getDataFinish();
                 }
 
                 @Override
@@ -377,12 +391,15 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      */
     public void loadNextData(String id, int chapter, final int offset){
 
-        mModel.getChaptersList(id,(chapter+2),new Observer<Chapters>() {
+        mModel.getChaptersList(id,(chapter+2),new DisposableObserver<Chapters>() {
 
             @Override
             public void onError(Throwable e) {
+                Chapters chapters = new Chapters();
+                chapters.setComiclist(new ArrayList<String>());
+                onNext(chapters);
                 isLoadingdata = false;
-                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                //mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
             }
 
             @Override
@@ -391,10 +408,6 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 mView.getDataFinish();
             }
 
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
-
-            }
 
             @Override
             public void onNext(@NonNull Chapters chapters) {
@@ -423,23 +436,21 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param chapter
      */
     public void loadPreData(String id, int chapter, final int offset){
-        mModel.getChaptersList(id,chapter-2,new Observer<Chapters>() {
+        mModel.getChaptersList(id,chapter-2,new DisposableObserver<Chapters>() {
 
             @Override
             public void onError(Throwable e) {
+                Chapters chapters = new Chapters();
+                chapters.setComiclist(new ArrayList<String>());
+                onNext(chapters);
                 isLoadingdata = false;
-                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                //mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
             }
 
             @Override
             public void onComplete() {
                 isLoadingdata = false;
                 mView.getDataFinish();
-            }
-
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
-
             }
 
             @Override
