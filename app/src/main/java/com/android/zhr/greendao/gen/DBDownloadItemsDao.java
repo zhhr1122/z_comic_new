@@ -38,9 +38,11 @@ public class DBDownloadItemsDao extends AbstractDao<DBDownloadItems, Long> {
         public final static Property Update_time = new Property(8, Long.class, "update_time", false, "UPDATE_TIME");
         public final static Property StateInte = new Property(9, int.class, "stateInte", false, "STATE_INTE");
         public final static Property Chapters_url = new Property(10, String.class, "chapters_url", false, "CHAPTERS_URL");
+        public final static Property Chapters_path = new Property(11, String.class, "chapters_path", false, "CHAPTERS_PATH");
     };
 
     private final StringConverter chapters_urlConverter = new StringConverter();
+    private final StringConverter chapters_pathConverter = new StringConverter();
 
     public DBDownloadItemsDao(DaoConfig config) {
         super(config);
@@ -64,7 +66,8 @@ public class DBDownloadItemsDao extends AbstractDao<DBDownloadItems, Long> {
                 "\"CREATE_TIME\" INTEGER," + // 7: create_time
                 "\"UPDATE_TIME\" INTEGER," + // 8: update_time
                 "\"STATE_INTE\" INTEGER NOT NULL ," + // 9: stateInte
-                "\"CHAPTERS_URL\" TEXT);"); // 10: chapters_url
+                "\"CHAPTERS_URL\" TEXT," + // 10: chapters_url
+                "\"CHAPTERS_PATH\" TEXT);"); // 11: chapters_path
     }
 
     /** Drops the underlying database table. */
@@ -115,6 +118,11 @@ public class DBDownloadItemsDao extends AbstractDao<DBDownloadItems, Long> {
         if (chapters_url != null) {
             stmt.bindString(11, chapters_urlConverter.convertToDatabaseValue(chapters_url));
         }
+ 
+        List chapters_path = entity.getChapters_path();
+        if (chapters_path != null) {
+            stmt.bindString(12, chapters_pathConverter.convertToDatabaseValue(chapters_path));
+        }
     }
 
     @Override
@@ -159,6 +167,11 @@ public class DBDownloadItemsDao extends AbstractDao<DBDownloadItems, Long> {
         if (chapters_url != null) {
             stmt.bindString(11, chapters_urlConverter.convertToDatabaseValue(chapters_url));
         }
+ 
+        List chapters_path = entity.getChapters_path();
+        if (chapters_path != null) {
+            stmt.bindString(12, chapters_pathConverter.convertToDatabaseValue(chapters_path));
+        }
     }
 
     @Override
@@ -179,7 +192,8 @@ public class DBDownloadItemsDao extends AbstractDao<DBDownloadItems, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // create_time
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // update_time
             cursor.getInt(offset + 9), // stateInte
-            cursor.isNull(offset + 10) ? null : chapters_urlConverter.convertToEntityProperty(cursor.getString(offset + 10)) // chapters_url
+            cursor.isNull(offset + 10) ? null : chapters_urlConverter.convertToEntityProperty(cursor.getString(offset + 10)), // chapters_url
+            cursor.isNull(offset + 11) ? null : chapters_pathConverter.convertToEntityProperty(cursor.getString(offset + 11)) // chapters_path
         );
         return entity;
     }
@@ -197,6 +211,7 @@ public class DBDownloadItemsDao extends AbstractDao<DBDownloadItems, Long> {
         entity.setUpdate_time(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setStateInte(cursor.getInt(offset + 9));
         entity.setChapters_url(cursor.isNull(offset + 10) ? null : chapters_urlConverter.convertToEntityProperty(cursor.getString(offset + 10)));
+        entity.setChapters_path(cursor.isNull(offset + 11) ? null : chapters_pathConverter.convertToEntityProperty(cursor.getString(offset + 11)));
      }
     
     @Override

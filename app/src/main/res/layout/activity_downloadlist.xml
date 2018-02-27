@@ -68,18 +68,54 @@
             android:layout_height="30dp" />
 
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/rl_all"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+        <ImageView
+            android:background="#e2e2e2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp">
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/iv_download"
+                android:src="@mipmap/pasue_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/tv_download"
+                android:textColor="@color/colorTextColorDark"
+                android:textSize="16dp"
+                android:text="全部停止"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:layout_above="@id/rl_all"
         android:layout_below="@id/rl_order"
-        android:padding="10dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
         android:scrollbars="none"
         android:id="@+id/rv_downloadlist"
         android:background="@color/colorBg"
         >
     </android.support.v7.widget.RecyclerView>
+    
     <RelativeLayout
         android:layout_below="@id/rl_order"
         android:background="@color/colorBg"

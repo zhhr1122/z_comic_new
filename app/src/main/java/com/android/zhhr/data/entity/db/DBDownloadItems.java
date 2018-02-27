@@ -39,6 +39,8 @@ public class DBDownloadItems extends BaseBean{
     protected int stateInte;
     @Convert(columnType = String.class, converter = StringConverter.class)
     protected List<String> chapters_url;
+    @Convert(columnType = String.class, converter = StringConverter.class)
+    protected List<String> chapters_path;
 
     public Long getUpdate_time() {
         return this.update_time;
@@ -100,11 +102,11 @@ public class DBDownloadItems extends BaseBean{
     public void setStateInte(int stateInte) {
         this.stateInte = stateInte;
     }
-    @Generated(hash = 853266354)
+    @Generated(hash = 2009349481)
     public DBDownloadItems(Long id, Long comic_id, String title,
             String chapters_title, int chapters, int num, int current_num,
             Long create_time, Long update_time, int stateInte,
-            List<String> chapters_url) {
+            List<String> chapters_url, List<String> chapters_path) {
         this.id = id;
         this.comic_id = comic_id;
         this.title = title;
@@ -116,6 +118,7 @@ public class DBDownloadItems extends BaseBean{
         this.update_time = update_time;
         this.stateInte = stateInte;
         this.chapters_url = chapters_url;
+        this.chapters_path = chapters_path;
     }
     @Generated(hash = 1311776000)
     public DBDownloadItems() {
@@ -150,6 +153,12 @@ public class DBDownloadItems extends BaseBean{
     }
     public void setChapters_url(List<String> chapters_url) {
         this.chapters_url = chapters_url;
+    }
+    public List<String> getChapters_path() {
+        return this.chapters_path;
+    }
+    public void setChapters_path(List<String> chapters_path) {
+        this.chapters_path = chapters_path;
     }
 
 }

@@ -33,20 +33,28 @@ public class DownloadChapterlistAdapter extends BaseRecyclerAdapter<DBDownloadIt
         switch (item.getState()){
             case NONE:
                 /*起始状态*/
-                holder.setText(R.id.tv_progress,"等待下载");
+                if(item.getNum() == 0 ){
+                    holder.setText(R.id.tv_progress,"等待下载");
+                }else{
+                    holder.setText(R.id.tv_progress,"等待下载:"+item.getCurrent_num()+"/"+item.getNum());
+                }
                 break;
             case START:
                 /*起始状态*/
                 holder.setText(R.id.tv_progress,"解析下载地址");
                 break;
             case PAUSE:
-                holder.setText(R.id.tv_progress,"下载暂停:"+item.getCurrent_num()+"/"+item.getNum());
+                //holder.setText(R.id.tv_progress,"等待下载:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
             case DOWN:
                 holder.setText(R.id.tv_progress,"正在下载:"+item.getCurrent_num()+"/"+item.getNum());
                 break;
             case STOP:
-                holder.setText(R.id.tv_progress,"下载停止:"+item.getCurrent_num()+"/"+item.getNum());
+                if(item.getNum() == 0 ){
+                    holder.setText(R.id.tv_progress,"下载停止");
+                }else{
+                    holder.setText(R.id.tv_progress,"下载停止:"+item.getCurrent_num()+"/"+item.getNum());
+                }
                 break;
             case ERROR:
                 holder.setText(R.id.tv_progress,"下载错误:"+item.getCurrent_num()+"/"+item.getNum());

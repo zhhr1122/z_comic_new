@@ -759,4 +759,61 @@ public class ComicModule {
                 /*数据回调*/
                 .subscribe(observer);
     }
+
+    public void download(final DBDownloadItems info, final int page, Observer observer) {
+        comicService.download("bytes=0" + "-", info.getChapters_url().get(page))
+                /*指定线程*/
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map(new Function<ResponseBody, Object>() {
+                    @Override
+                    public Object apply(@NonNull ResponseBody responseBody) throws Exception {
+                        //把图片保存到SD卡
+                        FileUtil.saveImgToSdCard(responseBody.byteStream(), FileUtil.SDPATH + FileUtil.COMIC + info.getComic_id() + "/" + info.getChapters()+"/",page+".png");
+                        ArrayList<String> paths = (ArrayList<String>) info.getChapters_path();
+                        if(paths==null){
+                            paths = new ArrayList<>();
+                        }
+                        paths.add(FileUtil.SDPATH + FileUtil.COMIC + info.getComic_id() + "/"+ info.getChapters()+"/"+page+".png");
+                        //保存存储位置
+                        info.setChapters_path(paths);
+                        return info;
+                    }
+                })
+                .observeOn(Schedulers.computation()) // 用于计算任务
+                /*回调线程*/
+                .observeOn(AndroidSchedulers.mainThread())
+                /*数据回调*/
+                .subscribe(observer);
+    }
+
+
+
+    public void updateDownloadItemsList(final List<DBDownloadItems> mLists, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
+                try{
+                    boolean result = true;
+                    for(int i=0;i<mLists.size();i++){
+                        DBDownloadItems items = mLists.get(i);
+                        if (items.getState() != DownState.FINISH){
+                            items.setState(DownState.NONE);
+                            result = mHelper.update(items);
+                        }
+                    }
+                    observableEmitter.onNext(result);
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 }

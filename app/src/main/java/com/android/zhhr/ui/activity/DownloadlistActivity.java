@@ -105,13 +105,13 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
     }
 
     @Override
-    public void onStartAll() {
-        mPresenter.startAll();
+    public void onDownloadFinished() {
+
     }
 
     @Override
-    public void onPauseAll() {
-        mPresenter.paseAll();
+    public void onPauseOrStartAll() {
+
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.android.zhhr.ui.adapter.DownloadChapterlistAdapter;
 import com.android.zhhr.ui.adapter.DownloadlistAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.view.IDownloadlistView;
+import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.LogUtil;
 
 import java.util.List;
@@ -47,10 +48,11 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     ImageView mLoading;
     @Bind(R.id.tv_download)
     TextView mDownloadText;
+    @Bind(R.id.iv_download)
+    ImageView mDownloadImage;
 
     private DownloadChapterlistAdapter mAdapter;
     private int recycleState = 0;
-    private boolean isAllDownload = true;
 
 
     @Override
@@ -91,7 +93,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
                 DBDownloadItems info = mAdapter.getItems(position);
                 switch (info.getState()){
                    case NONE:
-                        mPresenter.startDown(info,position);
+                        mPresenter.stop(info,position,false);
                         break;
                     case START:
                         //mPresenter.startDown(info);
@@ -110,7 +112,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
                         //mPresenter.startDown(info,position);
                         break;
                     case  FINISH:
-                        showToast("已下载");
+                        mPresenter.ToComicChapter(info);
                         break;
                 }
 
@@ -142,21 +144,31 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     }
 
     @Override
-    public void onStartAll() {
-        mPresenter.startAll();
+    public void onDownloadFinished() {
+        mDownloadText.setText("下载完成");
+        mDownloadImage.setVisibility(View.GONE);
     }
+
 
     @OnClick(R.id.rl_all)
     @Override
-    public void onPauseAll() {
-        if(isAllDownload){
-            mPresenter.stopAll();
-            mDownloadText.setText("全部开始");
-        }else{
-            mPresenter.ReStartAll();
-            mDownloadText.setText("全部停止");
+    public void onPauseOrStartAll() {
+        switch (mPresenter.isAllDownload){
+            case DownloadChapterlistPresenter.DOWNLOADING:
+                mPresenter.stopAll();
+                mDownloadText.setText("全部开始");
+                mDownloadImage.setImageResource(R.mipmap.pasue);
+                mPresenter.isAllDownload = DownloadChapterlistPresenter.STOP_DOWNLOAD;
+                break;
+            case DownloadChapterlistPresenter.STOP_DOWNLOAD:
+                mPresenter.ReStartAll();
+                mDownloadText.setText("全部停止");
+                mDownloadImage.setImageResource(R.mipmap.pasue_select);
+                mPresenter.isAllDownload = DownloadChapterlistPresenter.DOWNLOADING;
+                break;
+            default:
+                break;
         }
-        isAllDownload = !isAllDownload;
     }
 
     @Override
@@ -191,6 +203,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         if(mLists!=null&&mLists.size()!=0){
             mAdapter.updateWithClear(mLists);
             mAdapter.notifyDataSetChanged();
+            //开始自动下载
             mPresenter.startAll();
         }
         mRLloading.setVisibility(View.GONE);
@@ -208,5 +221,9 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         mRLloading.setVisibility(View.VISIBLE);
         mReload.setVisibility(View.GONE);
         mLoadingText.setText("正在重新加载，请稍后");
+    }
+    @OnClick(R.id.rl_order)
+    public void ToSelectDownload(){
+        IntentUtil.ToSelectDownload(this,mPresenter.getmComic());
     }
 }
