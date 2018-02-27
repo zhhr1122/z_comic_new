@@ -236,7 +236,21 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
 
                 @Override
                 public void onError(@NonNull Throwable e) {
-
+                    info.setState(DownState.ERROR);
+                    if(downloadMap.containsKey(info.getChapters())){
+                        downloadMap.remove(info.getChapters());
+                    }
+                    mView.updateView(position);
+                    //寻找下一话并开始下载
+                    for(int i=0;i<mLists.size();i++){
+                        if(mLists.get(i).getState()==DownState.NONE){
+                            downloadMap.put(i,mLists.get(i));
+                            //开始下载下一话
+                            startDown(mLists.get(i),i);
+                            break;
+                        }
+                    }
+                    LogUtil.e(e.toString());
                 }
 
                 @Override
@@ -259,29 +273,10 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * @param page
      */
     private void DownloadChapter(final DBDownloadItems info, final int page,int postion) {
-        DownloadComicDisposableObserver observer = new DownloadComicDisposableObserver(page,postion);
+        DownloadComicDisposableObserver observer = new DownloadComicDisposableObserver(info,page,postion);
         //mModel.download(info.getChapters_url().get(page), FileUtil.SDPATH + FileUtil.COMIC + mComic.getId() + "/" + info.getChapters()+"/", page+".png", observer);
         mModel.download(info, page, observer);
         subMap.put(info.getChapters_url().get(page),observer);
-    }
-
-    /**
-     * 设置为可以下载的等待状态
-     * @param items
-     * @param position
-     */
-    public void ready(DBDownloadItems items, int position) {
-        if(downloadMap.size()<downloadNum){
-            startDown(items,position);
-        }else{
-            items.setState(DownState.NONE);
-            helper.update(items);
-            mView.updateView(position);
-        }
-    }
-
-    public void ToComicChapter(DBDownloadItems info) {
-        IntentUtil.ToComicChapter(mContext,info.getChapters(),mComic);
     }
 
     /**
@@ -290,10 +285,11 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     public class DownloadComicDisposableObserver extends DisposableObserver<DBDownloadItems> {
         int page;
         DBDownloadItems info;
-        int postion;
-        public DownloadComicDisposableObserver(int page,int position){
+        int position;
+        public DownloadComicDisposableObserver(DBDownloadItems info,int page,int position){
             this.page = page;
-            this.postion = position;
+            this.position = position;
+            this.info = info;
         }
 
         @Override
@@ -301,18 +297,22 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
             info = dbDownloadItems;
             LogUtil.d(page+"/"+info.getNum()+"下载完成");
             //从队列中移除
-            subMap.remove(info.getChapters_url().get(page));
+            if(subMap.containsKey(info.getChapters_url().get(page))){
+                subMap.remove(info.getChapters_url().get(page));
+            }
             //写一个递归继续去下载这一话的下一张图片
             if(page<info.getNum()-1){
                 if(info.getState() == DownState.DOWN){
-                    DownloadChapter(info,page+1,postion);
+                    DownloadChapter(info,page+1,position);
                 }
             }else {
                 //如果这一话下载完成
                 downloadedNum++;
                 //修改状态
                 info.setState(DownState.FINISH);
-                downloadMap.remove(postion);
+                if(downloadMap.containsKey(position)){
+                    downloadMap.remove(position);
+                }
                 //遍历去寻找下一话
                 for(int i=0;i<mLists.size();i++){
                     if(mLists.get(i).getState()==DownState.NONE){
@@ -334,13 +334,27 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
             helper.update(info);
             //为了防止点击了stop之后，仍然刷新UI，即使图片下载已经完成，仍不刷新UI
             if(info.getState() !=DownState.STOP){
-                mView.updateView(postion);
+                mView.updateView(position);
             }
 
         }
 
         @Override
         public void onError(@NonNull Throwable e) {
+            info.setState(DownState.ERROR);
+            if(downloadMap.containsKey(info.getChapters())){
+                downloadMap.remove(info.getChapters());
+            }
+            mView.updateView(position);
+            for(int i=0;i<mLists.size();i++){
+                if(mLists.get(i).getState()==DownState.NONE){
+                    downloadMap.put(i,mLists.get(i));
+                    //开始下载下一话
+                    startDown(mLists.get(i),i);
+                    break;
+                }
+            }
+            LogUtil.e(e.toString());
 
         }
 
@@ -348,6 +362,25 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         public void onComplete() {
 
         }
+    }
+
+    /**
+     * 设置为可以下载的等待状态
+     * @param items
+     * @param position
+     */
+    public void ready(DBDownloadItems items, int position) {
+        if(downloadMap.size()<downloadNum){
+            startDown(items,position);
+        }else{
+            items.setState(DownState.NONE);
+            helper.update(items);
+            mView.updateView(position);
+        }
+    }
+
+    public void ToComicChapter(DBDownloadItems info) {
+        IntentUtil.ToComicChapter(mContext,info.getChapters(),mComic);
     }
 
     /**

@@ -109,7 +109,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
                         //mPresenter.startDown(info,position);
                         break;
                     case ERROR:
-                        //mPresenter.startDown(info,position);
+                        mPresenter.ready(info,position);
                         break;
                     case  FINISH:
                         mPresenter.ToComicChapter(info);

@@ -57,7 +57,11 @@ public class DownloadChapterlistAdapter extends BaseRecyclerAdapter<DBDownloadIt
                 }
                 break;
             case ERROR:
-                holder.setText(R.id.tv_progress,"下载错误:"+item.getCurrent_num()+"/"+item.getNum());
+                if(item.getNum() == 0 ){
+                    holder.setText(R.id.tv_progress,"下载错误");
+                }else{
+                    holder.setText(R.id.tv_progress,"下载错误:"+item.getCurrent_num()+"/"+item.getNum());
+                }
                 break;
             case FINISH:
                 holder.setText(R.id.tv_progress,"下载完成:"+item.getCurrent_num()+"/"+item.getNum());
