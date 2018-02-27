@@ -280,21 +280,37 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void getChaptersList(String comic_id,int comic_chapters,Observer observer){
-        Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
-        CacheProviders.getComicCacheInstance()
-                .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
-                .map(new Function<Chapters, Object>() {
-                    @Override
-                    public Object apply(@NonNull Chapters chapters) throws Exception {
-                        return chapters.getComiclist();
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
-                .subscribe(observer);
+    public void getChaptersList(final String comic_id, final int comic_chapters, Observer observer){
+        //拉取漫画用了多级缓存
+        //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
+        DBDownloadItems items = mHelper.findDBDownloadItems(Long.parseLong(comic_id)+(long) comic_chapters);
+        if(items!=null&&items.getState() == DownState.FINISH){
+            Chapters chapters = new Chapters();
+            chapters.setComiclist(items.getChapters_path());
+            chapters.setChapters(comic_chapters);
+            chapters.setComic_id(comic_id);
+            observer.onNext(chapters);
+            observer.onComplete();
+        }else{
+            //否则就联网拉取数据，先读取接口的缓存
+            Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
+            //真正调用联网接口
+            CacheProviders.getComicCacheInstance()
+                    .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                    .map(new Function<Chapters, Object>() {
+                        @Override
+                        public Object apply(@NonNull Chapters chapters) throws Exception {
+                            chapters.setComic_id(comic_id);
+                            chapters.setChapters(comic_chapters);
+                            return chapters;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
+                    .subscribe(observer);
+        }
     }
 
 

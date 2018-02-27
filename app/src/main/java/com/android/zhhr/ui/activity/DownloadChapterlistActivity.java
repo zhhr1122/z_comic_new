@@ -147,6 +147,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     public void onDownloadFinished() {
         mDownloadText.setText("下载完成");
         mDownloadImage.setVisibility(View.GONE);
+        mPresenter.isAllDownload = DownloadChapterlistPresenter.FINISH;
     }
 
 

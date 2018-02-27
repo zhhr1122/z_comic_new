@@ -3,6 +3,7 @@ package com.android.zhhr.db.helper;
 import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.data.entity.db.DownInfo;
@@ -137,6 +138,11 @@ public class DaoHelper<T> {
                 .where(DownInfoDao.Properties.Comic_id.eq(comic_id))
                 .list();
         return list;
+    }
+
+    public DBDownloadItems findDBDownloadItems(long id){
+        DBDownloadItems items =  manager.getDaoSession().getDBDownloadItemsDao().load(id);
+        return items;
     }
 
     public List<DBDownloadItems> queryDownloaditmes(long comic_id){

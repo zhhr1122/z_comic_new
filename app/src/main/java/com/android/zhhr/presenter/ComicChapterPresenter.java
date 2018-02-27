@@ -21,6 +21,7 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by 皓然 on 2017/7/20.
@@ -163,7 +164,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     }
 
     public void loadData(){
-        mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Observer<PreloadChapters>() {
+        /*mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Observer<PreloadChapters>() {
 
             @Override
             public void onError(Throwable e) {
@@ -186,7 +187,45 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 mView.fillData(mPreloadChapters);
                 mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
             }
-        });
+        });*/
+        for(int i=0;i<3;i++){
+            mModel.getChaptersList(comic_id+"",(comic_chapters-1+i),new DisposableObserver<Chapters>() {
+                @Override
+                public void onNext(@NonNull Chapters chapters) {
+                    //分别设置三个章节
+                    if(comic_chapters-1 == chapters.getChapters()){
+                        if(comic_chapters-1<0){
+                            mPreloadChapters.setPrelist(new ArrayList<String>());
+                        }
+                        mPreloadChapters.setPrelist(chapters.getComiclist());
+                    }else if(comic_chapters == chapters.getChapters()){
+                        mPreloadChapters.setNowlist(chapters.getComiclist());
+                    }else{
+                        if(comic_chapters+1>comic_chapter_title.size()){
+                            mPreloadChapters.setNextlist(new ArrayList<String>());
+                        }
+                        mPreloadChapters.setNextlist(chapters.getComiclist());
+                    }
+                    //三个章节都不为NULL
+                    if(mPreloadChapters.isNotNull()){
+                        mView.fillData(mPreloadChapters);
+                        mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
+                        mView.getDataFinish();
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        }
+
     }
 
     /**
@@ -338,7 +377,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      */
     public void loadNextData(String id, int chapter, final int offset){
 
-        mModel.getChaptersList(id,(chapter+2),new Observer<ArrayList<String>>() {
+        mModel.getChaptersList(id,(chapter+2),new Observer<Chapters>() {
 
             @Override
             public void onError(Throwable e) {
@@ -358,11 +397,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             }
 
             @Override
-            public void onNext(@NonNull ArrayList<String> strings) {
+            public void onNext(@NonNull Chapters chapters) {
                 if(isLoadingdata){
                     mPreloadChapters.setPrelist(mPreloadChapters.getNowlist());
                     mPreloadChapters.setNowlist(mPreloadChapters.getNextlist());
-                    mPreloadChapters.setNextlist(strings);
+                    mPreloadChapters.setNextlist(chapters.getComiclist());
                     comic_chapters++;
                     int mPosition;
                     if(mDirect == Constants.RIGHT_TO_LEFT){
@@ -384,7 +423,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * @param chapter
      */
     public void loadPreData(String id, int chapter, final int offset){
-        mModel.getChaptersList(id,chapter-2,new Observer<ArrayList<String>>() {
+        mModel.getChaptersList(id,chapter-2,new Observer<Chapters>() {
 
             @Override
             public void onError(Throwable e) {
@@ -404,11 +443,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             }
 
             @Override
-            public void onNext(@NonNull ArrayList<String> strings) {
+            public void onNext(@NonNull Chapters chapters) {
                 if(isLoadingdata){
                     mPreloadChapters.setNextlist(mPreloadChapters.getNowlist());
                     mPreloadChapters.setNowlist(mPreloadChapters.getPrelist());
-                    mPreloadChapters.setPrelist(strings);
+                    mPreloadChapters.setPrelist(chapters.getComiclist());
                     comic_chapters--;
                     int mPosition = 0;
                     if(mDirect == Constants.RIGHT_TO_LEFT){

@@ -281,7 +281,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     }
 
     public void ToComicChapter(DBDownloadItems info) {
-        //IntentUtil.ToComicChapter();
+        IntentUtil.ToComicChapter(mContext,info.getChapters(),mComic);
     }
 
     /**

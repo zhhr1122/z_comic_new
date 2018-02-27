@@ -47,9 +47,7 @@ public class PreloadChapters extends BaseBean{
     }
 
     public PreloadChapters(){
-        prelist = new ArrayList<>();
-        nowlist = new ArrayList<>();
-        nextlist = new ArrayList<>();
+
     }
 
     public int getDataSize(){
@@ -75,5 +73,9 @@ public class PreloadChapters extends BaseBean{
                 ", nowlist=" + nowlist +
                 ", nextlist=" + nextlist +
                 '}';
+    }
+
+    public boolean isNotNull(){
+        return prelist!=null&&nowlist!=null&&nextlist!=null;
     }
 }

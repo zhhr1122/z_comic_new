@@ -9,15 +9,24 @@ import java.util.List;
 public class Chapters extends BaseBean{
 
     protected List<String> comiclist;
-    protected String id;
+    protected String comic_id;
+    protected int chapters;
 
 
-    public String getId() {
-        return id;
+    public String getComic_id() {
+        return comic_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setComic_id(String comic_id) {
+        this.comic_id = comic_id;
+    }
+
+    public int getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(int chapters) {
+        this.chapters = chapters;
     }
 
     public List<String> getComiclist() {
