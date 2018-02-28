@@ -33,7 +33,5 @@ public class Url {
 
     public static String TencentSearchRecommend = TencentSearchBase+"index";
 
-    public static String test_url = "http://ac.tc.qq.com/store_file_download?buid=15017&uin=1422363405&dir_path=/&name=27_20_56_5916a61b8878248737589f2d5105fd46_3136.ori";
-
 }
 

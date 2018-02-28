@@ -9,6 +9,7 @@ import java.util.HashMap;
 public interface ISelectDownloadView<T> extends ILoadDataView<T>{
     void startDownload();
     void updateDownloadList(HashMap map);
+    void updateDownloadListItem(HashMap map,int position);
     void addAll();
     void removeAll();
 }

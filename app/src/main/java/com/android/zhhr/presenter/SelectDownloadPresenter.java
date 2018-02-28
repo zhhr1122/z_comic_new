@@ -2,12 +2,15 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.MutableContextWrapper;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.ISelectDownloadView;
 import com.android.zhhr.utils.IntentUtil;
 
@@ -19,24 +22,20 @@ import java.util.Map;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by 张皓然 on 2018/1/24.
  */
 
 public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
-    /*//已经选中的章节
-    private ArrayList<Integer> SelectedChapters;
-    //已经下载的章节
-    private ArrayList<Integer> DownloadedChapters;*/
-
     private ArrayList<String> mChapters;
-
     private HashMap<Integer,Integer> map;
     private boolean isSelectedAll ;
     private int SelectedNum = 0;
     private Comic mComic;
     private ComicModule mModel;
+    private static final int DEFAULT_SELECTED_NUM = 20;
 
     public int getSelectedNum() {
         return SelectedNum;
@@ -68,33 +67,52 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
         this.mChapters = (ArrayList<String>) mComic.getChapters();
         this.mModel = new ComicModule(mContext);
         this.isSelectedAll  = false;
-        initData();
+        this.map = new HashMap<>();
     }
 
-    private void initData() {
-        /*SelectedChapters = new ArrayList<>();
-        DownloadedChapters = new ArrayList<>();*/
-        map = new HashMap<>();
+    /**
+     * 自动选择
+     */
+    private void AutoSelected() {
+        int defaultSelectNum = 0;
         if(mChapters!=null&&mChapters.size()!=0){
             for(int i=0;i<mChapters.size();i++){
-                map.put(i, Constants.CHAPTER_FREE);
+                if(!map.containsKey(i)){
+                    if(defaultSelectNum<DEFAULT_SELECTED_NUM){
+                        map.put(i, Constants.CHAPTER_SELECTED);
+                        defaultSelectNum++;
+                        SelectedNum++;
+                        isSelectedAll = true;
+                    }else{
+                        map.put(i, Constants.CHAPTER_FREE);
+                        isSelectedAll = false;
+                    }
+                }
+            }
+            if(isSelectedAll){
+                mView.addAll();
             }
         }
     }
 
+    /**
+     * 从数据库获取数据
+     */
     public void getDataFormDb(){
-        mModel.getDownloadItemsFromDB(mComic.getId(), new Observer<List<DBDownloadItems>>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
+        SelectedNum = 0;
+        mModel.getDownloadItemsFromDB(mComic.getId(), new DisposableObserver<List<DBDownloadItems>>() {
             @Override
             public void onNext(@NonNull List<DBDownloadItems> items) {
                 for(int i=0;i<items.size();i++){
-                    map.put(items.get(i).getChapters(), Constants.CHAPTER_DOWNLOAD);
-                    mView.updateDownloadList(map);
+                    if(items.get(i).getState() == DownState.FINISH){
+                        map.put(items.get(i).getChapters(), Constants.CHAPTER_DOWNLOAD);
+                    }else{
+                        map.put(items.get(i).getChapters(), Constants.CHAPTER_DOWNLOADING);
+                    }
                 }
+                //自动选择
+                AutoSelected();
+                mView.updateDownloadList(map);
             }
 
             @Override
@@ -104,14 +122,11 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
 
             @Override
             public void onComplete() {
-
             }
         });
     }
 
     public void uptdateToSelected(int position){
-        //SelectedChapters.add(position);
-
         if(map.get(position)!=null&&map.get(position).equals(Constants.CHAPTER_FREE)){
             SelectedNum++;
             map.put(position,Constants.CHAPTER_SELECTED);
@@ -121,7 +136,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
             isSelectedAll = false;
             mView.removeAll();
         }
-        mView.updateDownloadList(map);
+        mView.updateDownloadListItem(map,position);
     }
 
     public void SelectOrMoveAll(){
@@ -151,6 +166,28 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     }
 
     public void startDownload() {
-        IntentUtil.ToDownloadListActivity(mContext,map,mComic);
+        if(SelectedNum>0){
+            final CustomDialog customDialog = new CustomDialog(mContext,mComic.getTitle(),"共"+SelectedNum+"话，确定下载？");
+            customDialog.setListener(new CustomDialog.onClickListener() {
+                @Override
+                public void OnClickConfirm() {
+                    IntentUtil.ToDownloadListActivity(mContext,map,mComic);
+                    if (customDialog.isShowing()){
+                        customDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void OnClickCancel() {
+                    if (customDialog.isShowing()){
+                        customDialog.dismiss();
+                    }
+                }
+            });
+            customDialog.show();
+        }else{
+            mView.ShowToast("请选择下载章节");
+        }
+
     }
 }

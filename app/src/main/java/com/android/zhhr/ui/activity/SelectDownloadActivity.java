@@ -12,6 +12,7 @@ import com.android.zhhr.presenter.SelectDownloadPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.SelectDownloadAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
+import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.view.ISelectDownloadView;
 import com.android.zhhr.utils.IntentUtil;
@@ -92,18 +93,28 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
 
     @Override
     public void ShowToast(String t) {
-
+        showToast(t);
     }
     @Override
     @OnClick(R.id.rl_download)
     public void startDownload() {
-       mPresenter.startDownload();
+        mPresenter.startDownload();
     }
 
     @Override
     public void updateDownloadList(HashMap map) {
         mAdapter.setMap(map);
         mAdapter.notifyDataSetChanged();
+        mSelectedNum.setText("已选择"+mPresenter.getSelectedNum()+"话");
+    }
+
+    @Override
+    public void updateDownloadListItem(HashMap map, int position) {
+        mAdapter.setMap(map);
+        if(!mAdapter.isOrder()){
+            position = map.size()-position-1;
+        }
+        mAdapter.notifyItemChanged(position,"isNotNull");
         mSelectedNum.setText("已选择"+mPresenter.getSelectedNum()+"话");
     }
 
