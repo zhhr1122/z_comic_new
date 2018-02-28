@@ -1,10 +1,8 @@
 package com.android.zhhr.ui.view;
 
 /**
- * Created by 皓然 on 2017/8/14.
+ * Created by 张皓然 on 2018/2/28.
  */
 
-public interface IBookShelfView<T> extends ILoadDataView<T>{
-
-    void showEmptyView();
+public interface IBookShelfView extends IBaseView{
 }

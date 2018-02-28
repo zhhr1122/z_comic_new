@@ -1,40 +1,50 @@
 package com.android.zhhr.ui.fragment;
 
-import android.graphics.drawable.AnimationDrawable;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.zhhr.R;
-import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.BookShelfPresenter;
-import com.android.zhhr.ui.adapter.BookShelfAdapter;
-import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
-import com.android.zhhr.ui.custom.DividerGridItemDecoration;
-import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
+import com.android.zhhr.ui.adapter.BookShelfFragmentAdapter;
+import com.android.zhhr.ui.fragment.base.BaseFragment;
+import com.android.zhhr.ui.fragment.bookshelf.CollectionFragment;
 import com.android.zhhr.ui.view.IBookShelfView;
-import com.android.zhhr.utils.IntentUtil;
-import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by 皓然 on 2017/8/7.
  */
 
-public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implements IBookShelfView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
-    @Bind(R.id.rv_bookshelf)
-    RecyclerView mRecycleView;
-    private BookShelfAdapter mAdapter;
+public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implements IBookShelfView {
+    @Bind(R.id.vp_bookshelf)
+    ViewPager mViewpager;
 
-    @Bind(R.id.iv_loading_top)
-    ImageView mLoadingTop;
-
-    //private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
+    BookShelfFragmentAdapter mAdapter;
+    protected FragmentManager fragmentManager;
+    protected List<Fragment> fragments;
+    @Bind(R.id.tv_download)
+    TextView mDownload;
+    @Bind(R.id.tv_history)
+    TextView mHistory;
+    @Bind(R.id.tv_collect)
+    TextView mCollect;
+    @Bind(R.id.iv_bottom_collect)
+    ImageView mBottomCollect;
+    @Bind(R.id.iv_bottom_history)
+    ImageView mBottomHistory;
+    @Bind(R.id.iv_bottom_download)
+    ImageView mBottomDownload;
 
     @Override
     protected void initPresenter() {
@@ -48,72 +58,82 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        fragments = new ArrayList<>();
+        for(int i=0;i<3;i++){
+            fragments.add(new CollectionFragment());
+        }
+        fragmentManager = getActivity().getSupportFragmentManager();
+        mAdapter = new BookShelfFragmentAdapter(fragmentManager,fragments);
+        mViewpager.setAdapter(mAdapter);
+        mViewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        //initAnimation();
-        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,3);
-        layoutManager.setScrollEnabled(false);
-        mRecycleView.setLayoutManager(layoutManager);
-        mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
-        mAdapter = new BookShelfAdapter(mActivity,R.layout.item_bookshelf);
+            }
 
-       /* mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
-        ImageView foot = new ImageView(mActivity);
-        foot.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        foot.setImageResource(R.mipmap.no_more);
-        foot.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mHeaderAndFooterWrapper.addFootView(foot);*/
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0:
+                        ToCollect();
+                        break;
+                    case 1:
+                        ToHistory();
+                        break;
+                    case 2:
+                        ToDownload();
+                        break;
+                }
+            }
 
-        mRecycleView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
-    //切换到该fragment做的操作
-   public void onHiddenChanged(boolean hidden) {
-       super.onHiddenChanged(hidden);
-       if (!hidden) {// 不在最前端界面显示
-           mPresenter.loadData();
-       }
-   }
+
 
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadData();
     }
 
     @Override
     public void ShowToast(String t) {
         showToast(t);
     }
-
-    @Override
-    public void getDataFinish() {
-        mAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void showErrorView(String throwable) {
-        ShowToast("重新加载");
-    }
-
-    @Override
-    public void fillData(List<Comic> data) {
-        if(data!=null&&data.size()!=0){
-            mAdapter.updateWithClear(data);
-        }else {
-            //ShowToast("未取到数据");
-        }
-    }
-
-    @Override
-    public void showEmptyView() {
+    @OnClick(R.id.rl_collect)
+    public void ToCollect(){
+        ResetTitle();
+        mCollect.setTextColor(Color.parseColor("#333333"));
+        mViewpager.setCurrentItem(0);
+        mBottomCollect.setVisibility(View.VISIBLE);
 
     }
+    @OnClick(R.id.rl_history)
+    public void ToHistory(){
+        ResetTitle();
+        mHistory.setTextColor(Color.parseColor("#333333"));
+        mViewpager.setCurrentItem(1);
+        mBottomHistory.setVisibility(View.VISIBLE);
+    }
+    @OnClick(R.id.rl_download)
+    public void ToDownload(){
+        ResetTitle();
+        mDownload.setTextColor(Color.parseColor("#333333"));
+        mViewpager.setCurrentItem(2);
+        mBottomDownload.setVisibility(View.VISIBLE);
+    }
 
-    @Override
-    public void onItemClick(RecyclerView parent, View view, int position) {
-        Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
+    public void ResetTitle(){
+        mDownload.setTextColor(Color.parseColor("#999999"));
+        mCollect.setTextColor(Color.parseColor("#999999"));
+        mHistory.setTextColor(Color.parseColor("#999999"));
+        mBottomCollect.setVisibility(View.GONE);
+        mBottomDownload.setVisibility(View.GONE);
+        mBottomHistory.setVisibility(View.GONE);
+
     }
 }

@@ -1,4 +1,4 @@
-package com.android.zhhr.ui.fragment;
+package com.android.zhhr.ui.fragment.base;
 
 
 import android.app.Activity;

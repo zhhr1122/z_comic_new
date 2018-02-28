@@ -1,10 +1,9 @@
 package com.android.zhhr.ui.fragment;
 
-import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
@@ -17,25 +16,19 @@ import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.HomePresenter;
+import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.adapter.MainAdapter;
-import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
-import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
-import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ZElasticRefreshScrollView;
+import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.IHomeView;
-import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.android.zhhr.utils.IntentUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
-import com.zonst.libzadsdk.ZAdComponent;
-import com.zonst.libzadsdk.ZAdSdk;
-import com.zonst.libzadsdk.ZAdType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -64,6 +57,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     @Bind(R.id.v_actionbar_bg)
     View mActionBarBg;
 
+    MainActivity activity;
+
 
 
     @Override
@@ -73,6 +68,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
@@ -141,9 +137,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onAlphaActionBar(float a) {
                 mActionBarBg.setAlpha(a);
+                if(a==1){
+                    if(activity.isTrans()){
+                        activity.initStatusBar(false);
+                    }
+                }else{
+                    if(!activity.isTrans()){
+                        activity.initStatusBar(true);
+                    }
+                }
             }
         });
         mBanner.setOnBannerListener(new OnBannerListener() {
