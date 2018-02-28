@@ -731,7 +731,8 @@ public class ComicModule {
                                 //把数据先存入数据库
                                 mHelper.insert(item);
                             }catch (SQLiteConstraintException exception){
-                                LogUtil.e("请不要插入重复值");
+                                LogUtil.e("插入下载列表失败，更新数据库");
+                                mHelper.update(item);
                             }
                         }
                     }
@@ -786,9 +787,9 @@ public class ComicModule {
                     public Object apply(@NonNull ResponseBody responseBody) throws Exception {
                         //把图片保存到SD卡
                         FileUtil.saveImgToSdCard(responseBody.byteStream(), FileUtil.SDPATH + FileUtil.COMIC + info.getComic_id() + "/" + info.getChapters()+"/",page+".png");
-                        ArrayList<String> paths = (ArrayList<String>) info.getChapters_path();
-                        if(paths==null){
-                            paths = new ArrayList<>();
+                        ArrayList<String> paths =  new ArrayList<>();
+                        if(info.getChapters_path()!=null){
+                            paths =new ArrayList<>(info.getChapters_path());
                         }
                         paths.add(FileUtil.SDPATH + FileUtil.COMIC + info.getComic_id() + "/"+ info.getChapters()+"/"+page+".png");
                         //保存存储位置

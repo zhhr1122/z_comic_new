@@ -27,6 +27,15 @@ public class DownloadChapterlistAdapter extends BaseRecyclerAdapter<DBDownloadIt
     }
 
     @Override
+    public void onBindViewHolder(BaseRecyclerHolder holder, int position, List<Object> payloads) {
+        if(payloads.isEmpty()){
+            onBindViewHolder(holder,position);
+        }else{
+            convert(holder, list.get(position), position);
+        }
+    }
+
+    @Override
     public void convert(final BaseRecyclerHolder holder, final DBDownloadItems item, final int position) {
         holder.setText(R.id.tv_title,item.getChapters_title());
         holder.setProgress(R.id.pg_download,item.getNum(),item.getCurrent_num());

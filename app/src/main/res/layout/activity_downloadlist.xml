@@ -139,7 +139,7 @@
             android:layout_below="@id/iv_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="正在加载,请稍后..."
+            android:text="正在加入下载列表,请稍后..."
             />
         <ImageView
             android:visibility="gone"

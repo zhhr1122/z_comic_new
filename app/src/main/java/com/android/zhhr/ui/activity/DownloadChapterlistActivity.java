@@ -136,7 +136,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         //如果是静止状态，则刷新局部，滑动则全局刷新
         if(recycleState == 0){
             //刷新局部，不然会影响点击事件
-            mAdapter.notifyItemChanged(postion);
+            mAdapter.notifyItemChanged(postion,"isNotEmpty");
         }else{
             mAdapter.notifyDataSetChanged();
         }
