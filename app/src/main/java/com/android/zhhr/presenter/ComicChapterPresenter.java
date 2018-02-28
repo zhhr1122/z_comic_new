@@ -55,7 +55,6 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     public ComicChapterPresenter(Activity context, IChapterView view) {
         super(context, view);
-        mPreloadChapters = new PreloadChapters();
         mModel = new ComicModule(context);
         mDirect = Constants.LEFT_TO_RIGHT;
 
@@ -189,6 +188,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
             }
         });*/
+        mPreloadChapters = new PreloadChapters();
         for(int i=0;i<3;i++){
             mModel.getChaptersList(comic_id+"",(comic_chapters-1+i),new DisposableObserver<Chapters>() {
                 @Override
@@ -228,9 +228,13 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     if(mPreloadChapters.getNextlist()==null){
                         mPreloadChapters.setNextlist(temp);
                     }
-                    mView.fillData(mPreloadChapters);
-                    mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
-                    mView.getDataFinish();
+                    if(mPreloadChapters.getSize()>0){
+                        mView.fillData(mPreloadChapters);
+                        mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
+                        mView.getDataFinish();
+                    }else{
+                        mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                    }
                 }
 
                 @Override

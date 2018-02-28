@@ -66,6 +66,10 @@ public class PreloadChapters extends BaseBean{
         return nextlist.size();
     }
 
+    public int getSize(){
+        return getPreSize()+getNowSize()+getNextSize();
+    }
+
     @Override
     public String toString() {
         return "PreloadChapters{" +
