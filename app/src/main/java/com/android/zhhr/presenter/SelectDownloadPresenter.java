@@ -87,6 +87,10 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
                         map.put(i, Constants.CHAPTER_FREE);
                         isSelectedAll = false;
                     }
+                }else{
+                    if(map.get(i) == Constants.CHAPTER_SELECTED ){
+                        SelectedNum++;
+                    }
                 }
             }
             if(isSelectedAll){
