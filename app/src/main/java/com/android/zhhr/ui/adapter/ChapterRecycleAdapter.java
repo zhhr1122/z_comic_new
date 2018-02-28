@@ -1,7 +1,6 @@
 package com.android.zhhr.ui.adapter;
 
 import android.content.Context;
-import android.widget.BaseAdapter;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.PreloadChapters;

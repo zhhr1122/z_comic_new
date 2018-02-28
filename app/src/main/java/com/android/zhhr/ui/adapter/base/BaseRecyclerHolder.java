@@ -23,8 +23,10 @@ import com.android.zhhr.utils.GlideImageLoader;
 import com.android.zhhr.utils.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 
 import org.w3c.dom.Text;
@@ -151,12 +153,34 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * 卷轴模式阅读的recycleview 需要设置宽高
+     * @param viewId
+     * @param url
+     * @return
+     */
     public BaseRecyclerHolder setPhotoViewImageByUrl(int viewId, final String url){
         final ImageView iv = getView(viewId);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(context)
                 .load(url)
                 .asBitmap()//强制Glide返回一个Bitmap对象
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String s, Target<Bitmap> target, boolean b) {
+                        LogUtil.e(url+"加载失败"+e.toString());
+                        Glide.with(context)
+                                .load(R.mipmap.pic_default)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap bitmap, String s, Target<Bitmap> target, boolean b, boolean b1) {
+                        return false;
+                    }
+                })
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
