@@ -50,7 +50,7 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_ID,mComic.getId());
         intent.putExtra(Constants.COMIC_TITLE,mComic.getTitle());
         intent.putExtra(Constants.COMIC_READ_TYPE,mComic.getReadType());
-        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) mComic.getChapters());
+        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, new ArrayList<>(mComic.getChapters()));
         context.startActivity(intent);
     }
 
@@ -60,7 +60,7 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_ID,id);
         intent.putExtra(Constants.COMIC_TITLE,title);
         intent.putExtra(Constants.COMIC_READ_TYPE,type);
-        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) chapter_titles);
+        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE,  new ArrayList<>(chapter_titles));
         context.startActivity(intent);
     }
 
@@ -69,7 +69,7 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC_ID,id);
         intent.putExtra(Constants.COMIC_TITLE,title);
         intent.putExtra(Constants.COMIC_READ_TYPE,type);
-        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, (ArrayList<String>) ChapterTitles);
+        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, new ArrayList<>(ChapterTitles));
         context.startActivity(intent);
     }
 

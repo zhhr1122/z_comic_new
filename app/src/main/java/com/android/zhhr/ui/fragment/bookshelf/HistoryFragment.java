@@ -7,7 +7,9 @@ import android.view.View;
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.presenter.CollectionPresenter;
+import com.android.zhhr.presenter.HistoryPresenter;
 import com.android.zhhr.ui.adapter.CollectAdapter;
+import com.android.zhhr.ui.adapter.HistoryAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
@@ -23,29 +25,28 @@ import butterknife.Bind;
  * Created by 皓然 on 2017/8/7.
  */
 
-public class CollectionFragment extends BaseFragment<CollectionPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
+public class HistoryFragment extends BaseFragment<HistoryPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
-    private CollectAdapter mAdapter;
+    private HistoryAdapter mAdapter;
 
     @Override
     protected void initPresenter() {
-        mPresenter = new CollectionPresenter(mActivity,this);
+        mPresenter = new HistoryPresenter(mActivity,this);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_collection;
+        return R.layout.fragment_history;
     }
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
-        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,3);
+        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,1);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
-        mAdapter = new CollectAdapter(mActivity,R.layout.item_collection);
+        mAdapter = new HistoryAdapter(mActivity,R.layout.item_history);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
     }

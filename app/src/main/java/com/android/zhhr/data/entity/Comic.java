@@ -48,29 +48,72 @@ public class Comic extends BaseBean {
     protected int readType;
     //当前章节
     protected int currentChapter;
-    //更新章节时间
-    protected long updateTime;
-    //创建时间
-    protected long crateTime;
+    //收藏时间
+    protected long collectTime;
+    //点击时间
+    protected long clickTime;
+    //下载时间
+    protected long downloadTime;
     //是否收藏
     protected boolean isCollected;
+
+    /*state状态数据库保存*/
+    protected int stateInte;
+    //当前页
+    protected int current_page;
+    //当前共有多少页面
+    protected int current_page_all;
+    //有多少话在下载
+    protected int download_num;
+    //下载完成多少话
+    protected int download_num_finish;
+    public int getDownload_num_finish() {
+        return this.download_num_finish;
+    }
+    public void setDownload_num_finish(int download_num_finish) {
+        this.download_num_finish = download_num_finish;
+    }
+    public int getDownload_num() {
+        return this.download_num;
+    }
+    public void setDownload_num(int download_num) {
+        this.download_num = download_num;
+    }
+    public int getCurrent_page() {
+        return this.current_page;
+    }
+    public void setCurrent_page(int current_page) {
+        this.current_page = current_page;
+    }
+    public int getStateInte() {
+        return this.stateInte;
+    }
+    public void setStateInte(int stateInte) {
+        this.stateInte = stateInte;
+    }
     public boolean getIsCollected() {
         return this.isCollected;
     }
     public void setIsCollected(boolean isCollected) {
         this.isCollected = isCollected;
     }
-    public long getCrateTime() {
-        return this.crateTime;
+    public long getDownloadTime() {
+        return this.downloadTime;
     }
-    public void setCrateTime(long crateTime) {
-        this.crateTime = crateTime;
+    public void setDownloadTime(long downloadTime) {
+        this.downloadTime = downloadTime;
     }
-    public long getUpdateTime() {
-        return this.updateTime;
+    public long getClickTime() {
+        return this.clickTime;
     }
-    public void setUpdateTime(long updateTime) {
-        this.updateTime = updateTime;
+    public void setClickTime(long clickTime) {
+        this.clickTime = clickTime;
+    }
+    public long getCollectTime() {
+        return this.collectTime;
+    }
+    public void setCollectTime(long collectTime) {
+        this.collectTime = collectTime;
     }
     public int getCurrentChapter() {
         return this.currentChapter;
@@ -162,12 +205,14 @@ public class Comic extends BaseBean {
     public void setId(long id) {
         this.id = id;
     }
-    @Generated(hash = 1512781272)
+    @Generated(hash = 1447888425)
     public Comic(long id, String title, String cover, String author,
             List<String> chapters, List<String> tags, String collections,
             String describe, String point, String popularity, String topics,
             String updates, String status, int readType, int currentChapter,
-            long updateTime, long crateTime, boolean isCollected) {
+            long collectTime, long clickTime, long downloadTime,
+            boolean isCollected, int stateInte, int current_page,
+            int current_page_all, int download_num, int download_num_finish) {
         this.id = id;
         this.title = title;
         this.cover = cover;
@@ -183,12 +228,48 @@ public class Comic extends BaseBean {
         this.status = status;
         this.readType = readType;
         this.currentChapter = currentChapter;
-        this.updateTime = updateTime;
-        this.crateTime = crateTime;
+        this.collectTime = collectTime;
+        this.clickTime = clickTime;
+        this.downloadTime = downloadTime;
         this.isCollected = isCollected;
+        this.stateInte = stateInte;
+        this.current_page = current_page;
+        this.current_page_all = current_page_all;
+        this.download_num = download_num;
+        this.download_num_finish = download_num_finish;
     }
     @Generated(hash = 1347984162)
     public Comic() {
+    }
+
+
+    public DownState getState() {
+        switch (getStateInte()){
+            case 0:
+                return DownState.START;
+            case 1:
+                return DownState.DOWN;
+            case 2:
+                return DownState.PAUSE;
+            case 3:
+                return DownState.STOP;
+            case 4:
+                return DownState.ERROR;
+            case 5:
+                return DownState.FINISH;
+            default:
+                return DownState.FINISH;
+        }
+    }
+
+    public void setState(DownState state) {
+        setStateInte(state.getState());
+    }
+    public int getCurrent_page_all() {
+        return this.current_page_all;
+    }
+    public void setCurrent_page_all(int current_page_all) {
+        this.current_page_all = current_page_all;
     }
 
 

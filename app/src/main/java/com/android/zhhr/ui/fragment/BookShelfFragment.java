@@ -14,6 +14,8 @@ import com.android.zhhr.presenter.BookShelfPresenter;
 import com.android.zhhr.ui.adapter.BookShelfFragmentAdapter;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.fragment.bookshelf.CollectionFragment;
+import com.android.zhhr.ui.fragment.bookshelf.DownloadFragment;
+import com.android.zhhr.ui.fragment.bookshelf.HistoryFragment;
 import com.android.zhhr.ui.view.IBookShelfView;
 
 import java.util.ArrayList;
@@ -59,9 +61,11 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         fragments = new ArrayList<>();
-        for(int i=0;i<3;i++){
-            fragments.add(new CollectionFragment());
-        }
+
+        fragments.add(new CollectionFragment());
+        fragments.add(new HistoryFragment());
+        fragments.add(new DownloadFragment());
+
         fragmentManager = getActivity().getSupportFragmentManager();
         mAdapter = new BookShelfFragmentAdapter(fragmentManager,fragments);
         mViewpager.setAdapter(mAdapter);

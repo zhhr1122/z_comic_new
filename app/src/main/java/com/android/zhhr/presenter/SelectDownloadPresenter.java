@@ -64,7 +64,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
     public SelectDownloadPresenter(Activity context, ISelectDownloadView view, Intent intent) {
         super(context, view);
         this.mComic = (Comic) intent.getSerializableExtra(Constants.COMIC);
-        this.mChapters = (ArrayList<String>) mComic.getChapters();
+        this.mChapters = new ArrayList<>(mComic.getChapters());
         this.mModel = new ComicModule(mContext);
         this.isSelectedAll  = false;
         this.map = new HashMap<>();

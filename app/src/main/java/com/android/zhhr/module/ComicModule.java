@@ -25,6 +25,7 @@ import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.LogUtil;
+import com.android.zhhr.utils.NetworkUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -35,6 +36,7 @@ import org.jsoup.nodes.Document;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,6 +52,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
@@ -62,7 +65,6 @@ import okhttp3.ResponseBody;
 
 public class ComicModule {
     public static final ComicService comicService = MainFactory.getComicServiceInstance();
-    public Context context;
     private DaoHelper mHelper;
     private RxAppCompatActivity rxAppCompatActivity;
     public ComicModule(Activity context){
@@ -245,15 +247,23 @@ public class ComicModule {
            @Override
            public void subscribe(@NonNull ObservableEmitter<Comic> observableEmitter) throws Exception {
                try {
-                   Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
-                   Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,context);
                    Comic comicFromDB = (Comic) mHelper.findComic(Long.parseLong(mComicId));
-                   if(comicFromDB!=null) {
-                       mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
+                   if(NetworkUtils.isAvailable(rxAppCompatActivity)){
+                       Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
+                       Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,rxAppCompatActivity);
+                       if(comicFromDB!=null) {
+                           mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
+                       }else{
+                           mComic.setCurrentChapter(0);
+                       }
+                       observableEmitter.onNext(mComic);
                    }else{
-                       mComic.setCurrentChapter(0);
+                       if(comicFromDB !=null){
+                           observableEmitter.onNext(comicFromDB);
+                       }else{
+                           observableEmitter.onError(new ConnectException());
+                       }
                    }
-                   observableEmitter.onNext(mComic);
                } catch (Exception e) {
                    observableEmitter.onError(e);
                    e.printStackTrace();
@@ -445,11 +455,8 @@ public class ComicModule {
             public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
                 try{
                     Comic mComic = (Comic) mHelper.findComic(Long.parseLong(comic_id));
-                    final java.util.Date date = new java.util.Date();
-                    long datetime = date.getTime();
                     if(mComic!=null){
                         mComic.setCurrentChapter(current_chapters+1);
-                        mComic.setUpdateTime(datetime);
                         if(mHelper.update(mComic)){
                             observableEmitter.onNext(true);
                         }else{
@@ -558,6 +565,50 @@ public class ComicModule {
             public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     List<Comic> comics = mHelper.queryCollect();
+                    observableEmitter.onNext(comics);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+
+    }
+
+    public void getHistoryComicList(Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try {
+                    List<Comic> comics = mHelper.queryHistory();
+                    observableEmitter.onNext(comics);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+
+    }
+
+    public void getDownloadComicList(Observer observer){
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try {
+                    List<Comic> comics = mHelper.queryDownloadComic();
                     observableEmitter.onNext(comics);
                 } catch (Exception e) {
                     observableEmitter.onError(e);
@@ -686,8 +737,7 @@ public class ComicModule {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
                 try{
-                    LogUtil.d("操作数据库");
-                    List<DBDownloadItems> results = mHelper.queryDownloaditmes(comic_id);
+                    List<DBDownloadItems> results = mHelper.queryDownloadItems(comic_id);
                     observableEmitter.onNext(results);
                 }catch (Exception e){
                     observableEmitter.onError(e);
@@ -709,34 +759,37 @@ public class ComicModule {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
                 try{
-                    DBDownloadItems item;
-                    //把hashmap進行排序操作
-                    List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
-                    Collections.sort(list,new Comparator<Map.Entry<Integer,Integer>>() {
-                        public int compare(Map.Entry<Integer, Integer> o1,
-                                           Map.Entry<Integer, Integer> o2) {
-                            return o1.getKey().compareTo(o2.getKey());
-                        }
-                    });
-                    //遍历map
-                    for(Map.Entry<Integer,Integer> mapping:list){
-                        if(mapping.getValue() == Constants.CHAPTER_SELECTED){
-                            item = new DBDownloadItems();
-                            item.setId(mComic.getId()+mapping.getKey());
-                            item.setChapters_title(mComic.getChapters().get(mapping.getKey()));
-                            item.setComic_id(mComic.getId());
-                            item.setChapters(mapping.getKey());
-                            item.setState(DownState.NONE);
-                            try{
-                                //把数据先存入数据库
-                                mHelper.insert(item);
-                            }catch (SQLiteConstraintException exception){
-                                LogUtil.e("插入下载列表失败，更新数据库");
-                                mHelper.update(item);
+                    if(mMap.size()>0){
+                        DBDownloadItems item;
+                        //把hashmap進行排序操作
+                        List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
+                        Collections.sort(list,new Comparator<Map.Entry<Integer,Integer>>() {
+                            public int compare(Map.Entry<Integer, Integer> o1,
+                                               Map.Entry<Integer, Integer> o2) {
+                                return o1.getKey().compareTo(o2.getKey());
+                            }
+                        });
+                        //遍历map
+                        for(Map.Entry<Integer,Integer> mapping:list){
+                            if(mapping.getValue() == Constants.CHAPTER_SELECTED){
+                                item = new DBDownloadItems();
+                                item.setId(mComic.getId()+mapping.getKey());
+                                item.setChapters_title(mComic.getChapters().get(mapping.getKey()));
+                                item.setComic_id(mComic.getId());
+                                item.setChapters(mapping.getKey());
+                                item.setState(DownState.NONE);
+                                try{
+                                    //把数据先存入数据库
+                                    mHelper.insert(item);
+                                }catch (SQLiteConstraintException exception){
+                                    LogUtil.e("插入下载列表失败，更新数据库");
+                                    mHelper.update(item);
+                                }
                             }
                         }
                     }
-                    List<DBDownloadItems> results = mHelper.queryDownloaditmes(mComic.getId());
+                    List<DBDownloadItems> results = mHelper.queryDownloadItems(mComic.getId());
+                    //修改漫画下载总数
                     observableEmitter.onNext(results);
                 }catch (Exception e){
                     observableEmitter.onError(e);
@@ -806,7 +859,7 @@ public class ComicModule {
 
 
 
-    public void updateDownloadItemsList(final List<DBDownloadItems> mLists, Observer observer) {
+    public void updateDownloadItemsList(final List<DBDownloadItems> mLists, final Comic mComic, Observer observer) {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
 
             @Override
@@ -820,6 +873,7 @@ public class ComicModule {
                             result = mHelper.update(items);
                         }
                     }
+                    mHelper.update(mComic);
                     observableEmitter.onNext(result);
                 }catch (Exception e){
                     observableEmitter.onError(e);

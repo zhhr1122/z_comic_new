@@ -6,8 +6,10 @@ import android.view.View;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.presenter.CollectionPresenter;
+import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.presenter.DownloadPresenter;
 import com.android.zhhr.ui.adapter.CollectAdapter;
+import com.android.zhhr.ui.adapter.DownloadAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
@@ -15,6 +17,7 @@ import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.IntentUtil;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -23,29 +26,28 @@ import butterknife.Bind;
  * Created by 皓然 on 2017/8/7.
  */
 
-public class CollectionFragment extends BaseFragment<CollectionPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
+public class DownloadFragment extends BaseFragment<DownloadPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
-    private CollectAdapter mAdapter;
+    private DownloadAdapter mAdapter;
 
     @Override
     protected void initPresenter() {
-        mPresenter = new CollectionPresenter(mActivity,this);
+        mPresenter = new DownloadPresenter(mActivity,this);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_collection;
+        return R.layout.fragment_download;
     }
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
-        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,3);
+        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,1);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
-        mAdapter = new CollectAdapter(mActivity,R.layout.item_collection);
+        mAdapter = new DownloadAdapter(mActivity,R.layout.item_download);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
     }
@@ -87,6 +89,7 @@ public class CollectionFragment extends BaseFragment<CollectionPresenter> implem
         }else {
             //ShowToast("未取到数据");
         }
+
     }
 
     @Override
@@ -97,6 +100,6 @@ public class CollectionFragment extends BaseFragment<CollectionPresenter> implem
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
         Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
+        IntentUtil.ToDownloadListActivity(mActivity,new HashMap<Integer, Integer>(),comic);
     }
 }

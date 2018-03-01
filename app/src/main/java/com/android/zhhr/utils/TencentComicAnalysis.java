@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.FullHomeItem;
 import com.android.zhhr.data.entity.LargeHomeItem;
 import com.android.zhhr.data.entity.SmallHomeItem;
@@ -296,6 +297,7 @@ public class TencentComicAnalysis {
             }else{
                 comic.setReadType(Constants.UP_TO_DOWN);
             }
+            comic.setState(DownState.START);
         }catch (Exception e){
 
         }finally {

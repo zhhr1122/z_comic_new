@@ -18,18 +18,18 @@ import io.reactivex.observers.DisposableObserver;
  * Created by 皓然 on 2017/8/14.
  */
 
-public class CollectionPresenter extends BasePresenter<ICollectionView>{
+public class HistoryPresenter extends BasePresenter<ICollectionView>{
 
     private ComicModule mModel;
 
-    public CollectionPresenter(Activity context, ICollectionView view) {
+    public HistoryPresenter(Activity context, ICollectionView view) {
         super(context, view);
         this.mModel = new ComicModule(context);
     }
 
 
     public void loadData(){
-        mModel.getCollectedComicList(new DisposableObserver<List<Comic>>() {
+        mModel.getHistoryComicList(new DisposableObserver<List<Comic>>() {
 
             @Override
             public void onError(Throwable e) {

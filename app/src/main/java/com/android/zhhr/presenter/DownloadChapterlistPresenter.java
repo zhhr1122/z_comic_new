@@ -93,7 +93,12 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     //判断是否全部下载完了
                     if(downloadedNum == mLists.size()){
                         mView.onDownloadFinished();
+                        mComic.setState(DownState.FINISH);
+                    }else{
+                        mComic.setState(DownState.DOWN);
                     }
+                    mComic.setDownloadTime(getCurrentTime());
+                    mComic.setDownload_num(items.size());
                 }
 
             }
@@ -308,6 +313,8 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
             }else {
                 //如果这一话下载完成
                 downloadedNum++;
+                //修改mComic的状态
+                mComic.setDownload_num_finish(downloadedNum);
                 //修改状态
                 info.setState(DownState.FINISH);
                 if(downloadMap.containsKey(position)){
@@ -326,6 +333,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     mView.ShowToast(mComic.getTitle()+"下载完成,共下载"+downloadedNum+"话");
                     mView.onDownloadFinished();
                     isAllDownload = FINISH;
+                    mComic.setState(DownState.FINISH);
                 }
             }
             //把已经下载完成的写入
@@ -387,7 +395,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 暂停所有下载
      */
     public void pauseAll() {
-        mModel.updateDownloadItemsList(mLists, new DisposableObserver<Boolean>() {
+        mModel.updateDownloadItemsList(mLists, mComic,new DisposableObserver<Boolean>() {
 
             @Override
             public void onNext(@NonNull Boolean aBoolean) {

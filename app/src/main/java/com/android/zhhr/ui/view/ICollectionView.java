@@ -5,6 +5,5 @@ package com.android.zhhr.ui.view;
  */
 
 public interface ICollectionView<T> extends ILoadDataView<T>{
-
     void showEmptyView();
 }

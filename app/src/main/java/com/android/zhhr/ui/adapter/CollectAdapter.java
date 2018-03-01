@@ -14,11 +14,11 @@ import java.util.List;
  * Created by 皓然 on 2017/8/14.
  */
 
-public class BookShelfAdapter extends BaseRecyclerAdapter<Comic>{
-    public BookShelfAdapter(Context context, int itemLayoutId) {
+public class CollectAdapter extends BaseRecyclerAdapter<Comic>{
+    public CollectAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
     }
-    public BookShelfAdapter(Context context, List<Comic> data,int itemLayoutId) {
+    public CollectAdapter(Context context, List<Comic> data, int itemLayoutId) {
         super(context, data, itemLayoutId);
     }
     @Override

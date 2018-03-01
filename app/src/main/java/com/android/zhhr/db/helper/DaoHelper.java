@@ -121,7 +121,15 @@ public class DaoHelper<T> {
         List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
                 .where(ComicDao.Properties.IsCollected.eq(true))
                 .limit(10000)
-                .orderAsc(ComicDao.Properties.CrateTime)
+                .orderDesc(ComicDao.Properties.CollectTime)
+                .list();
+        return list;
+    }
+
+    public List<Comic> queryHistory(){
+        List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
+                .limit(10000)
+                .orderDesc(ComicDao.Properties.ClickTime)
                 .list();
         return list;
     }
@@ -145,9 +153,23 @@ public class DaoHelper<T> {
         return items;
     }
 
-    public List<DBDownloadItems> queryDownloaditmes(long comic_id){
+    public List<DBDownloadItems> queryDownloadItems(long comic_id){
         List<DBDownloadItems> list= manager.getDaoSession().getDBDownloadItemsDao().queryBuilder()
                 .where(DBDownloadItemsDao.Properties.Comic_id.eq(comic_id))
+                .list();
+        return list;
+    }
+
+    public List<DBDownloadItems> queryDownloadItems(){
+        List<DBDownloadItems> list= manager.getDaoSession().getDBDownloadItemsDao().queryBuilder()
+                .list();
+        return list;
+    }
+
+    public List<Comic> queryDownloadComic(){
+        List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
+                .whereOr(ComicDao.Properties.StateInte.eq(5),ComicDao.Properties.StateInte.eq(1))
+                .orderDesc(ComicDao.Properties.DownloadTime)
                 .list();
         return list;
     }

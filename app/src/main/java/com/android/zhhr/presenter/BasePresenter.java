@@ -25,4 +25,10 @@ public abstract class BasePresenter<GV extends IBaseView> {
 
     protected BasePresenter() {
     }
+
+    public long getCurrentTime(){
+        java.util.Date date = new java.util.Date();
+        long datetime = date.getTime();
+        return datetime;
+    }
 }

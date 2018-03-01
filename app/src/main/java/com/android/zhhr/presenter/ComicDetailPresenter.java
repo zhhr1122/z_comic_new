@@ -24,6 +24,7 @@ import com.zonst.libzadsdk.ZAdType;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 
 /**
@@ -78,7 +79,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             mView.ShowToast("获取ID失败");
         }else{
             mComicId =  Long.parseLong(comic_id);
-            mModel.getComicDetail(comic_id,new Observer<Comic>() {
+            mModel.getComicDetail(comic_id,new DisposableObserver<Comic>() {
 
                 @Override
                 public void onError(Throwable throwable) {
@@ -91,20 +92,16 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                 }
 
                 @Override
-                public void onSubscribe(@NonNull Disposable disposable) {
-
-                }
-
-                @Override
                 public void onNext(Comic comic) {
                     comic.setId(mComicId);
                     mComic = comic;
+                    mComic.setClickTime(getCurrentTime());
                     SaveComicToDB(mComic);
                     mView.fillData(comic);
                     //mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
                 }
             });
-            mModel.isCollected(mComicId, new Observer<Boolean>() {
+            mModel.isCollected(mComicId, new DisposableObserver<Boolean>() {
 
                 @Override
                 public void onError(Throwable e) {
@@ -113,11 +110,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
                 @Override
                 public void onComplete() {
-
-                }
-
-                @Override
-                public void onSubscribe(@NonNull Disposable disposable) {
 
                 }
 
@@ -132,7 +124,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     public void getCurrentChapters(){
-        mModel.getComicFromDB(mComicId, new Observer<Comic>() {
+        mModel.getComicFromDB(mComicId, new DisposableObserver<Comic>() {
 
             @Override
             public void onError(Throwable e) {
@@ -141,11 +133,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
             @Override
             public void onComplete() {
-
-            }
-
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
 
             }
 
@@ -160,12 +147,10 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     public void collectComic(){
-        final java.util.Date date = new java.util.Date();
-        long datetime = date.getTime();
-        mComic.setCrateTime(datetime);
+        mComic.setCollectTime(getCurrentTime());
         mComic.setIsCollected(true);
         if(!isCollected){
-            mModel.updateComicToDB(mComic, new Observer<Boolean>() {
+            mModel.updateComicToDB(mComic, new DisposableObserver<Boolean>() {
 
                 @Override
                 public void onError(Throwable e) {
@@ -174,11 +159,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
                 @Override
                 public void onComplete() {
-
-                }
-
-                @Override
-                public void onSubscribe(@NonNull Disposable disposable) {
 
                 }
 
