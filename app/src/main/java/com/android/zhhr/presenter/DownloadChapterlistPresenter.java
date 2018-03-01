@@ -97,8 +97,13 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     }else{
                         mComic.setState(DownState.DOWN);
                     }
-                    mComic.setDownloadTime(getCurrentTime());
+                    //如果不是重新选择了下载章节数进去，不需要更新下载时间
+                    if(mMap.size()!=0){
+                        mComic.setDownloadTime(getCurrentTime());
+                    }
+                    mComic.setDownload_num_finish(downloadedNum);
                     mComic.setDownload_num(items.size());
+                    //helper.update(mComic);
                 }
 
             }
@@ -284,6 +289,10 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         subMap.put(info.getChapters_url().get(page),observer);
     }
 
+    public void updateComic() {
+        helper.update(mComic);
+    }
+
     /**
      * 下载图片的回调
      */
@@ -335,6 +344,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     isAllDownload = FINISH;
                     mComic.setState(DownState.FINISH);
                 }
+                //helper.update(mComic);
             }
             //把已经下载完成的写入
             info.setCurrent_num(page+1);
@@ -395,7 +405,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 暂停所有下载
      */
     public void pauseAll() {
-        mModel.updateDownloadItemsList(mLists, mComic,new DisposableObserver<Boolean>() {
+        mModel.updateDownloadItemsList(mLists,new DisposableObserver<Boolean>() {
 
             @Override
             public void onNext(@NonNull Boolean aBoolean) {

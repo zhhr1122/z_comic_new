@@ -16,6 +16,7 @@ import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.IntentUtil;
+import com.android.zhhr.utils.LogUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,7 @@ public class DownloadFragment extends BaseFragment<DownloadPresenter> implements
     @Override
     public void onResume() {
         super.onResume();
+        LogUtil.d("fragment onresume");
         mPresenter.loadData();
     }
 

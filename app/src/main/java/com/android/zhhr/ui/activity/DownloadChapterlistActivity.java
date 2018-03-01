@@ -78,7 +78,6 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         mRecyclerview.setLayoutManager(layoutmanager);
         mRecyclerview.setAdapter(mAdapter);
         //mPresenter.initDbData();
-        mPresenter.initData();
         mRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -121,9 +120,27 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.initData();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        initPresenter(intent);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.pauseAll();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.updateComic();
     }
 
     @Override

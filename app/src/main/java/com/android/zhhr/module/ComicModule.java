@@ -253,6 +253,15 @@ public class ComicModule {
                        Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,rxAppCompatActivity);
                        if(comicFromDB!=null) {
                            mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
+                           mComic.setStateInte(comicFromDB.getStateInte());
+                           mComic.setDownloadTime(comicFromDB.getDownloadTime());
+                           mComic.setCollectTime(comicFromDB.getCollectTime());
+                           mComic.setClickTime(comicFromDB.getClickTime());
+                           mComic.setDownload_num(comicFromDB.getDownload_num());
+                           mComic.setDownload_num_finish(comicFromDB.getDownload_num_finish());
+                           mComic.setCurrent_page(comicFromDB.getCurrent_page());
+                           mComic.setCurrent_page_all(comicFromDB.getCurrent_page_all());
+                           mComic.setIsCollected(comicFromDB.getIsCollected());
                        }else{
                            mComic.setCurrentChapter(0);
                        }
@@ -859,7 +868,7 @@ public class ComicModule {
 
 
 
-    public void updateDownloadItemsList(final List<DBDownloadItems> mLists, final Comic mComic, Observer observer) {
+    public void updateDownloadItemsList(final List<DBDownloadItems> mLists, Observer observer) {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
 
             @Override
@@ -873,7 +882,6 @@ public class ComicModule {
                             result = mHelper.update(items);
                         }
                     }
-                    mHelper.update(mComic);
                     observableEmitter.onNext(result);
                 }catch (Exception e){
                     observableEmitter.onError(e);

@@ -34,12 +34,14 @@ public class DownloadAdapter extends BaseRecyclerAdapter<Comic>{
                     holder.setVisibility(R.id.fl_cover_wraper,View.GONE);
                     break;
                 case START:
-                    holder.setText(R.id.tv_download_status,"已暂停("+item.getDownload_num_finish()+"/"+item.getDownload_num()+")");
+                    holder.setVisibility(R.id.fl_cover_wraper,View.VISIBLE);
+                    holder.setHtmlText(R.id.tv_download_status,"<font color='#eb6056'>"+"已暂停("+item.getDownload_num_finish()+"/"+item.getDownload_num()+")"+"</font>");
                     holder.setImageResource(R.id.iv_download_status,R.mipmap.download_icon);
                     holder.setText(R.id.tv_download_info,"下载管理");
                     break;
                 case DOWN:
-                    holder.setText(R.id.tv_download_status,"已暂停("+item.getDownload_num_finish()+"/"+item.getDownload_num()+")");
+                    holder.setVisibility(R.id.fl_cover_wraper,View.VISIBLE);
+                    holder.setHtmlText(R.id.tv_download_status,"<font color='#eb6056'>"+"已暂停("+item.getDownload_num_finish()+"/"+item.getDownload_num()+")"+"</font>");
                     holder.setImageResource(R.id.iv_download_status,R.mipmap.download_icon);
                     holder.setText(R.id.tv_download_info,"下载管理");
                     break;
