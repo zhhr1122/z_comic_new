@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 class MainRetrofit {
     public ComicService comicService;
 
-    public static final String BASE_URL = Url.TencentComicChapters1;
+    public static final String BASE_URL = Url.TencentComicChapters;
 
     private static final int DEFAULT_TIMEOUT = 5;
 

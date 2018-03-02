@@ -243,7 +243,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      * 保存当前章节数目到数据库
      */
     public void updateComicCurrentChapter() {
-        mModel.updateComicCurrentChapter(comic_id+"",comic_chapters, new Observer<Boolean>() {
+        mModel.updateComicCurrentChapter(comic_id+"",comic_chapters, new DisposableObserver<Boolean>() {
 
             @Override
             public void onError(Throwable e) {
@@ -252,11 +252,6 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
             @Override
             public void onComplete() {
-
-            }
-
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
 
             }
 

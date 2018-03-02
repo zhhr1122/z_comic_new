@@ -212,6 +212,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }
+        setCollect(comic.getIsCollected());
     }
 
     @Override
@@ -221,9 +222,15 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     }
 
     @Override
-    public void setCollect() {
-        mCollect.setImageResource(R.mipmap.collect_selet);
-        mIsCollect.setText("已收藏");
+    public void setCollect(boolean isCollect) {
+        if(isCollect){
+            mCollect.setImageResource(R.mipmap.collect_selet);
+            mIsCollect.setText("已收藏");
+        }else{
+            mCollect.setImageResource(R.mipmap.collect);
+            mIsCollect.setText("收藏");
+        }
+
     }
 
     @Override
@@ -417,7 +424,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @OnClick(R.id.ll_collect)
     public void selectComic(View view){
-        mPresenter.collectComic();
+        mPresenter.collectComic(!mComic.getIsCollected());
     }
 
     @OnClick(R.id.iv_download)

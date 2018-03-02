@@ -515,35 +515,6 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void isCollected(final long id,Observer observer) {
-        Observable.create(new ObservableOnSubscribe<Boolean>()  {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
-                try{
-                    Comic mComic = (Comic) mHelper.findComic(id);
-                    if(mComic!=null) {
-                        if(mComic.getIsCollected()){
-                            observableEmitter.onNext(false);
-                        }else{
-                            observableEmitter.onNext(true);
-                        }
-                    }else{
-                        observableEmitter.onNext(true);
-                    }
-                }catch (Exception e){
-                    observableEmitter.onError(e);
-                }finally {
-                    observableEmitter.onComplete();
-                }
-            }
-
-        }) .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(observer);
-    }
-
     public void getComicFromDB(final long id,Observer observer) {
         Observable.create(new ObservableOnSubscribe<Comic>() {
             @Override

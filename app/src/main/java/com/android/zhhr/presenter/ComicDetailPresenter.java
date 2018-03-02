@@ -32,15 +32,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     private Context context;
     private long mComicId;
     private boolean isOrder;
-    private boolean isCollected;
-
-    public boolean isCollected() {
-        return isCollected;
-    }
-
-    public void setCollected(boolean collected) {
-        isCollected = collected;
-    }
 
     public Comic getmComic() {
         return mComic;
@@ -98,25 +89,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                     //mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
                 }
             });
-            mModel.isCollected(mComicId, new DisposableObserver<Boolean>() {
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-
-                @Override
-                public void onNext(Boolean isCollect) {
-                    if(!isCollect){
-                        mView.setCollect();
-                    }
-                }
-            });
         }
     }
 
@@ -143,34 +115,28 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         });
     }
 
-    public void collectComic(){
+    public void collectComic(boolean isCollected){
         mComic.setCollectTime(getCurrentTime());
-        mComic.setIsCollected(true);
-        if(!isCollected){
-            mModel.updateComicToDB(mComic, new DisposableObserver<Boolean>() {
+        mComic.setIsCollected(isCollected);
+        mModel.updateComicToDB(mComic, new DisposableObserver<Boolean>() {
 
-                @Override
-                public void onError(Throwable e) {
-                    mView.ShowToast("已经收藏");
+            @Override
+            public void onError(Throwable e) {
+                mView.ShowToast("已经收藏");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onNext(Boolean result) {
+                if(result){
+                    mView.setCollect(mComic.getIsCollected());
                 }
-
-                @Override
-                public void onComplete() {
-
-                }
-
-                @Override
-                public void onNext(Boolean CanSelect) {
-                    if(CanSelect){
-                        mView.setCollect();
-                        isCollected = true;
-                        //mView.ShowToast("收藏成功"+date.toString());
-                    }/*else{
-                    mView.ShowToast("收藏失败");
-                }*/
-                }
-            });
-        }
+            }
+        });
     }
 
     public void SaveComicToDB(Comic mComic){
