@@ -1,20 +1,13 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
-import android.util.Log;
 
-import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.ShowErrorTextUtil;
-import com.zonst.libzadsdk.ZAdComponent;
-import com.zonst.libzadsdk.ZAdSdk;
-import com.zonst.libzadsdk.ZAdType;
-import com.zonst.libzadsdk.bean.RewardBean;
-import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +42,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     private int loadingDy = 0;
 
-    private ZAdComponent mReWardAd;
+   /* private ZAdComponent mReWardAd;
     private ZAdComponent mPreAd;
-    private ZAdComponent mVideoAd;
+    private ZAdComponent mVideoAd;*/
 
     public ComicChapterPresenter(Activity context, IChapterView view) {
         super(context, view);
@@ -128,7 +121,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         this.mDirect = mDirect;
     }
 
-    public void loadDataforAd(){
+   /* public void loadDataforAd(){
         if(comic_chapter_title.size()-10<=comic_chapters){
             if(mReWardAd==null){
                 mReWardAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO_REWARD, "1003");
@@ -161,7 +154,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             }
             loadData();
         }
-    }
+    }*/
 
     public void loadData(){
         /*mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Observer<PreloadChapters>() {

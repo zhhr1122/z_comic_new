@@ -34,11 +34,6 @@ import com.android.zhhr.utils.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.zonst.libzadsdk.ZAdComponent;
-import com.zonst.libzadsdk.ZAdSdk;
-import com.zonst.libzadsdk.ZAdType;
-import com.zonst.libzadsdk.bean.RewardBean;
-import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -112,7 +107,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Bind(R.id.layout1_banner)
     LinearLayout mAdBanner;
 
-    ZAdComponent banner;
+    //ZAdComponent banner;
 
 
     private float mScale = 1.0f;
@@ -154,13 +149,13 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             }
         });
         //add
-        if(Constants.isAD){
+        /*if(Constants.isAD){
             if(banner==null){
                 banner = ZAdSdk.getInstance().createAd(this, ZAdType.BANNER, "1001");
                 mAdBanner.addView(banner.getContentView()); // 添加到父视图里
             }
             ZAdSdk.getInstance().getLoader().loadAd(banner);
-        }
+        }*/
     }
 
     @Override

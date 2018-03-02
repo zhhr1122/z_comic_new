@@ -2,24 +2,16 @@ package com.android.zhhr.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
-import com.android.zhhr.ui.activity.DownloadlistActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.activity.SearchActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
-import com.zonst.libzadsdk.ZAdComponent;
-import com.zonst.libzadsdk.ZAdSdk;
-import com.zonst.libzadsdk.ZAdType;
-import com.zonst.libzadsdk.listener.ZAdDisplayListener;
-import com.zonst.libzadsdk.listener.ZAdLoadListener;
-import com.zonst.libzadsdk.listener.ZAdRewardListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;

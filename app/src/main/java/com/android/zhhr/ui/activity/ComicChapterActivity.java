@@ -249,11 +249,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
         initReaderModule(mPresenter.getmDirect());
 
-        if(Constants.isAD){
+        /*if(Constants.isAD){
             mPresenter.loadDataforAd();
-        }else{
+        }else{*/
             mPresenter.loadData();
-        }
+        /*}*/
     }
 
     /**

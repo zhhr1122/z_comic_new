@@ -92,5 +92,5 @@ dependencies {
 
     compile 'com.daimajia.numberprogressbar:library:1.4@aar'
 
-    compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
+    //compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }

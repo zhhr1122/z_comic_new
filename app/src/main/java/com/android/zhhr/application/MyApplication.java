@@ -1,15 +1,10 @@
 package com.android.zhhr.application;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 
-import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.db.manager.DaoManager;
-import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.LogUtil;
 import com.squareup.leakcanary.LeakCanary;
-import com.zonst.libzadsdk.ZAdSdk;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -27,10 +22,10 @@ public class MyApplication extends Application {
         JPushInterface.init(this);            // 初始化 JPush
         DaoManager.getInstance(this.getApplicationContext());
         //广告开关
-        if(Constants.isAD){
+       /* if(Constants.isAD){
             ZAdSdk.initialize(getApplicationContext());
             ZAdSdk.getInstance().setEnableLog(true);
-        }
+        }*/
         //内存溢出测试
         LeakCanary.install(this);
         //Log开关

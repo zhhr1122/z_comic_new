@@ -1,21 +1,13 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.android.zhhr.ui.view.IWelcomeView;
-import com.android.zhhr.utils.ADUtils;
 import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.IntentUtil;
-import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.PermissionUtils;
-import com.zonst.libzadsdk.ZAdError;
-import com.zonst.libzadsdk.ZAdType;
 
 /**
  * Created by 张皓然 on 2018/1/29.
@@ -85,7 +77,7 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView>{
         }
     }
 
-    public void getAdSuccess(int i){
+   /* public void getAdSuccess(int i){
         if(i == ZAdError.OK){
             IntentUtil.ToMainActivity(mContext);
         }
@@ -97,6 +89,6 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView>{
         if(!b){
             mContext.finish();
         }
-    }
+    }*/
 
 }

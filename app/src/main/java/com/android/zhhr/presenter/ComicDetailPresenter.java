@@ -17,9 +17,6 @@ import com.android.zhhr.ui.custom.IndexItemView;
 import com.android.zhhr.ui.view.IDetailView;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
-import com.zonst.libzadsdk.ZAdComponent;
-import com.zonst.libzadsdk.ZAdSdk;
-import com.zonst.libzadsdk.ZAdType;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
@@ -266,8 +263,8 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
      * @param mAdBanner
      */
     public void getAdBanner(Context context,ViewGroup mAdBanner) {
-        ZAdComponent banner = ZAdSdk.getInstance().createAd(context,ZAdType.BANNER, "1001");
+       /* ZAdComponent banner = ZAdSdk.getInstance().createAd(context,ZAdType.BANNER, "1001");
         mAdBanner.addView(banner.getContentView()); // 添加到父视图里
-        ZAdSdk.getInstance().getLoader().loadAd(banner);
+        ZAdSdk.getInstance().getLoader().loadAd(banner);*/
     }
 }
