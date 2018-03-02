@@ -83,7 +83,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                 public void onNext(Comic comic) {
                     comic.setId(mComicId);
                     mComic = comic;
-                    mComic.setClickTime(getCurrentTime());
                     SaveComicToDB(mComic);
                     mView.fillData(comic);
                     //mView.ShowToast("之前看到"+(mComic.getCurrentChapter())+"话");
@@ -140,7 +139,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
     public void SaveComicToDB(Comic mComic){
-        mModel.saveComicToDB(mComic, new Observer<Boolean>() {
+        mModel.saveComicToDB(mComic, new DisposableObserver<Boolean>() {
 
             @Override
             public void onError(Throwable e) {
@@ -149,11 +148,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
             @Override
             public void onComplete() {
-
-            }
-
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
 
             }
 

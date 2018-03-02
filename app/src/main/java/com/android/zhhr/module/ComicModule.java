@@ -262,6 +262,7 @@ public class ComicModule {
                            mComic.setCurrent_page(comicFromDB.getCurrent_page());
                            mComic.setCurrent_page_all(comicFromDB.getCurrent_page_all());
                            mComic.setIsCollected(comicFromDB.getIsCollected());
+                           mComic.setReadType(comicFromDB.getReadType());
                        }else{
                            mComic.setCurrentChapter(0);
                        }
@@ -302,7 +303,12 @@ public class ComicModule {
     public void getChaptersList(final String comic_id, final int comic_chapters, Observer observer){
         //拉取漫画用了多级缓存
         //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
-        DBDownloadItems items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
+        DBDownloadItems items;
+        try{
+            items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
+        }catch (Exception e){
+            items = null;
+        }
         if(items!=null&&items.getState() == DownState.FINISH){
             Chapters chapters = new Chapters();
             chapters.setComiclist(items.getChapters_path());

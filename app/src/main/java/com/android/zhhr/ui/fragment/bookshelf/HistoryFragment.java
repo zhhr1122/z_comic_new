@@ -98,6 +98,6 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
         Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
+        IntentUtil.ToComicChapter(mActivity,comic.getCurrentChapter(),comic);
     }
 }

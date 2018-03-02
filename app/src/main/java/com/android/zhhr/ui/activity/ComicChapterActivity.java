@@ -35,6 +35,8 @@ import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.IntentUtil;
 import com.xw.repo.BubbleSeekBar;
 
+import java.util.HashMap;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -93,7 +95,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     protected void initPresenter(Intent intent) {
         mPresenter = new ComicChapterPresenter(this,this);
-        mPresenter.init((Comic)intent.getSerializableExtra(Constants.COMIC));
+        mPresenter.init((Comic)intent.getSerializableExtra(Constants.COMIC),intent.getIntExtra(Constants.COMIC_CHAPERS,0));
     }
 
     @Override
@@ -299,16 +301,17 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             mVerticalAdapter.setDatas(datas);
             mRecycleView.setVisibility(View.VISIBLE);
             mViewpager.setVisibility(View.GONE);
-            mRecycleView.scrollToPosition(datas.getPrelist().size());
+            mRecycleView.scrollToPosition(datas.getPrelist().size()+mPresenter.getCurrentPage());
             mCurrentPosition = datas.getPrelist().size();
+            mSeekbar.setProgress(mPresenter.getCurrentPage()+1);
         }else{
             mRecycleView.setVisibility(View.GONE);
             mViewpager.setVisibility(View.VISIBLE);
             mAdapter.setDatas(datas);
             if(mAdapter.getDirection() == Constants.RIGHT_TO_LEFT){
-                mViewpager.setCurrentItem(datas.getNextlist().size()+datas.getNowlist().size()-1,false);//关闭切换动画
+                mViewpager.setCurrentItem(datas.getNextlist().size()+datas.getNowlist().size()-1-mPresenter.getCurrentPage(),false);//关闭切换动画
             }else{
-                mViewpager.setCurrentItem(datas.getPrelist().size(),false);
+                mViewpager.setCurrentItem(datas.getPrelist().size()+mPresenter.getCurrentPage(),false);
             }
         }
         mSeekbar.setmMax(datas.getNowlist().size());
@@ -495,7 +498,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @OnClick(R.id.iv_index)
     public void toIndex(View view){
-        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getComic_id(),mPresenter.getComic_chapter_title(),getIntent().getStringExtra(Constants.COMIC_TITLE),mPresenter.getmDirect());
+        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getmComic());
     }
 
     @OnClick(R.id.iv_settiong)
@@ -506,6 +509,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         }else {
             mSwitchModel.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick(R.id.iv_download)
+    public void toDownload(View view){
+        IntentUtil.ToSelectDownload(this,mPresenter.getmComic());
     }
 
     @OnClick(R.id.iv_normal_model)

@@ -41,10 +41,9 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
     @Bind(R.id.tv_chapters_num)
     TextView mChapterNum;
 
-    private Intent intent;
     @Override
     protected void initPresenter(Intent intent) {
-        mPresenter = new IndexPresenter(this,this);
+        mPresenter = new IndexPresenter(this,this,intent);
     }
 
     @Override
@@ -54,15 +53,14 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
 
     @Override
     protected void initView() {
-        intent = getIntent();
         mAdapter = new DetailAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this,1);
         mRecycleView.setLayoutManager(layoutManager);
-        mAdapter.updateWithClear(intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE));
+        mAdapter.updateWithClear(mPresenter.getmComic().getChapters());
         mAdapter.setOnItemClickListener(this);
-        mTitle.setText(intent.getStringExtra(Constants.COMIC_TITLE));
-        mChapterNum.setText("共"+intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size()+"话");
+        mTitle.setText(mPresenter.getmComic().getTitle());
+        mChapterNum.setText("共"+mPresenter.getmComic().getChapters().size()+"话");
         mDownload.setVisibility(View.VISIBLE);
     }
 
@@ -89,8 +87,8 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
         if(!mAdapter.isOrder()){
-            position = intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE).size()-position-1;
+            position = mPresenter.getmComic().getChapters().size()-position-1;
         }
-        IntentUtil.ToComicChapter(IndexActivity.this,position,intent.getLongExtra(Constants.COMIC_ID,0),intent.getStringExtra(Constants.COMIC_TITLE),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
+        IntentUtil.ToComicChapter(IndexActivity.this,position,mPresenter.getmComic());
     }
 }

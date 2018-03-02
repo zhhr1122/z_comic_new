@@ -46,7 +46,15 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     private Comic mComic;
 
-   /* private ZAdComponent mReWardAd;
+    public Comic getmComic() {
+        return mComic;
+    }
+
+    public int getCurrentPage(){
+        return mComic.getCurrent_page()-1;
+    }
+
+    /* private ZAdComponent mReWardAd;
     private ZAdComponent mPreAd;
     private ZAdComponent mVideoAd;*/
 
@@ -60,11 +68,16 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     /***
      * 初始化present
      */
-    public void init(Comic comic){
+    public void init(Comic comic,int Chapters){
         this.mComic= comic;
+        Comic DBComic = (Comic) mHelper.findComic(comic.getId());
+        //判断如果是点进上次点击的那一话
+        if(DBComic.getCurrentChapter() != Chapters){
+            mComic.setCurrent_page(1);
+        }
         this.comic_chapter_title = comic.getChapters();
         this.comic_id = comic.getId();
-        this.comic_chapters = comic.getCurrentChapter();
+        this.comic_chapters = Chapters;
         this.mDirect = comic.getReadType();
     }
 
@@ -86,6 +99,8 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
 
     public void setReaderModuel(int mDirect){
+        mComic.setReadType(mDirect);
+        mHelper.update(mComic);
         mView.SwitchModel(mDirect);
     }
 
@@ -123,66 +138,8 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         this.mDirect = mDirect;
     }
 
-   /* public void loadDataforAd(){
-        if(comic_chapter_title.size()-10<=comic_chapters){
-            if(mReWardAd==null){
-                mReWardAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO_REWARD, "1003");
-            }
-            mReWardAd.setRewardListener(new ZAdRewardListener() {
-                @Override
-                public void onReward(RewardBean rewardBean) {
-                    Log.d("zhhr1122","onReward");
-                    if(rewardBean!=null&&rewardBean.fraud == 0){
-                        mView.ShowToast("获得奖励");
-                        loadData();
-                    }else{
-                        mView.ShowToast("没有获得奖励");
-                        mContext.finish();
-                    }
-                }
-            });
-            ZAdSdk.getInstance().getLoader().loadAd(mReWardAd);
-        }else{
-            if(mPreAd==null){
-                mPreAd= ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1004");
-            }
-            if(ZAdSdk.getInstance().getLoader().readyForPreloadAd(mPreAd)){
-                ZAdSdk.getInstance().getLoader().showPreloadAd(mPreAd);
-            }else{
-                if(mVideoAd==null){
-                    mVideoAd = ZAdSdk.getInstance().createAd(mContext,ZAdType.VIDEO, "1005");
-                }
-                ZAdSdk.getInstance().getLoader().loadAd(mVideoAd);
-            }
-            loadData();
-        }
-    }*/
 
     public void loadData(){
-        /*mModel.getPreNowChapterList(comic_id+"",comic_chapters,new Observer<PreloadChapters>() {
-
-            @Override
-            public void onError(Throwable e) {
-                mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
-            }
-
-            @Override
-            public void onComplete() {
-                mView.getDataFinish();
-            }
-
-            @Override
-            public void onSubscribe(@NonNull Disposable disposable) {
-
-            }
-
-            @Override
-            public void onNext(PreloadChapters result) {
-                mPreloadChapters = result;
-                mView.fillData(mPreloadChapters);
-                mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
-            }
-        });*/
         mPreloadChapters = new PreloadChapters();
         for(int i=0;i<3;i++){
             mModel.getChaptersList(comic_id+"",(comic_chapters-1+i),new DisposableObserver<Chapters>() {
@@ -205,9 +162,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     //三个章节都不为NULL
                     if(mPreloadChapters.isNotNull()){
                         mView.fillData(mPreloadChapters);
-                        mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
+                        mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+mComic.getCurrent_page()+"/"+ mPreloadChapters.getNowlist().size());
                         mView.getDataFinish();
-                        updateComic(0);
+                        updateComic(mComic.getCurrent_page());
                     }
                 }
 
@@ -247,7 +204,8 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
      */
     public void updateComic(int current_page) {
         mComic.setCurrent_page(current_page);
-        mComic.setCurrent_page_all(mPreloadChapters.getNextSize());
+        mComic.setCurrent_page_all(mPreloadChapters.getNowSize());
+        mComic.setClickTime(getCurrentTime());
         mComic.setCurrentChapter(comic_chapters);
         mHelper.update(mComic);
     }
@@ -358,8 +316,10 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         String title = null;
         if(Direct == Constants.LEFT_TO_RIGHT||Direct == Constants.UP_TO_DOWN){
             title = comic_chapter_title+"-"+(position+1)+"/"+comic_size;
+            updateComic(position+1);
         }else{
             title = comic_chapter_title+"-"+(comic_size-position)+"/"+comic_size;
+            updateComic(comic_size-position);
         }
         mView.setTitle(title);
     }
@@ -405,7 +365,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(1+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
                     }
                     mView.nextChapter(mPreloadChapters,mPosition,offset);
-                    updateComic(0);
+                    updateComic(1);
                 }
             }
         });
@@ -450,7 +410,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(mPreloadChapters.getNowlist().size()+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
                     }
                     mView.preChapter(mPreloadChapters,mPosition,offset);
-                    updateComic(0);
+                    updateComic(1);
                 }
             }
         });

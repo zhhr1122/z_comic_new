@@ -1,7 +1,11 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.content.Intent;
 
+import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.ui.view.IIndexView;
 
 import java.util.List;
@@ -11,9 +15,15 @@ import java.util.List;
  */
 
 public class IndexPresenter extends BasePresenter<IIndexView>{
-    private List<String > comic_chapter_titles;
-    public IndexPresenter(Activity context, IIndexView view) {
+
+    public Comic getmComic() {
+        return mComic;
+    }
+
+    private Comic mComic;
+    public IndexPresenter(Activity context, IIndexView view, Intent intent) {
         super(context, view);
+        mComic = (Comic) intent.getSerializableExtra(Constants.COMIC);
     }
 
 }
