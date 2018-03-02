@@ -113,7 +113,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     private float mScale = 1.0f;
     private float Dy = 0;
     private Rect normal = new Rect();
-    private Comic mComic;
     private int mCurrent;
 
 
@@ -180,7 +179,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     public void fillData(final Comic comic) {
         mRLloading.setVisibility(View.GONE);
-        mComic = comic;
         Glide.with(this)
                 .load(comic.getCover())
                 .placeholder(R.mipmap.pic_default)
@@ -203,16 +201,17 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         mUpdate.setText(comic.getUpdates());
         mPoint.setText(comic.getPoint());
         normal.set(mText.getLeft(),mText.getTop(),getMobileWidth(),mText.getBottom());
-        mCurrent = mComic.getCurrentChapter();
+        mCurrent = mPresenter.getmComic().getCurrentChapter();
         if(mCurrent>0){
             mRead.setText("续看第"+mCurrent+"话");
         }
         for(int i=0;i<comic.getChapters().size();i++){
-            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i,mCurrent,comic.getChapters().size());
+            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i,comic.getChapters().size());
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }
         setCollect(comic.getIsCollected());
+        setCurrent(mCurrent+1);
     }
 
     @Override
@@ -263,7 +262,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     public void onItemClick(View view, int position) {
         if(mPresenter.isOrder()){
-            position = mComic.getChapters().size()-position-1;
+            position = mPresenter.getmComic().getChapters().size()-position-1;
             Log.d("ComicDetailActivity","position="+position);
         }
         IntentUtil.ToComicChapter(ComicDetaiActivity.this, position, mPresenter.getmComic());
@@ -424,7 +423,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @OnClick(R.id.ll_collect)
     public void selectComic(View view){
-        mPresenter.collectComic(!mComic.getIsCollected());
+        mPresenter.collectComic(!mPresenter.getmComic().getIsCollected());
     }
 
     @OnClick(R.id.iv_download)

@@ -26,12 +26,10 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Comic>{
         if(item!=null){
             holder.setText(R.id.tv_title,item.getTitle());
             holder.setImageByUrl(R.id.iv_cover,item.getCover());
+            holder.setText(R.id.tv_history_page,item.getCurrent_page()+"页/"+item.getCurrent_page_all()+"页");
             if(item.getChapters()!=null&&item.getChapters().size()!=0){
                 int current = item.getCurrentChapter();
-                if(current == 0){
-                    current =1;
-                }
-                holder.setText(R.id.tv_chapters_current,"上次看到"+current+"-"+item.getChapters().get(current-1));
+                holder.setText(R.id.tv_chapters_current,"上次看到"+(current+1)+"-"+item.getChapters().get(current));
             }
             holder.setText(R.id.tv_chapters,"更新到"+item.getChapters().size()+"话");
             //最后一个item隐藏下划线

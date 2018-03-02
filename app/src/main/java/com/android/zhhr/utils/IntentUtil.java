@@ -38,12 +38,8 @@ public class IntentUtil {
 
     public static void ToComicChapter(Context context, int chapters,Comic mComic){
         Intent intent = new Intent(context, ComicChapterActivity.class);
+        mComic.setCurrentChapter(chapters);
         intent.putExtra(Constants.COMIC,mComic);
-        intent.putExtra(Constants.COMIC_CHAPERS,chapters);
-        intent.putExtra(Constants.COMIC_ID,mComic.getId());
-        intent.putExtra(Constants.COMIC_TITLE,mComic.getTitle());
-        intent.putExtra(Constants.COMIC_READ_TYPE,mComic.getReadType());
-        intent.putStringArrayListExtra(Constants.COMIC_CHAPER_TITLE, new ArrayList<>(mComic.getChapters()));
         context.startActivity(intent);
     }
 

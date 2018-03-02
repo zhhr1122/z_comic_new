@@ -108,8 +108,8 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             @Override
             public void onNext(Comic comic) {
                 if(comic!=null){
-                    mComic.setCurrentChapter(comic.getCurrentChapter());
-                    mView.setCurrent(comic.getCurrentChapter());
+                    mComic=comic;
+                    mView.setCurrent(comic.getCurrentChapter()+1);
                 }
             }
         });

@@ -302,7 +302,7 @@ public class ComicModule {
     public void getChaptersList(final String comic_id, final int comic_chapters, Observer observer){
         //拉取漫画用了多级缓存
         //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
-        DBDownloadItems items = mHelper.findDBDownloadItems(Long.parseLong(comic_id)+(long) comic_chapters);
+        DBDownloadItems items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
         if(items!=null&&items.getState() == DownState.FINISH){
             Chapters chapters = new Chapters();
             chapters.setComiclist(items.getChapters_path());
@@ -753,7 +753,7 @@ public class ComicModule {
                         for(Map.Entry<Integer,Integer> mapping:list){
                             if(mapping.getValue() == Constants.CHAPTER_SELECTED){
                                 item = new DBDownloadItems();
-                                item.setId(mComic.getId()+mapping.getKey());
+                                item.setId(Long.parseLong(mComic.getId()+""+mapping.getKey()));
                                 item.setChapters_title(mComic.getChapters().get(mapping.getKey()));
                                 item.setComic_id(mComic.getId());
                                 item.setChapters(mapping.getKey());

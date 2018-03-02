@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
+import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.presenter.ComicChapterPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
@@ -92,7 +93,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     protected void initPresenter(Intent intent) {
         mPresenter = new ComicChapterPresenter(this,this);
-        mPresenter.init(intent.getLongExtra(Constants.COMIC_ID,0),intent.getIntExtra(Constants.COMIC_CHAPERS,0),intent.getStringArrayListExtra(Constants.COMIC_CHAPER_TITLE),intent.getIntExtra(Constants.COMIC_READ_TYPE,Constants.LEFT_TO_RIGHT));
+        mPresenter.init((Comic)intent.getSerializableExtra(Constants.COMIC));
     }
 
     @Override
@@ -311,7 +312,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             }
         }
         mSeekbar.setmMax(datas.getNowlist().size());
-        mPresenter.updateComicCurrentChapter();
     }
 
     @Override
@@ -371,8 +371,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             }
         }
         mSeekbar.setmMax(data.getNowlist().size());
-        mPresenter.updateComicCurrentChapter();
-
     }
 
     @Override
@@ -395,7 +393,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             }
         }
         mSeekbar.setmMax(data.getNowlist().size());
-        mPresenter.updateComicCurrentChapter();
     }
 
     @Override

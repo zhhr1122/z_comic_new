@@ -39,7 +39,7 @@ public class IndexItemView extends LinearLayout{
         this.listener = listener;
     }
 
-    public IndexItemView(Context context, String title, final int position,int Current,int size) {
+    public IndexItemView(Context context, String title, final int position,int size) {
         super(context);
         this.setOrientation(VERTICAL);
         LinearLayout ll = new LinearLayout(context);
@@ -62,13 +62,13 @@ public class IndexItemView extends LinearLayout{
         lp.setMargins(DisplayUtil.dip2px(context,10),0,0,0);
         mTitle.setGravity(Gravity.CENTER_VERTICAL);
         mTitle.setTextSize(12);
-        if(Current == position+1){
+        /*if(Current == position+1){
             mTitle.setTextColor(Color.parseColor("#ff9a6a"));
             mTitle.setCompoundDrawables(null, null, img_location, null);
             mTitle.setCompoundDrawablePadding(DisplayUtil.dip2px(getContext(),10));
         }else{
             mTitle.setTextColor(Color.parseColor("#666666"));
-        }
+        }*/
        /* mPosition.setGravity(Gravity.CENTER_VERTICAL);
         mPosition.setTextSize(13);
         mPosition.setTextColor(Color.parseColor("#333333"));*/

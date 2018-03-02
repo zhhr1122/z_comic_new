@@ -4,7 +4,9 @@ import android.app.Activity;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
+import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.PreloadChapters;
+import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.ShowErrorTextUtil;
@@ -12,9 +14,7 @@ import com.android.zhhr.utils.ShowErrorTextUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -42,6 +42,10 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     private int loadingDy = 0;
 
+    private DaoHelper mHelper;
+
+    private Comic mComic;
+
    /* private ZAdComponent mReWardAd;
     private ZAdComponent mPreAd;
     private ZAdComponent mVideoAd;*/
@@ -50,20 +54,18 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         super(context, view);
         mModel = new ComicModule(context);
         mDirect = Constants.LEFT_TO_RIGHT;
-
+        mHelper = new DaoHelper(context);
     }
 
     /***
      * 初始化present
-     * @param comic_id
-     * @param comic_chapters
-     * @param comic_chapter_title
      */
-    public void init(long comic_id,int comic_chapters,List<String> comic_chapter_title,int type){
-        this.comic_chapter_title = comic_chapter_title;
-        this.comic_id = comic_id;
-        this.comic_chapters = comic_chapters;
-        this.mDirect = type;
+    public void init(Comic comic){
+        this.mComic= comic;
+        this.comic_chapter_title = comic.getChapters();
+        this.comic_id = comic.getId();
+        this.comic_chapters = comic.getCurrentChapter();
+        this.mDirect = comic.getReadType();
     }
 
     public int getLoadingDy() {
@@ -205,6 +207,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         mView.fillData(mPreloadChapters);
                         mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
                         mView.getDataFinish();
+                        updateComic(0);
                     }
                 }
 
@@ -242,26 +245,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     /**
      * 保存当前章节数目到数据库
      */
-    public void updateComicCurrentChapter() {
-        mModel.updateComicCurrentChapter(comic_id+"",comic_chapters, new DisposableObserver<Boolean>() {
-
-            @Override
-            public void onError(Throwable e) {
-                mView.ShowToast(e.toString());
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onNext(Boolean aBoolean) {
-                /*if(aBoolean){
-                    mView.ShowToast("保存当前话成功"+(comic_chapters+1));
-                }*/
-            }
-        });
+    public void updateComic(int current_page) {
+        mComic.setCurrent_page(current_page);
+        mComic.setCurrent_page_all(mPreloadChapters.getNextSize());
+        mComic.setCurrentChapter(comic_chapters);
+        mHelper.update(mComic);
     }
 
     public void loadMoreData(int position,int mDirect,int offset){
@@ -417,6 +405,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(1+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
                     }
                     mView.nextChapter(mPreloadChapters,mPosition,offset);
+                    updateComic(0);
                 }
             }
         });
@@ -461,6 +450,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         mView.setTitle(comic_chapter_title.get(comic_chapters)+"-"+(mPreloadChapters.getNowlist().size()+loadingPosition)+"/"+ mPreloadChapters.getNowlist().size());
                     }
                     mView.preChapter(mPreloadChapters,mPosition,offset);
+                    updateComic(0);
                 }
             }
         });
