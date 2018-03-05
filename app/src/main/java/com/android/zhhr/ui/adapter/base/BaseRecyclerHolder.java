@@ -1,5 +1,6 @@
 package com.android.zhhr.ui.adapter.base;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -90,6 +91,15 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         }
         return this;
     }
+
+    public BaseRecyclerHolder startAnimation(int viewId){
+        ImageView tv = getView(viewId);
+        tv.setImageResource(R.drawable.loading_more);
+        AnimationDrawable animationDrawable = (AnimationDrawable) tv.getDrawable();
+        animationDrawable.start();
+        return this;
+    }
+
 
     public BaseRecyclerHolder setProgress(int viewId,long countLength,long readLength){
         NumberProgressBar progressBar = getView(viewId);

@@ -3,6 +3,7 @@ package com.android.zhhr.ui.custom;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import com.android.zhhr.R;
+import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.LogUtil;
 
 /***
  * 下拉回弹的ScrollView
@@ -22,6 +25,20 @@ import com.android.zhhr.R;
  */
 public class ElasticScrollView extends ScrollView {
     ImageView mLoadingTop;
+    private OnScrollListener listener;
+    // 拖动的距离 size = 4 的意思 只允许拖动屏幕的1/4
+    private static final int size = 3;
+    private ViewGroup inner;
+    private float y;
+    private Rect normal = new Rect();
+
+    private RecyclerView mRecyclerView;
+    private Context context;
+
+
+    public void setListener(OnScrollListener listener) {
+        this.listener = listener;
+    }
 
     public ElasticScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,21 +60,21 @@ public class ElasticScrollView extends ScrollView {
     @Override
     protected void onScrollChanged(int x, int y, int oldx, int oldy) {
         super.onScrollChanged(x, y, oldx, oldy);
+        if(mRecyclerView.getHeight()-y+DisplayUtil.getBottomStatusHeight(context) == DisplayUtil.dip2px(context,484)){
+            listener.OnScrollToBottom();
+        }
     }
 
-    // 拖动的距离 size = 4 的意思 只允许拖动屏幕的1/4
-    private static final int size = 3;
-    private ViewGroup inner;
-    private float y;
-    private Rect normal = new Rect();
 
     //获取到ScrollView内部的子View,并赋值给inner
     @Override
     protected void onFinishInflate() {
+        context = getContext().getApplicationContext();
         if (getChildCount() > 0) {
             inner = (ViewGroup) getChildAt(0);
             if(inner.getChildCount()!=1){
                 mLoadingTop = (ImageView) inner.findViewById(R.id.iv_loading_top);
+                mRecyclerView = (RecyclerView) inner.findViewById(R.id.rv_bookshelf);
                 initAnimation();
             }
         }
@@ -153,5 +170,9 @@ public class ElasticScrollView extends ScrollView {
         int offset = inner.getMeasuredHeight() - getHeight();
         int scrollY = getScrollY();
         return scrollY == 0 || scrollY == offset;
+    }
+
+    public interface OnScrollListener{
+        void OnScrollToBottom();
     }
 }

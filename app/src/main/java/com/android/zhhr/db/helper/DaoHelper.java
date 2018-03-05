@@ -126,9 +126,15 @@ public class DaoHelper<T> {
         return list;
     }
 
-    public List<Comic> queryHistory(){
+    /**
+     * 分页查询
+     * @param page
+     * @return
+     */
+    public List<Comic> queryHistory(int page){
         List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
-                .limit(10000)
+                .offset(page*12)
+                .limit(12)
                 .orderDesc(ComicDao.Properties.ClickTime)
                 .list();
         return list;

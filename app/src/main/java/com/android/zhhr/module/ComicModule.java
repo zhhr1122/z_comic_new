@@ -12,6 +12,7 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.HttpResult;
+import com.android.zhhr.data.entity.LoadingItem;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
@@ -568,54 +569,18 @@ public class ComicModule {
 
     }
 
-    public void getHistoryComicList(final long currentMillisecond, Observer observer) {
+    /**
+     *得到按照时间排列的list
+     * @param page 页面
+     * @param observer
+     */
+    public void getHistoryComicList(final int page, Observer observer) {
         Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
-                    List<Comic> todays = new ArrayList<>();
-                    List<Comic> treedays = new ArrayList<>();
-                    List<Comic> weekenddays = new ArrayList<>();
-                    List<Comic> earlierdays = new ArrayList<>();
-                    List<Comic> comics = mHelper.queryHistory();
-                    for(int i=0;i<comics.size();i++){
-                        long millisecond  = comics.get(i).getClickTime();
-                        Calendar calendar = Calendar.getInstance();
-                        Long currentMillisecond = calendar.getTimeInMillis();
-                        //间隔秒
-                        Long spaceSecond = (currentMillisecond - millisecond) / 1000;
-                        if (spaceSecond / (60 * 60) < 24) {
-                            todays.add(comics.get(i));
-                        }
-                        //三天之内
-                        else if (spaceSecond/(60*60*24)>0&&spaceSecond/(60*60*24)<3){
-                            treedays.add(comics.get(i));
-                        }
-                        //一周之内
-                        else if (spaceSecond/(60*60*24)>0&&spaceSecond/(60*60*24)<7){
-                            weekenddays.add(comics.get(i));
-                        }
-                        //更早之前
-                        else {
-                            earlierdays.add(comics.get(i));
-                        }
-                    }
-                    List<Comic> history = new ArrayList<>();
-                    history.add(new HomeTitle("今天"));
-                    history.addAll(todays);
-                    if(treedays.size()!=0){
-                        history.add(new HomeTitle("过去三天"));
-                        history.addAll(treedays);
-                    }
-                    if(weekenddays.size()!=0){
-                        history.add(new HomeTitle("过去一周"));
-                        history.addAll(weekenddays);
-                    }
-                    if(earlierdays.size()!=0){
-                        history.add(new HomeTitle("更早"));
-                        history.addAll(earlierdays);
-                    }
-                    observableEmitter.onNext(history);
+                    List<Comic> comics = mHelper.queryHistory(page);
+                    observableEmitter.onNext(comics);
                 } catch (Exception e) {
                     observableEmitter.onError(e);
                     e.printStackTrace();

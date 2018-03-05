@@ -49,6 +49,8 @@ public class DownloadAdapter extends BaseRecyclerAdapter<Comic>{
             //最后一个item隐藏下划线
             if(position == list.size()-1){
                 holder.setVisibility(R.id.v_bottom_line, View.GONE);
+            }else{
+                holder.setVisibility(R.id.v_bottom_line, View.VISIBLE);
             }
         }
     }

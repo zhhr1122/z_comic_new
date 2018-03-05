@@ -3,6 +3,8 @@ package com.android.zhhr.ui.fragment.bookshelf;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
@@ -10,9 +12,11 @@ import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.presenter.HistoryPresenter;
 import com.android.zhhr.ui.adapter.HistoryAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
+import com.android.zhhr.ui.custom.ElasticScrollView;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
+import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.IntentUtil;
 
 import java.util.List;
@@ -27,6 +31,8 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
     private HistoryAdapter mAdapter;
+    @Bind(R.id.ev_scrollview)
+    ElasticScrollView mScrollView;
 
     @Override
     protected void initPresenter() {
@@ -41,12 +47,31 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
-        NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,1);
+        final NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,1);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mAdapter = new HistoryAdapter(mActivity,R.layout.item_history,R.layout.item_history_title);
+        mAdapter = new HistoryAdapter(mActivity,R.layout.item_history,R.layout.item_history_title,R.layout.item_loading);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
+        mScrollView.setListener(new ElasticScrollView.OnScrollListener() {
+            @Override
+            public void OnScrollToBottom() {
+                mPresenter.loadMoreData();
+            }
+        });
+       /* mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+                    if(lastVisiblePosition >= layoutManager.getItemCount() - 1){
+                        mPresenter.loadData();
+                    }
+                }
+            }
+        });*/
+
     }
     //切换到该fragment做的操作
    public void onHiddenChanged(boolean hidden) {
