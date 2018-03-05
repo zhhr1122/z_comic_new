@@ -23,6 +23,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     //初始化Presenter
     protected abstract void initPresenter();
 
+    public abstract void OnEditList(boolean isEditing);
+
     protected BaseFragmentActivity mActivity;
 
     protected abstract void initView(View view, Bundle savedInstanceState);

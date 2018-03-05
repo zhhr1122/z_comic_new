@@ -96,7 +96,17 @@ public class CollectionFragment extends BaseFragment<CollectionPresenter> implem
 
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
-        Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
+        if(!mAdapter.isEditing()){
+            Comic comic = mAdapter.getItems(position);
+            IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
+        }else{
+
+        }
+
+    }
+
+    public void OnEditList(boolean isEdit){
+        mAdapter.setEditing(isEdit);
+        mAdapter.notifyDataSetChanged();
     }
 }

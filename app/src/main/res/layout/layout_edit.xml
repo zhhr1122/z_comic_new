@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.zhhr.ui.custom.FloatEditLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_edit_bottom"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+    android:background="@color/colorBg"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <RelativeLayout
+            android:id="@+id/rl_select"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_select"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/btn_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_select_all"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/iv_select"
+                android:layout_centerVertical="true"
+                android:text="全选"
+                android:textColor="@color/colorTextColor"
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <ImageView
+            android:background="#e2e2e2"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent" />
+        <RelativeLayout
+            android:id="@+id/rl_delete"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_delete"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/iv_delete"
+                android:layout_centerVertical="true"
+                android:text="删除"
+                android:textSize="16dp"
+                android:textColor="@color/colorTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </LinearLayout>
+    <ImageView
+        android:background="@color/colorBottom"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp" />
+</com.android.zhhr.ui.custom.FloatEditLayout>

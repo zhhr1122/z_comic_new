@@ -5,18 +5,26 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.presenter.BookShelfPresenter;
+import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.adapter.BookShelfFragmentAdapter;
+import com.android.zhhr.ui.custom.FloatEditLayout;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.fragment.bookshelf.CollectionFragment;
 import com.android.zhhr.ui.fragment.bookshelf.DownloadFragment;
 import com.android.zhhr.ui.fragment.bookshelf.HistoryFragment;
 import com.android.zhhr.ui.view.IBookShelfView;
+import com.android.zhhr.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +42,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
 
     BookShelfFragmentAdapter mAdapter;
     protected FragmentManager fragmentManager;
-    protected List<Fragment> fragments;
+    protected List<BaseFragment> fragments;
     @Bind(R.id.tv_download)
     TextView mDownload;
     @Bind(R.id.tv_history)
@@ -47,10 +55,27 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     ImageView mBottomHistory;
     @Bind(R.id.iv_bottom_download)
     ImageView mBottomDownload;
+    @Bind(R.id.iv_edit)
+    ImageView mEdit;
+
+    private boolean isEditing;
+
+    private MainActivity mainActivity;
+
+    private CollectionFragment collectionFragment;
+    private HistoryFragment historyFragment;
+    private DownloadFragment downloadFragment;
+
+
 
     @Override
     protected void initPresenter() {
         mPresenter = new BookShelfPresenter(mActivity,this);
+    }
+
+    @Override
+    public void OnEditList(boolean isEditing) {
+
     }
 
     @Override
@@ -61,10 +86,16 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         fragments = new ArrayList<>();
+        mainActivity = (MainActivity) this.getActivity();
 
-        fragments.add(new CollectionFragment());
-        fragments.add(new HistoryFragment());
-        fragments.add(new DownloadFragment());
+        collectionFragment = new CollectionFragment();
+        historyFragment = new HistoryFragment();
+        downloadFragment = new DownloadFragment();
+
+
+        fragments.add(collectionFragment);
+        fragments.add(historyFragment);
+        fragments.add(downloadFragment);
 
         fragmentManager = getActivity().getSupportFragmentManager();
         mAdapter = new BookShelfFragmentAdapter(fragmentManager,fragments);
@@ -72,7 +103,12 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         mViewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                if(isEditing){
+                    mEdit.setImageResource(R.mipmap.edit);
+                    mainActivity.setEditBottomVisible(View.GONE);
+                    showEditModel(fragments.get(position),false);
+                    isEditing = false;
+                }
             }
 
             @Override
@@ -138,6 +174,22 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         mBottomCollect.setVisibility(View.GONE);
         mBottomDownload.setVisibility(View.GONE);
         mBottomHistory.setVisibility(View.GONE);
+    }
+    @OnClick(R.id.iv_edit)
+    public void toEdit(){
+        if(!isEditing){
+            mEdit.setImageResource(R.mipmap.closed);
+            mainActivity.setEditBottomVisible(View.VISIBLE);
+            showEditModel(fragments.get(mViewpager.getCurrentItem()),true);
+        }else{
+            mEdit.setImageResource(R.mipmap.edit);
+            mainActivity.setEditBottomVisible(View.GONE);
+            showEditModel(fragments.get(mViewpager.getCurrentItem()),false);
+        }
+        isEditing = !isEditing;
+    }
 
+    private void showEditModel(BaseFragment fragment,boolean isEdit) {
+        fragment.OnEditList(isEdit);
     }
 }

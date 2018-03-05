@@ -104,4 +104,8 @@ public class DownloadFragment extends BaseFragment<DownloadPresenter> implements
         Comic comic = mAdapter.getItems(position);
         IntentUtil.ToDownloadListActivity(mActivity,new HashMap<Integer, Integer>(),comic);
     }
+
+    public void OnEditList(boolean isEdit){
+        mAdapter.notifyDataSetChanged();
+    }
 }

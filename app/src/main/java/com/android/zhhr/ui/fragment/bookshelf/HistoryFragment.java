@@ -127,4 +127,8 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
             IntentUtil.ToComicChapter(mActivity,comic.getCurrentChapter(),comic);
         }
     }
+
+    public void OnEditList(boolean isEdit){
+        mAdapter.notifyDataSetChanged();
+    }
 }

@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
+import com.android.zhhr.ui.custom.FloatEditLayout;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,8 @@ public class MainActivity extends BaseFragmentActivity {
     Button mBookShelf;
     @Bind(R.id.btn_mine)
     Button mMine;
+    @Bind(R.id.rl_edit_bottom)
+    FloatEditLayout mEditBottom;
 
 
     @Override
@@ -65,5 +68,9 @@ public class MainActivity extends BaseFragmentActivity {
         mHome.setBackgroundResource(R.drawable.homepage);
         mMine.setBackgroundResource(R.drawable.mine);
         mBookShelf.setBackgroundResource(R.drawable.bookshelf);
+    }
+
+    public void setEditBottomVisible(int Visible){
+        mEditBottom.setVisibility(Visible);
     }
 }

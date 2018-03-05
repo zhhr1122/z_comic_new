@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
@@ -25,7 +25,7 @@
             android:layout_height="match_parent"/>
     </RelativeLayout>
     <RelativeLayout
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:background="@color/colorBg"
         android:id="@+id/rl_bottombar"
         android:layout_width="match_parent"
@@ -83,4 +83,5 @@
             android:layout_height="0.5dp"/>
 
     </RelativeLayout>
-</RelativeLayout>
+    <include layout="@layout/layout_edit"></include>
+</FrameLayout>

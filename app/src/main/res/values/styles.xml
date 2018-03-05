@@ -24,4 +24,9 @@
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
 
+    <style name="EditDialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
 </resources>
