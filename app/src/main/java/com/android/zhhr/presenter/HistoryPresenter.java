@@ -29,7 +29,7 @@ public class HistoryPresenter extends BasePresenter<ICollectionView>{
 
 
     public void loadData(){
-        mModel.getHistoryComicList(new DisposableObserver<List<Comic>>() {
+        mModel.getHistoryComicList(getCurrentTime(),new DisposableObserver<List<Comic>>() {
 
             @Override
             public void onError(Throwable e) {

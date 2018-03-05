@@ -159,7 +159,7 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    int size = 2;
+                    int size ;
                     switch (getItemViewType(position)){
                         case ITEM_TITLE:
                             size = 6;

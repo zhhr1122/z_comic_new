@@ -5,7 +5,7 @@
     <RelativeLayout
         android:background="@color/colorBg"
         android:layout_width="match_parent"
-        android:layout_height="148dp">
+        android:layout_height="138dp">
         <FrameLayout
             android:id="@+id/fl_cover"
             android:layout_centerVertical="true"

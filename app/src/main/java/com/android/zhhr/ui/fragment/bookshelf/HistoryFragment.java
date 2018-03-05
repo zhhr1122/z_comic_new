@@ -6,12 +6,10 @@ import android.view.View;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.presenter.CollectionPresenter;
+import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.presenter.HistoryPresenter;
-import com.android.zhhr.ui.adapter.CollectAdapter;
 import com.android.zhhr.ui.adapter.HistoryAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
-import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
@@ -46,7 +44,7 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
         NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(mActivity,1);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mAdapter = new HistoryAdapter(mActivity,R.layout.item_history);
+        mAdapter = new HistoryAdapter(mActivity,R.layout.item_history,R.layout.item_history_title);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
     }
@@ -97,7 +95,11 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
 
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
-        Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToComicChapter(mActivity,comic.getCurrentChapter(),comic);
+        if(mAdapter.getItems(position) instanceof HomeTitle){
+
+        }else{
+            Comic comic = mAdapter.getItems(position);
+            IntentUtil.ToComicChapter(mActivity,comic.getCurrentChapter(),comic);
+        }
     }
 }
