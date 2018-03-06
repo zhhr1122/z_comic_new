@@ -2,6 +2,7 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.LoadingItem;
@@ -25,9 +26,37 @@ import io.reactivex.observers.DisposableObserver;
 public class HistoryPresenter extends SelectPresenter<ICollectionView>{
     int page = 1;
     private boolean isloadingdata;
+    private List<Comic> mHistoryList;
 
     public HistoryPresenter(Activity context, ICollectionView view) {
         super(context, view);
+        mHistoryList = new ArrayList<>();
+    }
+
+    public void SelectOrMoveAll(){
+        if(!isSelectedAll){
+            if(mHistoryList!=null&&mHistoryList.size()!=0){
+                for(int i=0;i<mHistoryList.size();i++){
+                    if(mMap.get(i) == Constants.CHAPTER_FREE){
+                        mMap.put(i, Constants.CHAPTER_SELECTED);
+                        SelectedNum++;
+                    }
+                }
+                mView.addAll();
+            }
+        }else{
+            if(mHistoryList!=null&&mHistoryList.size()!=0){
+                for(int i=0;i<mHistoryList.size();i++){
+                    if(mMap.get(i) == Constants.CHAPTER_SELECTED){
+                        mMap.put(i, Constants.CHAPTER_FREE);
+                    }
+                }
+                SelectedNum = 0;
+                mView.removeAll();
+            }
+        }
+        isSelectedAll = !isSelectedAll;
+        mView.updateList(mMap);
     }
 
 
@@ -134,6 +163,7 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
                 history.add(new LoadingItem(true));
             }
         }
+        mHistoryList = history;
         resetSelect(history);
         return history;
     }

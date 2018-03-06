@@ -190,4 +190,13 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     private void showEditModel(BaseBookShelfFragment fragment, boolean isEdit) {
         fragment.OnEditList(isEdit);
     }
+
+    public void OnClickDelete(){
+        fragments.get(mViewpager.getCurrentItem()).OnDelete();
+    }
+
+
+    public void OnClickSelect(){
+        fragments.get(mViewpager.getCurrentItem()).OnSelect();
+    }
 }

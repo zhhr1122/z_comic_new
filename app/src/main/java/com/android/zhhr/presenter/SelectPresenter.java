@@ -52,6 +52,33 @@ public abstract class SelectPresenter<T extends ISelectDataView> extends BasePre
         mView.updateListItem(mMap,position);
     }
 
+    public void SelectOrMoveAll(){
+        if(!isSelectedAll){
+            if(mComics!=null&&mComics.size()!=0){
+                for(int i=0;i<mComics.size();i++){
+                    if(mMap.get(i) == Constants.CHAPTER_FREE){
+                        mMap.put(i, Constants.CHAPTER_SELECTED);
+                        SelectedNum++;
+                    }
+                }
+                mView.addAll();
+            }
+        }else{
+            if(mComics!=null&&mComics.size()!=0){
+                for(int i=0;i<mComics.size();i++){
+                    if(mMap.get(i) == Constants.CHAPTER_SELECTED){
+                        mMap.put(i, Constants.CHAPTER_FREE);
+                    }
+                }
+                SelectedNum = 0;
+                mView.removeAll();
+            }
+        }
+        isSelectedAll = !isSelectedAll;
+        mView.updateList(mMap);
+    }
+
+
 
     /**
      * 重置选择信息
@@ -59,7 +86,11 @@ public abstract class SelectPresenter<T extends ISelectDataView> extends BasePre
     public void resetSelect(List<Comic> mList){
         for(int i=0;i<mList.size();i++){
             if(!mMap.containsKey(i)){
-                mMap.put(i,Constants.CHAPTER_FREE);
+                if(isSelectedAll){
+                    mMap.put(i,Constants.CHAPTER_SELECTED);
+                }else{
+                    mMap.put(i,Constants.CHAPTER_FREE);
+                }
             }
         }
     }

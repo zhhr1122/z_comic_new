@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
 import com.android.zhhr.ui.custom.FloatEditLayout;
+import com.android.zhhr.ui.fragment.BookShelfFragment;
 
 import java.util.ArrayList;
 
@@ -27,16 +28,33 @@ public class MainActivity extends BaseFragmentActivity {
     Button mMine;
     @Bind(R.id.rl_edit_bottom)
     FloatEditLayout mEditBottom;
+    BookShelfFragment bookShelfFragment;
 
+
+    public FloatEditLayout getmEditBottom() {
+        return mEditBottom;
+    }
 
     @Override
     protected void initView() {
         mHome.setBackgroundResource(R.drawable.homepage_press);
         fragments = new ArrayList<>();
         fragmentManager = getSupportFragmentManager();
+        bookShelfFragment= (BookShelfFragment) fragmentManager.findFragmentById(R.id.fm_bookshelf);
         fragments.add (fragmentManager.findFragmentById(R.id.fm_home));
-        fragments.add (fragmentManager.findFragmentById(R.id.fm_bookshelf));
+        fragments.add (bookShelfFragment);
         fragments.add (fragmentManager.findFragmentById(R.id.fm_mine));
+        mEditBottom.setListener(new FloatEditLayout.onClickListener() {
+            @Override
+            public void OnClickSelect() {
+                bookShelfFragment.OnClickSelect();
+            }
+
+            @Override
+            public void OnDelete() {
+                bookShelfFragment.OnClickDelete();
+            }
+        });
         selectTab(0);
     }
 

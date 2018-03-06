@@ -141,6 +141,16 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
     }
 
     @Override
+    public void OnDelete() {
+
+    }
+
+    @Override
+    public void OnSelect() {
+        mPresenter.SelectOrMoveAll();
+    }
+
+    @Override
     public void updateList(HashMap map) {
         mAdapter.setmMap(map);
         mAdapter.notifyDataSetChanged();
@@ -154,11 +164,11 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
 
     @Override
     public void addAll() {
-
+        mainActivity.getmEditBottom().addAll();
     }
 
     @Override
     public void removeAll() {
-
+        mainActivity.getmEditBottom().removeAll();
     }
 }

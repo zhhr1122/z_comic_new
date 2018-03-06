@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
@@ -19,6 +21,10 @@ import com.android.zhhr.utils.DisplayUtil;
 public class FloatEditLayout extends RelativeLayout{
     RelativeLayout mSelect;
     RelativeLayout mDelete;
+    ImageView mSelectedIcon;
+    TextView mSelectText;
+    boolean isSelected;
+
     onClickListener listener;
     private static final int  ANIMATION_TIME = 200;
 
@@ -37,10 +43,18 @@ public class FloatEditLayout extends RelativeLayout{
     protected void onFinishInflate() {
         mSelect = (RelativeLayout) this.findViewById(R.id.rl_select);
         mDelete = (RelativeLayout) this.findViewById(R.id.rl_delete);
+        mSelectedIcon = (ImageView) this.findViewById(R.id.iv_select);
+        mSelectText = (TextView) this.findViewById(R.id.tv_select_all);
         mSelect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(listener!=null){
+                    if(!isSelected){
+                        addAll();
+                    }else{
+                        removeAll();
+                    }
+                    isSelected = !isSelected;
                     listener.OnClickSelect();
                 }
             }
@@ -55,6 +69,18 @@ public class FloatEditLayout extends RelativeLayout{
         });
     }
 
+    public void addAll(){
+        mSelectText.setText("取消全选");
+        mSelectedIcon.setImageResource(R.mipmap.btn_cancel_select);
+        isSelected = true;
+    }
+
+    public void removeAll(){
+        mSelectText.setText("全选");
+        mSelectedIcon.setImageResource(R.mipmap.btn_select);
+        isSelected = false;
+    }
+
 
     public FloatEditLayout(Context context, AttributeSet attrs) {
         this(context, attrs,0);
@@ -65,6 +91,7 @@ public class FloatEditLayout extends RelativeLayout{
         switch (visibility){
             case View.GONE:
                 super.setVisibility(View.GONE);
+                removeAll();
                 AlphaAnimation alphaAnimation1 = new AlphaAnimation(1,0);
                 AnimationSet animationSet2 = new AnimationSet(true);
                 TranslateAnimation tran2 = new TranslateAnimation(0, 0 ,0 , height);

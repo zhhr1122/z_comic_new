@@ -112,20 +112,30 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
 
     @Override
     public void addAll() {
-
+        mainActivity.getmEditBottom().addAll();
     }
 
     @Override
     public void removeAll() {
-
+        mainActivity.getmEditBottom().removeAll();
     }
 
     public void OnEditList(boolean isEdit){
-        if(mAdapter.isEditing()!=isEdit){
+        if(mAdapter!=null&&mAdapter.isEditing()!=isEdit){
             mAdapter.setmMap(new HashMap<Integer, Integer>());
             mAdapter.setEditing(isEdit);
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void OnDelete() {
+
+    }
+
+    @Override
+    public void OnSelect() {
+        mPresenter.SelectOrMoveAll();
     }
 
     @Override
