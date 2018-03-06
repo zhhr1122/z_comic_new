@@ -47,5 +47,31 @@
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
     </com.android.zhhr.ui.custom.ElasticScrollView>
+    <RelativeLayout
+        android:id="@+id/rl_empty_view"
+        android:background="@color/colorBgDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/empty_view"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorTextColorLight"
+                android:textSize="14dp"
+                android:text="你还木有看过任何漫画呐~"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
