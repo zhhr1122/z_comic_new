@@ -8,6 +8,7 @@ import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.LoadingItem;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.ICollectionView;
+import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 
 import java.util.ArrayList;
@@ -108,6 +109,7 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
 
     public void loadMoreData(){
         if(!isloadingdata){
+            LogUtil.d("加载更多");
             mModel.getHistoryComicList(page,new DisposableObserver<List<Comic>>() {
                 @Override
                 protected void onStart() {
@@ -132,8 +134,8 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
                     mComics.addAll(comics);
                     if(comics.size()!=0){
                         mView.fillData(addTitle(comics));
+                        isloadingdata = false;
                     }
-                    isloadingdata = false;
                 }
             });
         }
