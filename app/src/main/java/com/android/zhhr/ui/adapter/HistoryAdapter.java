@@ -104,9 +104,11 @@ public class HistoryAdapter extends BookShelfAdapter<Comic> {
                     if(loading.isLoading()){
                         holder.startAnimation(R.id.iv_loading);
                         holder.setText(R.id.tv_loading,"正在加载");
+                        holder.setVisibility(R.id.v_padding,View.VISIBLE);
                     }else{
                         holder.setImageResource(R.id.iv_loading,R.mipmap.loading_finish);
                         holder.setText(R.id.tv_loading,"已全部加载完毕");
+                        holder.setVisibility(R.id.v_padding,View.GONE);
                     }
                     break;
             }

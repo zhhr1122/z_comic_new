@@ -108,9 +108,11 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
     }
 
     public void OnEditList(boolean isEdit){
-        mAdapter.setmMap(new HashMap<Integer, Integer>());
-        mAdapter.setEditing(isEdit);
-        mAdapter.notifyDataSetChanged();
+        if(mAdapter.isEditing()!=isEdit){
+            mAdapter.setmMap(new HashMap<Integer, Integer>());
+            mAdapter.setEditing(isEdit);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -122,7 +124,7 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
     @Override
     public void updateListItem(HashMap map, int position) {
         mAdapter.setmMap(map);
-        mAdapter.notifyItemChanged(position,"isNotNull");
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

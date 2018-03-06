@@ -121,9 +121,11 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
     }
 
     public void OnEditList(boolean isEdit){
-        mAdapter.setmMap(new HashMap<Integer, Integer>());
-        mAdapter.setEditing(isEdit);
-        mAdapter.notifyDataSetChanged();
+        if(mAdapter.isEditing()!=isEdit){
+            mAdapter.setmMap(new HashMap<Integer, Integer>());
+            mAdapter.setEditing(isEdit);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
