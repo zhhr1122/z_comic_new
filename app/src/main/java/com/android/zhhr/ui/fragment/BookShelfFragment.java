@@ -187,6 +187,12 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         isEditing = !isEditing;
     }
 
+    public void quitEdit(){
+        mEdit.setImageResource(R.mipmap.edit);
+        showEditModel(fragments.get(mViewpager.getCurrentItem()),false);
+        isEditing = false;
+    }
+
     private void showEditModel(BaseBookShelfFragment fragment, boolean isEdit) {
         fragment.OnEditList(isEdit);
     }

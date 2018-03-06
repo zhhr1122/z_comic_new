@@ -84,16 +84,12 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
 
     @Override
     public void fillData(List<Comic> data) {
-        if(data!=null&&data.size()!=0){
-            mAdapter.updateWithClear(data);
-        }else {
-            //ShowToast("未取到数据");
-        }
+        mAdapter.updateWithClear(data);
     }
 
     @Override
     public void showEmptyView() {
-
+        mAdapter.updateWithClear(null);
     }
 
     @Override
@@ -116,7 +112,7 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
 
     @Override
     public void OnDelete() {
-
+        mPresenter.ShowDeteleDialog();
     }
 
     @Override
@@ -133,7 +129,7 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
     @Override
     public void updateListItem(HashMap map, int position) {
         mAdapter.setmMap(map);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemChanged(position,"isNotNull");
     }
 
     @Override
@@ -144,5 +140,10 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
     @Override
     public void removeAll() {
         mainActivity.getmEditBottom().removeAll();
+    }
+
+    @Override
+    public void quitEdit() {
+        mainActivity.quitEdit();
     }
 }

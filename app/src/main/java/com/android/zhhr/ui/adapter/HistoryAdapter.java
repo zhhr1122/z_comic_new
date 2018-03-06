@@ -87,13 +87,7 @@ public class HistoryAdapter extends BookShelfAdapter<Comic> {
                     }
                     holder.setText(R.id.tv_chapters,"更新到"+item.getChapters().size()+"话");
                     //最后一个item隐藏下划线
-                    int offset = 1;
-                    if(position>=12){
-                        offset = 2;
-                    }else{
-                        offset = 1;
-                    }
-                    if(position == list.size()-offset){
+                    if(list.size()>2&&position == list.size()-2){
                         holder.setVisibility(R.id.v_bottom_line, View.GONE);
                     }else{
                         holder.setVisibility(R.id.v_bottom_line, View.VISIBLE);

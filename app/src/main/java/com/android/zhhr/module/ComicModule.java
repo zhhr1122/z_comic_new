@@ -879,4 +879,84 @@ public class ComicModule {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
+    public void deleteHistoryComic(final List<Comic> mLists, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try{
+                    for(int i=0;i<mLists.size();i++){
+                        Comic items = mLists.get(i);
+                        items.setClickTime(0);
+                        items.setCurrent_page(0);
+                        mHelper.update(items);
+                    }
+                    List<Comic> mComics = mHelper.queryHistory(0);
+                    observableEmitter.onNext(mComics);
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+    }
+
+    public void deleteCollectComic(final List<Comic> mLists, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try {
+                    for (int i = 0; i < mLists.size(); i++) {
+                        Comic items = mLists.get(i);
+                        items.setIsCollected(false);
+                        mHelper.update(items);
+                    }
+                    List<Comic> mComics = mHelper.queryCollect();
+                    observableEmitter.onNext(mComics);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                } finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void deleteDownloadComic(final List<Comic> mLists, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try {
+                    for (int i = 0; i < mLists.size(); i++) {
+                        Comic items = mLists.get(i);
+                        items.setStateInte(0);
+                        mHelper.update(items);
+                    }
+                    List<Comic> mComics = mHelper.queryDownloadComic();
+                    observableEmitter.onNext(mComics);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                } finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 }

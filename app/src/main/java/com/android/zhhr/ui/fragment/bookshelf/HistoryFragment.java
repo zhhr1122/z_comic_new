@@ -108,16 +108,12 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
 
     @Override
     public void fillData(List<Comic> data) {
-        if(data!=null&&data.size()!=0){
-            mAdapter.updateWithClear(data);
-        }else {
-            //ShowToast("未取到数据");
-        }
+        mAdapter.updateWithClear(data);
     }
 
     @Override
     public void showEmptyView() {
-
+        mAdapter.updateWithClear(null);
     }
 
     @Override
@@ -141,7 +137,7 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
 
     @Override
     public void OnDelete() {
-
+        mPresenter.ShowDeteleDialog();
     }
 
     @Override
@@ -169,5 +165,10 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
     @Override
     public void removeAll() {
         mainActivity.getmEditBottom().removeAll();
+    }
+
+    @Override
+    public void quitEdit() {
+            mainActivity.quitEdit();
     }
 }

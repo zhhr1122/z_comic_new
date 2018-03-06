@@ -5,10 +5,12 @@ import android.app.Activity;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.IBaseView;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.ui.view.ILoadDataView;
 import com.android.zhhr.ui.view.ISelectDataView;
+import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 
 import java.util.ArrayList;
@@ -36,9 +38,15 @@ public abstract class SelectPresenter<T extends ISelectDataView> extends BasePre
         this.mComics = new ArrayList<>();
     }
 
-
+    /**
+     * 加载数据
+     */
     public abstract void loadData();
 
+    /**
+     * 选择或者取消选择
+     * @param position
+     */
     public void uptdateToSelected(int position){
         if(mMap.get(position)!=null&&mMap.get(position).equals(Constants.CHAPTER_FREE)){
             SelectedNum++;
@@ -56,6 +64,9 @@ public abstract class SelectPresenter<T extends ISelectDataView> extends BasePre
         mView.updateListItem(mMap,position);
     }
 
+    /**
+     * 全选或全部删除
+     */
     public void SelectOrMoveAll(){
         if(!isSelectedAll){
             if(mComics!=null&&mComics.size()!=0){
@@ -99,6 +110,9 @@ public abstract class SelectPresenter<T extends ISelectDataView> extends BasePre
         }
     }
 
+    /**
+     * 清除map信息
+     */
     public void clearSelect(){
         SelectedNum = 0;
         isSelectedAll = false;
@@ -106,5 +120,35 @@ public abstract class SelectPresenter<T extends ISelectDataView> extends BasePre
             mMap.put(i,Constants.CHAPTER_FREE);
         }
         mView.updateList(mMap);
+    }
+
+    /**
+     * 删除漫画
+     */
+    public abstract void deleteComic();
+
+    public void ShowDeteleDialog(){
+        if(SelectedNum>0){
+            final CustomDialog customDialog = new CustomDialog(mContext,"提示","确认删除选中的漫画？");
+            customDialog.setListener(new CustomDialog.onClickListener() {
+                @Override
+                public void OnClickConfirm() {
+                    deleteComic();
+                    if (customDialog.isShowing()){
+                        customDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void OnClickCancel() {
+                    if (customDialog.isShowing()){
+                        customDialog.dismiss();
+                    }
+                }
+            });
+            customDialog.show();
+        }else{
+            mView.ShowToast("请选择需要删除的作品");
+        }
     }
 }

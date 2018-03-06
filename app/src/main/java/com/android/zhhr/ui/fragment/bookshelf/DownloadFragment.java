@@ -87,17 +87,13 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
 
     @Override
     public void fillData(List<Comic> data) {
-        if(data!=null&&data.size()!=0){
-            mAdapter.updateWithClear(data);
-        }else {
-            //ShowToast("未取到数据");
-        }
+        mAdapter.updateWithClear(data);
 
     }
 
     @Override
     public void showEmptyView() {
-
+        mAdapter.updateWithClear(null);
     }
 
     @Override
@@ -129,7 +125,7 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
 
     @Override
     public void OnDelete() {
-
+        mPresenter.ShowDeteleDialog();
     }
 
     @Override
@@ -147,5 +143,10 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
     public void updateListItem(HashMap map, int position) {
         mAdapter.setmMap(map);
         mAdapter.notifyItemChanged(position,"isNotNull");
+    }
+
+    @Override
+    public void quitEdit() {
+        mainActivity.quitEdit();
     }
 }

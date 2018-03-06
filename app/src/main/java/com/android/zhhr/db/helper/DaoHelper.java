@@ -135,6 +135,7 @@ public class DaoHelper<T> {
         List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
                 .offset(page*12)
                 .limit(12)
+                .where(ComicDao.Properties.ClickTime.gt(0))
                 .orderDesc(ComicDao.Properties.ClickTime)
                 .list();
         return list;

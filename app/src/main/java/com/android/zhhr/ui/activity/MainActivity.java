@@ -58,6 +58,11 @@ public class MainActivity extends BaseFragmentActivity {
         selectTab(0);
     }
 
+    public void quitEdit(){
+        setEditBottomVisible(View.GONE);
+        bookShelfFragment.quitEdit();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -11,4 +11,5 @@ public interface ISelectDataView<T> extends ILoadDataView<T>{
     void updateListItem(HashMap map,int position);
     void addAll();
     void removeAll();
+    void quitEdit();
 }

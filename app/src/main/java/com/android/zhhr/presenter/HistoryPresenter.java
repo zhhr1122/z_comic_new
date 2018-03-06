@@ -179,6 +179,8 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
             }else{
                 history.add(new LoadingItem(true));
             }
+        }else{
+            history.add(new LoadingItem(false));
         }
         mHistoryList = history;
         resetSelect();
@@ -207,5 +209,43 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
             mMap.put(i,Constants.CHAPTER_FREE);
         }
         mView.updateList(mMap);
+    }
+
+    /**
+     * 操作数据库更新数据
+     */
+    @Override
+    public void deleteComic() {
+        List<Comic> mDeleteComics = new ArrayList<>();
+        for(int i=0;i<mHistoryList.size();i++){
+            if(mMap.get(i) == Constants.CHAPTER_SELECTED){
+                mDeleteComics.add(mHistoryList.get(i));
+            }
+        }
+        mModel.deleteHistoryComic(mDeleteComics, new DisposableObserver<List<Comic>>() {
+
+            @Override
+            public void onNext(@NonNull List<Comic> comics) {
+                page = 1;
+                clearSelect();
+                mComics.clear();
+                mComics.addAll(comics);
+                if(comics.size()>=0){
+                    mView.fillData(addTitle(comics));
+                }else{
+                    mView.showEmptyView();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                mView.quitEdit();
+            }
+        });
     }
 }

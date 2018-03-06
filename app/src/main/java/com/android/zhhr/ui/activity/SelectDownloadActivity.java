@@ -130,6 +130,11 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
         mSelectedIcon.setImageResource(R.mipmap.btn_select);
     }
 
+    @Override
+    public void quitEdit() {
+
+    }
+
     @OnClick(R.id.iv_back_color)
     public void finish(View view){
         this.finish();

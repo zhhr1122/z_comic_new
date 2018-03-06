@@ -163,6 +163,16 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public BaseRecyclerHolder setImageByUrlNone(int viewId,String url){
+        ImageView iv = getView(viewId);
+        Glide.with(context)
+                .load(url)
+                .placeholder(R.mipmap.pic_default)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(iv);
+        return this;
+    }
+
     /**
      * 卷轴模式阅读的recycleview 需要设置宽高
      * @param viewId
