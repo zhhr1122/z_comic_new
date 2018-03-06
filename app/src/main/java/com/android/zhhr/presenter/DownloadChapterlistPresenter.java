@@ -293,6 +293,13 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         helper.update(mComic);
     }
 
+    public void getResultComic(int resultCode, Intent data) {
+        if(resultCode == Constants.OK){
+            Comic comic = (Comic) data.getSerializableExtra(Constants.COMIC);
+            this.mComic = comic;
+        }
+    }
+
     /**
      * 下载图片的回调
      */
@@ -398,7 +405,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     }
 
     public void ToComicChapter(DBDownloadItems info) {
-        IntentUtil.ToComicChapter(mContext,info.getChapters(),mComic);
+        IntentUtil.ToComicChapterForResult(mContext,info.getChapters(),mComic);
     }
 
     /**

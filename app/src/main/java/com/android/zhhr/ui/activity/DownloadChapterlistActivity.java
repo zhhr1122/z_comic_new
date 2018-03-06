@@ -244,4 +244,9 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     public void ToSelectDownload(){
         IntentUtil.ToSelectDownload(this,mPresenter.getmComic());
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPresenter.getResultComic(resultCode,data);
+    }
 }

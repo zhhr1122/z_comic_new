@@ -1,5 +1,6 @@
 package com.android.zhhr.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -42,6 +43,14 @@ public class IntentUtil {
         intent.putExtra(Constants.COMIC,mComic);
         context.startActivity(intent);
     }
+
+    public static void ToComicChapterForResult(Activity context, int chapters, Comic mComic){
+        Intent intent = new Intent(context, ComicChapterActivity.class);
+        intent.putExtra(Constants.COMIC_CHAPERS,chapters);
+        intent.putExtra(Constants.COMIC,mComic);
+        context.startActivityForResult(intent,1);
+    }
+
 
     public static void ToComicChapter(Context context, int chapters,long id,String title,List<String> chapter_titles,int type){
         Intent intent = new Intent(context, ComicChapterActivity.class);

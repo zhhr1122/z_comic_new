@@ -41,4 +41,5 @@ public class Constants {
     public final static boolean isAD = false;
 
 
+    public static final int OK = 1;
 }

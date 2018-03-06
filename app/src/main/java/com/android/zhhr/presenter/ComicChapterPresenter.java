@@ -1,6 +1,7 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
@@ -72,7 +73,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         this.mComic= comic;
         Comic DBComic = (Comic) mHelper.findComic(comic.getId());
         //判断如果是点进上次点击的那一话
-        if(DBComic.getCurrentChapter() != Chapters){
+        if(DBComic!=null&&DBComic.getCurrentChapter() != Chapters){
             mComic.setCurrent_page(1);
         }
         this.comic_chapter_title = comic.getChapters();
@@ -208,6 +209,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
         mComic.setClickTime(getCurrentTime());
         mComic.setCurrentChapter(comic_chapters);
         mHelper.update(mComic);
+        Intent intent = new Intent();
+        intent.putExtra(Constants.COMIC,mComic);
+        mContext.setResult(Constants.OK,intent);
     }
 
     public void loadMoreData(int position,int mDirect,int offset){

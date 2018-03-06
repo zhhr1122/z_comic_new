@@ -96,7 +96,12 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
             public void onNext(List<Comic> comics) {
                 mComics.clear();
                 mComics.addAll(comics);
-                mView.fillData(addTitle(comics));
+                if(mComics.size()!=0){
+                    mView.fillData(addTitle(comics));
+                }else{
+                    mView.showEmptyView();
+                }
+
             }
         });
     }
@@ -125,7 +130,9 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
                 public void onNext(List<Comic> comics) {
                     page++;
                     mComics.addAll(comics);
-                    mView.fillData(addTitle(comics));
+                    if(comics.size()!=0){
+                        mView.fillData(addTitle(comics));
+                    }
                     isloadingdata = false;
                 }
             });
@@ -222,30 +229,37 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
                 mDeleteComics.add(mHistoryList.get(i));
             }
         }
-        mModel.deleteHistoryComic(mDeleteComics, new DisposableObserver<List<Comic>>() {
+        if(!isSelectedAll){
+            mModel.deleteHistoryComic(mDeleteComics,observer);
+        }else{
+            mModel.deleteHistoryComic(observer);
+        }
 
-            @Override
-            public void onNext(@NonNull List<Comic> comics) {
-                page = 1;
-                clearSelect();
-                mComics.clear();
-                mComics.addAll(comics);
-                if(comics.size()>=0){
-                    mView.fillData(addTitle(comics));
-                }else{
-                    mView.showEmptyView();
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                mView.quitEdit();
-            }
-        });
     }
+
+    DisposableObserver observer = new DisposableObserver<List<Comic>>() {
+
+        @Override
+        public void onNext(@NonNull List<Comic> comics) {
+            page = 1;
+            clearSelect();
+            mComics.clear();
+            mComics.addAll(comics);
+            if(comics.size()!=0){
+                mView.fillData(addTitle(comics));
+            }else{
+                mView.showEmptyView();
+            }
+        }
+
+        @Override
+        public void onError(@NonNull Throwable e) {
+
+        }
+
+        @Override
+        public void onComplete() {
+            mView.quitEdit();
+        }
+    };
 }

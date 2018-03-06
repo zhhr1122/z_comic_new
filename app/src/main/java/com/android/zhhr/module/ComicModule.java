@@ -860,11 +860,10 @@ public class ComicModule {
                 try{
                     boolean result = true;
                     for(int i=0;i<mLists.size();i++){
-                        DBDownloadItems items = mLists.get(i);
-                        if (items.getState() != DownState.FINISH){
-                            items.setState(DownState.NONE);
-                            result = mHelper.update(items);
+                        if (mLists.get(i).getState() != DownState.FINISH){
+                            mLists.get(i).setState(DownState.NONE);
                         }
+                        result = mHelper.insertList(mLists);
                     }
                     observableEmitter.onNext(result);
                 }catch (Exception e){
@@ -890,8 +889,38 @@ public class ComicModule {
                         Comic items = mLists.get(i);
                         items.setClickTime(0);
                         items.setCurrent_page(0);
+                        items.setCurrentChapter(0);
                         mHelper.update(items);
                     }
+                    List<Comic> mComics = mHelper.queryHistory(0);
+                    observableEmitter.onNext(mComics);
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+    }
+
+    public void deleteHistoryComic(Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try{
+                    List<Comic> mLists = mHelper.queryHistory();
+                    for(int i=0;i<mLists.size();i++){
+                        mLists.get(i).setClickTime(0);
+                        mLists.get(i).setCurrent_page(0);
+                        mLists.get(i).setCurrentChapter(0);
+                    }
+                    mHelper.insertList(mLists);
                     List<Comic> mComics = mHelper.queryHistory(0);
                     observableEmitter.onNext(mComics);
                 }catch (Exception e){

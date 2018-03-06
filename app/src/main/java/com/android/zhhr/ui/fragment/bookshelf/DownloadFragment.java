@@ -71,7 +71,6 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
     @Override
     public void onResume() {
         super.onResume();
-        LogUtil.d("fragment onresume");
         mPresenter.loadData();
     }
 

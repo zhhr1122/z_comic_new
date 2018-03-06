@@ -20,6 +20,7 @@ import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.IntentUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
     private HistoryAdapter mAdapter;
     @Bind(R.id.ev_scrollview)
     ElasticScrollView mScrollView;
+
+    @Bind(R.id.rl_empty_view)
+    RelativeLayout mEmptyView;
+
 
     @Override
     protected void initPresenter() {
@@ -108,12 +113,14 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
 
     @Override
     public void fillData(List<Comic> data) {
+        mEmptyView.setVisibility(View.GONE);
         mAdapter.updateWithClear(data);
     }
 
     @Override
     public void showEmptyView() {
-        mAdapter.updateWithClear(null);
+        mAdapter.updateWithClear(new ArrayList<Comic>());
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
