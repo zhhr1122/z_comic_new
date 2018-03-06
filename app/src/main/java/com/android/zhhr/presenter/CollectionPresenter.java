@@ -41,8 +41,12 @@ public class CollectionPresenter extends SelectPresenter<ICollectionView>{
             @Override
             public void onNext(List<Comic> comics) {
                 mComics= comics;
-                mView.fillData(comics);
-                resetSelect();
+                if(comics.size()>0){
+                    mView.fillData(comics);
+                    resetSelect();
+                }else{
+                    mView.showEmptyView();
+                }
             }
         });
     }
@@ -62,7 +66,7 @@ public class CollectionPresenter extends SelectPresenter<ICollectionView>{
                 clearSelect();
                 mComics.clear();
                 mComics.addAll(comics);
-                if(comics.size()>=0){
+                if(comics.size()>0){
                     mView.fillData(comics);
                 }else{
                     mView.showEmptyView();

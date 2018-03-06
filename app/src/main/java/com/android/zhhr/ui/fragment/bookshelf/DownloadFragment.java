@@ -3,6 +3,7 @@ package com.android.zhhr.ui.fragment.bookshelf;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
@@ -19,6 +20,7 @@ import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.LogUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +33,10 @@ import butterknife.Bind;
 public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
+
+    @Bind(R.id.rl_empty_view)
+    RelativeLayout mEmptyView;
+
     private DownloadAdapter mAdapter;
 
     @Override
@@ -82,18 +88,19 @@ public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> i
 
     @Override
     public void showErrorView(String throwable) {
-        ShowToast("重新加载");
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void fillData(List<Comic> data) {
         mAdapter.updateWithClear(data);
-
+        mEmptyView.setVisibility(View.GONE);
     }
 
     @Override
     public void showEmptyView() {
-        mAdapter.updateWithClear(null);
+        mAdapter.updateWithClear(new ArrayList<Comic>());
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
