@@ -33,6 +33,23 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
         mHistoryList = new ArrayList<>();
     }
 
+    public void uptdateToSelected(int position){
+        if(mMap.get(position)!=null&&mMap.get(position).equals(Constants.CHAPTER_FREE)){
+            SelectedNum++;
+            mMap.put(position,Constants.CHAPTER_SELECTED);
+            if(SelectedNum == mHistoryList.size()){
+                mView.addAll();
+                isSelectedAll = true;
+            }
+        }else if(mMap.get(position)!=null&&mMap.get(position).equals(Constants.CHAPTER_SELECTED)){
+            mMap.put(position,Constants.CHAPTER_FREE);
+            SelectedNum--;
+            isSelectedAll = false;
+            mView.removeAll();
+        }
+        mView.updateListItem(mMap,position);
+    }
+
     public void SelectOrMoveAll(){
         if(!isSelectedAll){
             if(mHistoryList!=null&&mHistoryList.size()!=0){
@@ -164,7 +181,31 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
             }
         }
         mHistoryList = history;
-        resetSelect(history);
+        resetSelect();
         return history;
+    }
+
+    /**
+     * 重置选择信息
+     */
+    public void resetSelect(){
+        for(int i=0;i<mHistoryList.size();i++){
+            if(!mMap.containsKey(i)){
+                if(isSelectedAll){
+                    mMap.put(i,Constants.CHAPTER_SELECTED);
+                }else{
+                    mMap.put(i,Constants.CHAPTER_FREE);
+                }
+            }
+        }
+    }
+
+    public void clearSelect(){
+        SelectedNum = 0;
+        isSelectedAll = false;
+        for(int i=0;i<mHistoryList.size();i++){
+            mMap.put(i,Constants.CHAPTER_FREE);
+        }
+        mView.updateList(mMap);
     }
 }

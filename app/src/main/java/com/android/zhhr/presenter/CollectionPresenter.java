@@ -39,7 +39,7 @@ public class CollectionPresenter extends SelectPresenter<ICollectionView>{
             public void onNext(List<Comic> comics) {
                 mComics= comics;
                 mView.fillData(comics);
-                resetSelect(mComics);
+                resetSelect();
             }
         });
     }

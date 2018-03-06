@@ -109,9 +109,8 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
 
     public void OnEditList(boolean isEdit){
         if(mAdapter.isEditing()!=isEdit){
-            mAdapter.setmMap(new HashMap<Integer, Integer>());
+            mPresenter.clearSelect();
             mAdapter.setEditing(isEdit);
-            mAdapter.notifyDataSetChanged();
         }
     }
 

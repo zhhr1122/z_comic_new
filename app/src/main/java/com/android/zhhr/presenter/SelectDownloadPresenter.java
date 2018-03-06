@@ -134,6 +134,10 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
         if(map.get(position)!=null&&map.get(position).equals(Constants.CHAPTER_FREE)){
             SelectedNum++;
             map.put(position,Constants.CHAPTER_SELECTED);
+            if(SelectedNum == map.size()){
+                mView.addAll();
+                isSelectedAll = true;
+            }
         }else if(map.get(position)!=null&&map.get(position).equals(Constants.CHAPTER_SELECTED)){
             map.put(position,Constants.CHAPTER_FREE);
             SelectedNum--;

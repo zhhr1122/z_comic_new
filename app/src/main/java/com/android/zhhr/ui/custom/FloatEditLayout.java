@@ -49,12 +49,6 @@ public class FloatEditLayout extends RelativeLayout{
             @Override
             public void onClick(View v) {
                 if(listener!=null){
-                    if(!isSelected){
-                        addAll();
-                    }else{
-                        removeAll();
-                    }
-                    isSelected = !isSelected;
                     listener.OnClickSelect();
                 }
             }
