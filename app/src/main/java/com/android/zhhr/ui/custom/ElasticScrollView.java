@@ -61,7 +61,9 @@ public class ElasticScrollView extends ScrollView {
     protected void onScrollChanged(int x, int y, int oldx, int oldy) {
         super.onScrollChanged(x, y, oldx, oldy);
         if(mRecyclerView.getHeight()-y+DisplayUtil.getBottomStatusHeight(context) == DisplayUtil.dip2px(context,534)){
-            listener.OnScrollToBottom();
+            if(listener!=null){
+                listener.OnScrollToBottom();
+            }
         }
     }
 

@@ -27,6 +27,7 @@ import io.reactivex.observers.DisposableObserver;
 public class HistoryPresenter extends SelectPresenter<ICollectionView>{
     int page = 1;
     private boolean isloadingdata;
+    //带有标题的列表总数 如 今天 三天内 一星期之内
     private List<Comic> mHistoryList;
 
     public HistoryPresenter(Activity context, ICollectionView view) {
@@ -38,7 +39,7 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
         if(mMap.get(position)!=null&&mMap.get(position).equals(Constants.CHAPTER_FREE)){
             SelectedNum++;
             mMap.put(position,Constants.CHAPTER_SELECTED);
-            if(SelectedNum == mHistoryList.size()){
+            if(SelectedNum == mComics.size()){
                 mView.addAll();
                 isSelectedAll = true;
             }
@@ -132,10 +133,8 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
                 public void onNext(List<Comic> comics) {
                     page++;
                     mComics.addAll(comics);
-                    if(comics.size()!=0){
-                        mView.fillData(addTitle(comics));
-                        isloadingdata = false;
-                    }
+                    mView.fillData(addTitle(comics));
+                    isloadingdata = false;
                 }
             });
         }
@@ -232,36 +231,56 @@ public class HistoryPresenter extends SelectPresenter<ICollectionView>{
             }
         }
         if(!isSelectedAll){
-            mModel.deleteHistoryComic(mDeleteComics,observer);
+            mModel.deleteHistoryComic(mDeleteComics, new DisposableObserver<List<Comic>>() {
+                @Override
+                public void onNext(@NonNull List<Comic> comics) {
+                    page = 1;
+                    clearSelect();
+                    mComics.clear();
+                    mComics.addAll(comics);
+                    if(comics.size()!=0){
+                        mView.fillData(addTitle(comics));
+                    }else{
+                        mView.showEmptyView();
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+                    mView.quitEdit();
+                }
+            });
         }else{
-            mModel.deleteHistoryComic(observer);
+            mModel.deleteHistoryComic(new DisposableObserver<List<Comic>>() {
+                @Override
+                public void onNext(@NonNull List<Comic> comics) {
+                    page = 1;
+                    clearSelect();
+                    mComics.clear();
+                    mComics.addAll(comics);
+                    if(comics.size()!=0){
+                        mView.fillData(addTitle(comics));
+                    }else{
+                        mView.showEmptyView();
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+                    mView.quitEdit();
+                }
+            });
         }
 
     }
-
-    DisposableObserver observer = new DisposableObserver<List<Comic>>() {
-
-        @Override
-        public void onNext(@NonNull List<Comic> comics) {
-            page = 1;
-            clearSelect();
-            mComics.clear();
-            mComics.addAll(comics);
-            if(comics.size()!=0){
-                mView.fillData(addTitle(comics));
-            }else{
-                mView.showEmptyView();
-            }
-        }
-
-        @Override
-        public void onError(@NonNull Throwable e) {
-
-        }
-
-        @Override
-        public void onComplete() {
-            mView.quitEdit();
-        }
-    };
 }
