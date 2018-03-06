@@ -14,11 +14,13 @@ import com.android.zhhr.ui.adapter.HistoryAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.ElasticScrollView;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
+import com.android.zhhr.ui.fragment.base.BaseBookShelfFragment;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.IntentUtil;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -27,7 +29,7 @@ import butterknife.Bind;
  * Created by 皓然 on 2017/8/7.
  */
 
-public class HistoryFragment extends BaseFragment<HistoryPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
+public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
     private HistoryAdapter mAdapter;
@@ -122,13 +124,39 @@ public class HistoryFragment extends BaseFragment<HistoryPresenter> implements I
     public void onItemClick(RecyclerView parent, View view, int position) {
         if(mAdapter.getItems(position) instanceof HomeTitle){
 
-        }else{
+        }else if(!mAdapter.isEditing()){
             Comic comic = mAdapter.getItems(position);
             IntentUtil.ToComicChapter(mActivity,comic.getCurrentChapter(),comic);
+        }else{
+            mPresenter.uptdateToSelected(position);
         }
     }
 
     public void OnEditList(boolean isEdit){
+        mAdapter.setmMap(new HashMap<Integer, Integer>());
+        mAdapter.setEditing(isEdit);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateList(HashMap map) {
+        mAdapter.setmMap(map);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListItem(HashMap map, int position) {
+        mAdapter.setmMap(map);
+        mAdapter.notifyItemChanged(position,"isNotNull");
+    }
+
+    @Override
+    public void addAll() {
+
+    }
+
+    @Override
+    public void removeAll() {
+
     }
 }

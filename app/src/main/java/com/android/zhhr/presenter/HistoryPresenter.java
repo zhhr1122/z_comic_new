@@ -22,17 +22,12 @@ import io.reactivex.observers.DisposableObserver;
  * Created by 皓然 on 2017/8/14.
  */
 
-public class HistoryPresenter extends BasePresenter<ICollectionView>{
-
-    private ComicModule mModel;
-    private List<Comic> mLists;
+public class HistoryPresenter extends SelectPresenter<ICollectionView>{
     int page = 1;
     private boolean isloadingdata;
 
     public HistoryPresenter(Activity context, ICollectionView view) {
         super(context, view);
-        this.mModel = new ComicModule(context);
-        mLists = new ArrayList<>();
     }
 
 
@@ -53,8 +48,8 @@ public class HistoryPresenter extends BasePresenter<ICollectionView>{
 
             @Override
             public void onNext(List<Comic> comics) {
-                mLists.clear();
-                mLists.addAll(comics);
+                mComics.clear();
+                mComics.addAll(comics);
                 mView.fillData(addTitle(comics));
             }
         });
@@ -83,7 +78,7 @@ public class HistoryPresenter extends BasePresenter<ICollectionView>{
                 @Override
                 public void onNext(List<Comic> comics) {
                     page++;
-                    mLists.addAll(comics);
+                    mComics.addAll(comics);
                     mView.fillData(addTitle(comics));
                     isloadingdata = false;
                 }
@@ -98,21 +93,21 @@ public class HistoryPresenter extends BasePresenter<ICollectionView>{
         List<Comic> earlierdays = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         Long currentMillisecond = calendar.getTimeInMillis();
-        for(int i=0;i<mLists.size();i++){
-            long millisecond  = mLists.get(i).getClickTime();
+        for(int i=0;i<mComics.size();i++){
+            long millisecond  = mComics.get(i).getClickTime();
             //间隔秒
             Long spaceSecond = (currentMillisecond - millisecond) / 1000;
             if (spaceSecond / (60 * 60) < 24) {
-                todays.add(mLists.get(i));
+                todays.add(mComics.get(i));
 
             } else if (spaceSecond/(60*60*24)<3){
-                treedays.add(mLists.get(i));
+                treedays.add(mComics.get(i));
 
             } else if (spaceSecond/(60*60*24)<7){
-                weekenddays.add(mLists.get(i));
+                weekenddays.add(mComics.get(i));
 
             } else {
-                earlierdays.add(mLists.get(i));
+                earlierdays.add(mComics.get(i));
             }
         }
         List<Comic> history = new ArrayList<>();
@@ -132,14 +127,14 @@ public class HistoryPresenter extends BasePresenter<ICollectionView>{
             history.add(new HomeTitle("更早"));
             history.addAll(earlierdays);
         }
-        if(mLists.size()>=12){
+        if(mComics.size()>=12){
             if(comics.size()==0){
                 history.add(new LoadingItem(false));
             }else{
                 history.add(new LoadingItem(true));
             }
         }
-
+        resetSelect(history);
         return history;
     }
 }

@@ -102,14 +102,14 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
     }
 
     @Override
-    public void updateDownloadList(HashMap map) {
+    public void updateList(HashMap map) {
         mAdapter.setMap(map);
         mAdapter.notifyDataSetChanged();
         mSelectedNum.setText("已选择"+mPresenter.getSelectedNum()+"话");
     }
 
     @Override
-    public void updateDownloadListItem(HashMap map, int position) {
+    public void updateListItem(HashMap map, int position) {
         mAdapter.setMap(map);
         if(!mAdapter.isOrder()){
             position = map.size()-position-1;

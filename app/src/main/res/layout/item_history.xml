@@ -61,6 +61,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/iv_select"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

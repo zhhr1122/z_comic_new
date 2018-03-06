@@ -19,6 +19,7 @@ import com.android.zhhr.presenter.BookShelfPresenter;
 import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.adapter.BookShelfFragmentAdapter;
 import com.android.zhhr.ui.custom.FloatEditLayout;
+import com.android.zhhr.ui.fragment.base.BaseBookShelfFragment;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.fragment.bookshelf.CollectionFragment;
 import com.android.zhhr.ui.fragment.bookshelf.DownloadFragment;
@@ -42,7 +43,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
 
     BookShelfFragmentAdapter mAdapter;
     protected FragmentManager fragmentManager;
-    protected List<BaseFragment> fragments;
+    protected List<BaseBookShelfFragment> fragments;
     @Bind(R.id.tv_download)
     TextView mDownload;
     @Bind(R.id.tv_history)
@@ -74,11 +75,6 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     }
 
     @Override
-    public void OnEditList(boolean isEditing) {
-
-    }
-
-    @Override
     protected int getLayoutId() {
         return R.layout.fragment_bookshelf;
     }
@@ -106,7 +102,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
                 if(isEditing){
                     mEdit.setImageResource(R.mipmap.edit);
                     mainActivity.setEditBottomVisible(View.GONE);
-                    showEditModel(fragments.get(position),false);
+                    showEditModel(fragments.get(mViewpager.getCurrentItem()),false);
                     isEditing = false;
                 }
             }
@@ -189,7 +185,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
         isEditing = !isEditing;
     }
 
-    private void showEditModel(BaseFragment fragment,boolean isEdit) {
+    private void showEditModel(BaseBookShelfFragment fragment, boolean isEdit) {
         fragment.OnEditList(isEdit);
     }
 }

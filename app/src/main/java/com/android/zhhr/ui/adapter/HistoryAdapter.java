@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.zhhr.R;
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.LoadingItem;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerHolder;
+import com.android.zhhr.ui.adapter.base.BookShelfAdapter;
+import com.android.zhhr.utils.LogUtil;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import java.util.List;
  * Created by 皓然 on 2017/8/14.
  */
 
-public class HistoryAdapter extends BaseRecyclerAdapter<Comic>{
+public class HistoryAdapter extends BookShelfAdapter<Comic> {
     public static final int ITEM_TITLE = 0;
     public static final int ITEM_FULL = 1;
     public static final int ITEM_LOADING = 2;
@@ -62,6 +65,15 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Comic>{
                     holder.setText(R.id.tv_history_title,((HomeTitle)item).getItemTitle());
                     break;
                 case ITEM_FULL:
+                    if(!isEditing){
+                        holder.setImageResource(R.id.iv_select, R.mipmap.continue_read);
+                    }else{
+                        if(mMap.size()!=0&&mMap.get(position) == Constants.CHAPTER_SELECTED){
+                            holder.setImageResource(R.id.iv_select,R.mipmap.item_selected);
+                        }else{
+                            holder.setImageResource(R.id.iv_select,R.mipmap.item_select_history);
+                        }
+                    }
                     holder.setText(R.id.tv_title,item.getTitle());
                     holder.setImageByUrl(R.id.iv_cover,item.getCover());
                     int currentpage = item.getCurrent_page();

@@ -11,10 +11,12 @@ import com.android.zhhr.ui.adapter.CollectAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
+import com.android.zhhr.ui.fragment.base.BaseBookShelfFragment;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.IntentUtil;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -23,7 +25,7 @@ import butterknife.Bind;
  * Created by 皓然 on 2017/8/7.
  */
 
-public class CollectionFragment extends BaseFragment<CollectionPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
+public class CollectionFragment extends BaseBookShelfFragment<CollectionPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
     private CollectAdapter mAdapter;
@@ -100,13 +102,36 @@ public class CollectionFragment extends BaseFragment<CollectionPresenter> implem
             Comic comic = mAdapter.getItems(position);
             IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
         }else{
-
+            mPresenter.uptdateToSelected(position);
         }
 
     }
 
     public void OnEditList(boolean isEdit){
+        mAdapter.setmMap(new HashMap<Integer, Integer>());
         mAdapter.setEditing(isEdit);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateList(HashMap map) {
+        mAdapter.setmMap(map);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListItem(HashMap map, int position) {
+        mAdapter.setmMap(map);
+        mAdapter.notifyItemChanged(position,"isNotNull");
+    }
+
+    @Override
+    public void addAll() {
+
+    }
+
+    @Override
+    public void removeAll() {
+
     }
 }

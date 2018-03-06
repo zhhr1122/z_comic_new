@@ -67,11 +67,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     }
 
     @Override
-    public void OnEditList(boolean isEditing) {
-
-    }
-
-    @Override
     protected void initView(View view, Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         //设置图片加载器

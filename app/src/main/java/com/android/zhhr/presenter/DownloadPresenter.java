@@ -18,13 +18,11 @@ import io.reactivex.observers.DisposableObserver;
  * Created by 皓然 on 2017/8/14.
  */
 
-public class DownloadPresenter extends BasePresenter<ICollectionView>{
+public class DownloadPresenter extends SelectPresenter<ICollectionView>{
 
-    private ComicModule mModel;
 
     public DownloadPresenter(Activity context, ICollectionView view) {
         super(context, view);
-        this.mModel = new ComicModule(context);
     }
 
 
@@ -44,7 +42,9 @@ public class DownloadPresenter extends BasePresenter<ICollectionView>{
 
             @Override
             public void onNext(List<Comic> comics) {
+                mComics = comics;
                 mView.fillData(comics);
+                resetSelect(comics);
             }
         });
     }

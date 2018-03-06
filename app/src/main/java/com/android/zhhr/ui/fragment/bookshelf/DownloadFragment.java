@@ -13,6 +13,7 @@ import com.android.zhhr.ui.adapter.DownloadAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
+import com.android.zhhr.ui.fragment.base.BaseBookShelfFragment;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.IntentUtil;
@@ -27,7 +28,7 @@ import butterknife.Bind;
  * Created by 皓然 on 2017/8/7.
  */
 
-public class DownloadFragment extends BaseFragment<DownloadPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
+public class DownloadFragment extends BaseBookShelfFragment<DownloadPresenter> implements ICollectionView<List<Comic>>,BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_bookshelf)
     RecyclerView mRecycleView;
     private DownloadAdapter mAdapter;
@@ -101,11 +102,39 @@ public class DownloadFragment extends BaseFragment<DownloadPresenter> implements
 
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
-        Comic comic = mAdapter.getItems(position);
-        IntentUtil.ToDownloadListActivity(mActivity,new HashMap<Integer, Integer>(),comic);
+        if(!mAdapter.isEditing()){
+            Comic comic = mAdapter.getItems(position);
+            IntentUtil.ToDownloadListActivity(mActivity,new HashMap<Integer, Integer>(),comic);
+        }else{
+            mPresenter.uptdateToSelected(position);
+        }
+    }
+
+    @Override
+    public void addAll() {
+
+    }
+
+    @Override
+    public void removeAll() {
+
     }
 
     public void OnEditList(boolean isEdit){
+        mAdapter.setmMap(new HashMap<Integer, Integer>());
+        mAdapter.setEditing(isEdit);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateList(HashMap map) {
+        mAdapter.setmMap(map);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListItem(HashMap map, int position) {
+        mAdapter.setmMap(map);
+        mAdapter.notifyItemChanged(position,"isNotNull");
     }
 }

@@ -116,7 +116,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
                 }
                 //自动选择
                 AutoSelected();
-                mView.updateDownloadList(map);
+                mView.updateList(map);
             }
 
             @Override
@@ -140,7 +140,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
             isSelectedAll = false;
             mView.removeAll();
         }
-        mView.updateDownloadListItem(map,position);
+        mView.updateListItem(map,position);
     }
 
     public void SelectOrMoveAll(){
@@ -166,7 +166,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
             }
         }
         isSelectedAll = !isSelectedAll;
-        mView.updateDownloadList(map);
+        mView.updateList(map);
     }
 
     public void startDownload() {

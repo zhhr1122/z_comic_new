@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.android.zhhr.ui.fragment.base.BaseBookShelfFragment;
 import com.android.zhhr.ui.fragment.base.BaseFragment;
 
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.List;
 
 public class BookShelfFragmentAdapter extends FragmentPagerAdapter {
 
-    private List<BaseFragment> fraglist;
-    public BookShelfFragmentAdapter(FragmentManager fm, List<BaseFragment> fraglist) {
+    private List<BaseBookShelfFragment> fraglist;
+    public BookShelfFragmentAdapter(FragmentManager fm, List<BaseBookShelfFragment> fraglist) {
         super(fm);
         this.fraglist=fraglist;
     }
