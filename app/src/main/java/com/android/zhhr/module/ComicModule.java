@@ -969,10 +969,9 @@ public class ComicModule {
             public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
                     for (int i = 0; i < mLists.size(); i++) {
-                        Comic items = mLists.get(i);
-                        items.setStateInte(0);
-                        mHelper.update(items);
+                        mLists.get(i).setStateInte(-1);
                     }
+                    mHelper.insertList(mLists);
                     List<Comic> mComics = mHelper.queryDownloadComic();
                     observableEmitter.onNext(mComics);
                 } catch (Exception e) {

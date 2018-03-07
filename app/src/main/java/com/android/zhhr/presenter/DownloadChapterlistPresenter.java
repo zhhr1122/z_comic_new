@@ -605,8 +605,10 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                 mLists.clear();
                 mLists.addAll(comics);
                 if(comics.size()>0){
+                    mComic.setDownload_num_finish(comics.size());
                     mView.fillData(comics);
                 }else{
+                    mComic.setStateInte(-1);
                     mContext.finish();
                 }
             }
@@ -618,6 +620,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
 
             @Override
             public void onComplete() {
+                helper.update(mComic);
                 mView.quitEdit();
             }
         });
