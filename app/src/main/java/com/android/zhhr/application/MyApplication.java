@@ -27,7 +27,7 @@ public class MyApplication extends Application {
             ZAdSdk.getInstance().setEnableLog(true);
         }*/
         //内存溢出测试
-        LeakCanary.install(this);
+        //LeakCanary.install(this);
         //Log开关
         LogUtil.init(LogUtil.VERBOSE,"zhhr1122");
     }

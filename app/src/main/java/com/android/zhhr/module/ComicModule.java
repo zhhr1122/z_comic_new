@@ -970,6 +970,7 @@ public class ComicModule {
                 try {
                     for (int i = 0; i < mLists.size(); i++) {
                         mLists.get(i).setStateInte(-1);
+                        FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.COMIC + mLists.get(i).getId());
                     }
                     mHelper.insertList(mLists);
                     List<Comic> mComics = mHelper.queryDownloadComic();
@@ -987,7 +988,7 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void deleteDownloadItem(final List<DBDownloadItems> mLists, final long comic_id ,Observer observer) {
+    public void deleteDownloadItem(final List<DBDownloadItems> mLists, final Comic comic ,Observer observer) {
         Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
 
             @Override
@@ -995,9 +996,11 @@ public class ComicModule {
                 try {
                     for (int i = 0; i < mLists.size(); i++) {
                         mLists.get(i).setStateInte(-1);
+                        mLists.get(i).setChapters_path(new ArrayList<String>());
+                        FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.COMIC + comic.getId() + "/" + mLists.get(i).getChapters());
                     }
                     mHelper.insertList(mLists);
-                    List<DBDownloadItems> Items = mHelper.queryDownloadItems(comic_id);
+                    List<DBDownloadItems> Items = mHelper.queryDownloadItems(comic.getId());
                     observableEmitter.onNext(Items);
                 } catch (Exception e) {
                     observableEmitter.onError(e);

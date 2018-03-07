@@ -44,7 +44,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     //保存自己选择状态的MAP
     private HashMap<Integer,Integer> selectMap;
     //下载章节数，同时允许存在四个
-    private final static int downloadNum = 4;
+    private final static int downloadNum = 1;
     //已经下载完成的个数
     int downloadedNum = 0;
     //是否选择了全部
@@ -122,7 +122,6 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     }
                     mComic.setDownload_num_finish(downloadedNum);
                     mComic.setDownload_num(items.size());
-                    //helper.update(mComic);
                 }
 
             }
@@ -211,11 +210,11 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
             }
         }
         //中断整个章节的下载，并且切换章节
-        if (downloadMap.containsKey(position)&&isContinue){
-            downloadMap.remove(position);
+        if (downloadMap.containsKey(info.getChapters())&&isContinue){
+            downloadMap.remove(info.getChapters());
             for(int i=0;i<mLists.size();i++){
                 if(mLists.get(i).getState()==DownState.NONE){
-                    downloadMap.put(i,mLists.get(i));
+                    downloadMap.put(mLists.get(i).getChapters(),mLists.get(i));
                     startDown(mLists.get(i),i);
                     break;
                 }
@@ -231,7 +230,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      */
     public void startDown(final DBDownloadItems info, final int position) {
         //加入到下载队列中
-        downloadMap.put(position,info);
+        downloadMap.put(info.getChapters(),info);
         //首先判断是否已经获取过下载地址
         if(info.getNum()==0){
             //获取下载地址
@@ -273,7 +272,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     //寻找下一话并开始下载
                     for(int i=0;i<mLists.size();i++){
                         if(mLists.get(i).getState()==DownState.NONE){
-                            downloadMap.put(i,mLists.get(i));
+                            downloadMap.put(mLists.get(i).getChapters(),mLists.get(i));
                             //开始下载下一话
                             startDown(mLists.get(i),i);
                             break;
@@ -383,13 +382,13 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                 mComic.setDownload_num_finish(downloadedNum);
                 //修改状态
                 info.setState(DownState.FINISH);
-                if(downloadMap.containsKey(position)){
-                    downloadMap.remove(position);
+                if(downloadMap.containsKey(info.getChapters())){
+                    downloadMap.remove(info.getChapters());
                 }
                 //遍历去寻找下一话
                 for(int i=0;i<mLists.size();i++){
                     if(mLists.get(i).getState()==DownState.NONE){
-                        downloadMap.put(i,mLists.get(i));
+                        downloadMap.put(mLists.get(i).getChapters(),mLists.get(i));
                         //开始下载下一话
                         startDown(mLists.get(i),i);
                         break;
@@ -423,7 +422,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
             mView.updateView(position);
             for(int i=0;i<mLists.size();i++){
                 if(mLists.get(i).getState()==DownState.NONE){
-                    downloadMap.put(i,mLists.get(i));
+                    downloadMap.put(mLists.get(i).getChapters(),mLists.get(i));
                     //开始下载下一话
                     startDown(mLists.get(i),i);
                     break;
@@ -595,18 +594,38 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         for(int i=0;i<mLists.size();i++){
             if(selectMap.get(i) == Constants.CHAPTER_SELECTED){
                 mDeleteComics.add(mLists.get(i));
+                if(downloadMap.containsKey(mLists.get(i).getChapters())){
+                    downloadMap.remove(mLists.get(i).getChapters());//如果删除的的正好在下载队列中，则移除
+                }
             }
         }
-        mModel.deleteDownloadItem(mDeleteComics, mComic.getId(),new DisposableObserver<List<DBDownloadItems>>() {
+        mModel.deleteDownloadItem(mDeleteComics, mComic,new DisposableObserver<List<DBDownloadItems>>() {
 
             @Override
-            public void onNext(@NonNull List<DBDownloadItems> comics) {
-                clearSelect();
+            public void onNext(@NonNull List<DBDownloadItems> items) {
+                downloadedNum = 0;
                 mLists.clear();
-                mLists.addAll(comics);
-                if(comics.size()>0){
-                    mComic.setDownload_num_finish(comics.size());
-                    mView.fillData(comics);
+                if(items!=null&&items.size()!=0){
+                    //刷新列表
+                    mLists.addAll(items);
+                    mView.fillData(mLists);
+                    //初始化选择
+                    clearSelect();
+                    //判断有多少是之前已经下载过的
+                    for(int i=0;i<items.size();i++){
+                        if(items.get(i).getState() == DownState.FINISH){
+                            downloadedNum++;
+                        }
+                    }
+                    //判断是否全部下载完了
+                    if(downloadedNum == mLists.size()){
+                        mView.onDownloadFinished();
+                        mComic.setState(DownState.FINISH);
+                    }else{
+                        mComic.setState(DownState.DOWN);
+                    }
+                    mComic.setDownload_num_finish(downloadedNum);
+                    mComic.setDownload_num(items.size());
                 }else{
                     mComic.setStateInte(-1);
                     mContext.finish();
@@ -620,7 +639,6 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
 
             @Override
             public void onComplete() {
-                helper.update(mComic);
                 mView.quitEdit();
             }
         });
