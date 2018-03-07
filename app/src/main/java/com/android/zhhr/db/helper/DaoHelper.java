@@ -170,7 +170,7 @@ public class DaoHelper<T> {
 
     public List<DBDownloadItems> queryDownloadItems(long comic_id){
         List<DBDownloadItems> list= manager.getDaoSession().getDBDownloadItemsDao().queryBuilder()
-                .where(DBDownloadItemsDao.Properties.Comic_id.eq(comic_id))
+                .where(DBDownloadItemsDao.Properties.Comic_id.eq(comic_id),DBDownloadItemsDao.Properties.StateInte.notEq(-1))
                 .list();
         return list;
     }

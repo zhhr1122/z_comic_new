@@ -26,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageView
-            android:layout_marginRight="10dp"
+            android:id="@+id/iv_edit"
+            android:padding="10dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/edit"
@@ -104,9 +105,6 @@
     <android.support.v7.widget.RecyclerView
         android:layout_above="@id/rl_all"
         android:layout_below="@id/rl_order"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -153,5 +151,7 @@
             />
 
     </RelativeLayout>
+
+    <include layout="@layout/layout_edit"></include>
 
 </RelativeLayout>

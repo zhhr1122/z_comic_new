@@ -18,6 +18,7 @@ import com.android.zhhr.ui.adapter.DownloadlistAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.view.IDownloadlistView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -115,12 +116,27 @@ public class DownloadlistActivity extends BaseActivity<DownloadlistPresenter> im
     }
 
     @Override
-    public void onSelectALL() {
+    public void updateList(HashMap map) {
 
     }
 
     @Override
-    public void onDeleteAll() {
+    public void updateListItem(HashMap map, int position) {
+
+    }
+
+    @Override
+    public void addAll() {
+
+    }
+
+    @Override
+    public void removeAll() {
+
+    }
+
+    @Override
+    public void quitEdit() {
 
     }
 

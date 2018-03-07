@@ -9,18 +9,16 @@ import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.IDownloadlistView;
-import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import io.reactivex.Observer;
@@ -34,7 +32,6 @@ import io.reactivex.observers.DisposableObserver;
 
 public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistView>{
     private Comic mComic;
-    private HashMap<Integer,Integer> mMap;
     private ComicModule mModel;
     private ArrayList<DBDownloadItems> mLists;
     private DaoHelper helper;
@@ -42,10 +39,18 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     private LinkedHashMap<String, DownloadComicDisposableObserver> subMap;
     //下载章节队列
     private TreeMap<Integer,DBDownloadItems> downloadMap;
+    //从上个页面获取的map
+    private HashMap<Integer,Integer> mMap;
+    //保存自己选择状态的MAP
+    private HashMap<Integer,Integer> selectMap;
     //下载章节数，同时允许存在四个
     private final static int downloadNum = 4;
     //已经下载完成的个数
     int downloadedNum = 0;
+    //是否选择了全部
+    private boolean isSelectedAll;
+    //选择个数
+    private int SelectedNum;
     /**
      * 0 下载中
      * 1 停止下载
@@ -56,11 +61,21 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
     public static final int FINISH = 2;
     public int isAllDownload = DOWNLOADING;
 
+    private boolean isEditing;
+
+    public boolean isEditing() {
+        return isEditing;
+    }
+
+    public void setEditing(boolean editing) {
+        isEditing = editing;
+    }
 
     public DownloadChapterlistPresenter(Activity context, IDownloadlistView view, Intent intent) {
         super(context, view);
         mComic= (Comic) intent.getSerializableExtra(Constants.COMIC);
         mMap = (HashMap<Integer, Integer>) intent.getSerializableExtra(Constants.COMIC_SELECT_DOWNLOAD);
+        selectMap = new HashMap<>();
         this.mModel = new ComicModule(mContext);
         helper = new DaoHelper(context);
         mLists = new ArrayList<>();
@@ -76,6 +91,8 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 初始化按照章節下載
      */
     public void initData() {
+        downloadedNum = 0;
+        mLists = new ArrayList<>();
         //把数据存入数据库/从数据库拉取数据
         mModel.getDownloadItemsFromDB(mComic,mMap, new DisposableObserver<List<DBDownloadItems>>() {
             @Override
@@ -84,6 +101,8 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     //刷新列表
                     mLists.addAll(items);
                     mView.fillData(mLists);
+                    //初始化选择
+                    clearSelect();
                     //判断有多少是之前已经下载过的
                     for(int i=0;i<items.size();i++){
                         if(items.get(i).getState() == DownState.FINISH){
@@ -300,6 +319,37 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         }
     }
 
+    public void onItemClick(DBDownloadItems info, int position) {
+        if(isEditing()){
+            uptdateToSelected(position);
+        }else{
+            switch (info.getState()){
+                case NONE:
+                    stop(info,position,false);
+                    break;
+                case START:
+                    //mPresenter.startDown(info);
+                    break;
+                case PAUSE:
+                    //mPresenter.startDown(info,position);
+                    break;
+                case DOWN:
+                    stop(info,position,true);
+                    break;
+                case STOP:
+                    ready(info,position);
+                    //mPresenter.startDown(info,position);
+                    break;
+                case ERROR:
+                    ready(info,position);
+                    break;
+                case  FINISH:
+                    ToComicChapter(info);
+                    break;
+            }
+        }
+    }
+
     /**
      * 下载图片的回调
      */
@@ -449,4 +499,128 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         }
         mView.getDataFinish();
     }
+
+    /**
+     * 选择相关方法
+     */
+    /**
+     * 清除map信息
+     */
+    public void clearSelect(){
+        SelectedNum = 0;
+        isSelectedAll = false;
+        for(int i=0;i<mLists.size();i++){
+            selectMap.put(i,Constants.CHAPTER_FREE);
+        }
+    }
+
+    /**
+     * 选择或者取消选择
+     * @param position
+     */
+    public void uptdateToSelected(int position){
+        if(selectMap.get(position)!=null&&selectMap.get(position).equals(Constants.CHAPTER_FREE)){
+            SelectedNum++;
+            selectMap.put(position,Constants.CHAPTER_SELECTED);
+            if(SelectedNum == mLists.size()){
+                mView.addAll();
+                isSelectedAll = true;
+            }
+        }else if(selectMap.get(position)!=null&&selectMap.get(position).equals(Constants.CHAPTER_SELECTED)){
+            selectMap.put(position,Constants.CHAPTER_FREE);
+            SelectedNum--;
+            isSelectedAll = false;
+            mView.removeAll();
+        }
+        mView.updateListItem(selectMap,position);
+    }
+
+    /**
+     * 选择或者移除全部
+     */
+    public void SelectOrMoveAll(){
+        if(!isSelectedAll){
+            if(mLists!=null&&mLists.size()!=0){
+                for(int i=0;i<mLists.size();i++){
+                    if(selectMap.get(i) == Constants.CHAPTER_FREE){
+                        selectMap.put(i, Constants.CHAPTER_SELECTED);
+                        SelectedNum++;
+                    }
+                }
+                mView.addAll();
+            }
+        }else{
+            if(mLists!=null&&mLists.size()!=0){
+                for(int i=0;i<mLists.size();i++){
+                    if(selectMap.get(i) == Constants.CHAPTER_SELECTED){
+                        selectMap.put(i, Constants.CHAPTER_FREE);
+                    }
+                }
+                SelectedNum = 0;
+                mView.removeAll();
+            }
+        }
+        isSelectedAll = !isSelectedAll;
+        mView.updateList(selectMap);
+    }
+
+
+    public void ShowDeteleDialog(){
+        if(SelectedNum>0){
+            final CustomDialog customDialog = new CustomDialog(mContext,mComic.getTitle(),"确认删除选中的漫画章节？");
+            customDialog.setListener(new CustomDialog.onClickListener() {
+                @Override
+                public void OnClickConfirm() {
+                    deleteComic();
+                    if (customDialog.isShowing()){
+                        customDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void OnClickCancel() {
+                    if (customDialog.isShowing()){
+                        customDialog.dismiss();
+                    }
+                }
+            });
+            customDialog.show();
+        }else{
+            mView.ShowToast("请选择需要删除的章节数");
+        }
+    }
+
+    public void deleteComic() {
+        List<DBDownloadItems> mDeleteComics = new ArrayList<>();
+        for(int i=0;i<mLists.size();i++){
+            if(selectMap.get(i) == Constants.CHAPTER_SELECTED){
+                mDeleteComics.add(mLists.get(i));
+            }
+        }
+        mModel.deleteDownloadItem(mDeleteComics, mComic.getId(),new DisposableObserver<List<DBDownloadItems>>() {
+
+            @Override
+            public void onNext(@NonNull List<DBDownloadItems> comics) {
+                clearSelect();
+                mLists.clear();
+                mLists.addAll(comics);
+                if(comics.size()>0){
+                    mView.fillData(comics);
+                }else{
+                    mContext.finish();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                mView.quitEdit();
+            }
+        });
+    }
+
 }

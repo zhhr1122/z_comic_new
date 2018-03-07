@@ -40,7 +40,7 @@ public class CollectAdapter extends BookShelfAdapter<Comic> {
             holder.setText(R.id.tv_title,item.getTitle());
             holder.setImageByUrlNone(R.id.iv_image,item.getCover());
             if(item.getChapters()!=null&&item.getChapters().size()!=0){
-                holder.setText(R.id.tv_index_reader,item.getChapters().size()+"话"+"/"+item.getCurrentChapter()+"话");
+                holder.setText(R.id.tv_index_reader,item.getChapters().size()+"话"+"/"+(item.getCurrentChapter()+1)+"话");
             }
         }
     }

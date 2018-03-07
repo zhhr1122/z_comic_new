@@ -1,4 +1,4 @@
-package com.android.zhhr.net;
+package com.android.zhhr.net.Function;
 
 import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.utils.ApiException;

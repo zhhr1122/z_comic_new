@@ -2,10 +2,8 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.MutableContextWrapper;
 
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
@@ -17,11 +15,8 @@ import com.android.zhhr.utils.IntentUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**

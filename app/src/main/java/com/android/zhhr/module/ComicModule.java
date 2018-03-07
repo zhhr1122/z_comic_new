@@ -1,7 +1,6 @@
 package com.android.zhhr.module;
 
 import android.app.Activity;
-import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
@@ -12,7 +11,6 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.HttpResult;
-import com.android.zhhr.data.entity.LoadingItem;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.data.entity.db.DBDownloadItems;
@@ -20,7 +18,8 @@ import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.net.ComicService;
-import com.android.zhhr.net.HttpResultFunc;
+import com.android.zhhr.net.Function.HttpResultFunc;
+import com.android.zhhr.net.Function.RetryFunction;
 import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
@@ -34,12 +33,10 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -54,7 +51,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
@@ -284,6 +280,7 @@ public class ComicModule {
                }
            }
         }).subscribeOn(Schedulers.io())
+               .retryWhen(new RetryFunction())
                .unsubscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
@@ -324,6 +321,7 @@ public class ComicModule {
             //真正调用联网接口
             CacheProviders.getComicCacheInstance()
                     .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                    .retryWhen(new RetryFunction())
                     .map(new Function<Chapters, Object>() {
                         @Override
                         public Object apply(@NonNull Chapters chapters) throws Exception {
@@ -361,6 +359,7 @@ public class ComicModule {
                         return mLists;
                     }
                 })*/
+                .retryWhen(new RetryFunction())
                 .map(new Function<Chapters, Object>() {
                     @Override
                     public Object apply(@NonNull Chapters chapters) throws Exception {
@@ -976,6 +975,31 @@ public class ComicModule {
                     }
                     List<Comic> mComics = mHelper.queryDownloadComic();
                     observableEmitter.onNext(mComics);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                } finally {
+                    observableEmitter.onComplete();
+                }
+            }
+
+        }).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void deleteDownloadItem(final List<DBDownloadItems> mLists, final long comic_id ,Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
+
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
+                try {
+                    for (int i = 0; i < mLists.size(); i++) {
+                        mLists.get(i).setStateInte(-1);
+                    }
+                    mHelper.insertList(mLists);
+                    List<DBDownloadItems> Items = mHelper.queryDownloadItems(comic_id);
+                    observableEmitter.onNext(Items);
                 } catch (Exception e) {
                     observableEmitter.onError(e);
                 } finally {
