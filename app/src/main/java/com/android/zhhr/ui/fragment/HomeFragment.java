@@ -10,6 +10,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.zhhr.R;
@@ -56,6 +57,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     RelativeLayout mActionBar;
     @Bind(R.id.v_actionbar_bg)
     View mActionBarBg;
+    @Bind(R.id.tv_recent)
+    TextView mTvRecent;
+    @Bind(R.id.rl_recent)
+    RelativeLayout mRlRecent;
 
     MainActivity activity;
 
@@ -75,7 +80,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(getActivity(),6);
         layoutManager.setScrollEnabled(false);
         mRecycleView.setLayoutManager(layoutManager);
-        mAdapter = new MainAdapter(mActivity,R.layout.item_hometitle,R.layout.item_homepage,R.layout.item_homepage_full);
+        mAdapter = new MainAdapter(mActivity,R.layout.item_hometitle,R.layout.item_homepage_three,R.layout.item_homepage,R.layout.item_homepage_full);
         mRecycleView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         //mRecycleView.addItemDecoration(new DividerGridItemDecoration(mActivity));
@@ -213,6 +218,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         mBanner.start();
     }
 
+    @Override
+    public void fillRecent(String str) {
+        if(str!=null){
+            mRlRecent.setVisibility(View.VISIBLE);
+            mTvRecent.setText(str);
+        }else{
+            mRlRecent.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void fillData(List<Comic> data) {
@@ -276,7 +291,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
         IntentUtil.ToSearch(getActivity());
     }
 
-    @OnClick({ R.id.ll_category1, R.id.ll_category2, R.id.ll_category3, R.id.ll_category4,R.id.ll_category5 })
+    @OnClick({ R.id.ll_category1, R.id.ll_category2, R.id.ll_category3})
     public void toCategory(View view) {
         switch (view.getId()) {
             case R.id.ll_category1:
@@ -288,14 +303,23 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
             case R.id.ll_category3:
                 showToast("开发中，敬请期待");
                 break;
-            case R.id.ll_category4:
-                showToast("开发中，敬请期待");
-                break;
-            case R.id.ll_category5:
-                showToast("开发中，敬请期待");
-                break;
             default:
                 break;
         }
+    }
+    @OnClick(R.id.iv_recent)
+    public void OnClickClose(){
+        mRlRecent.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.rl_recent)
+    public void OnClickRecnet(){
+        mPresenter.toRecentComic();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getRecent();
     }
 }

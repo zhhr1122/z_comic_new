@@ -30,4 +30,6 @@ public interface IHomeView<T extends BaseBean> extends IBaseView {
 
     void fillBanner(List<T> data);
 
+    void fillRecent(String str);
+
 }

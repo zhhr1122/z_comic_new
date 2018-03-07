@@ -32,17 +32,19 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
     public static final int ITEM_FULL = 3;
     private int itemTitleLayoutId;
     private int itemFullLayoutId;
+    private int itemFullLayoutTreeId;
     private OnItemClickListener mItemClickListener;
 
     public MainAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
     }
 
-    public MainAdapter(Context context, int itemTitleLayoutId,int itemLayoutId,int itemFullLayoutId) {
+    public MainAdapter(Context context, int itemTitleLayoutId,int itemFullLayoutTreeId,int itemLayoutId,int itemFullLayoutId) {
         super(context, itemLayoutId);
         this.itemLayoutId = itemLayoutId;
         this.itemTitleLayoutId = itemTitleLayoutId;
         this.itemFullLayoutId = itemFullLayoutId;
+        this.itemFullLayoutTreeId = itemFullLayoutTreeId;
     }
 
     public MainAdapter(Context context, List<Comic> list, int itemLayoutId) {
@@ -94,6 +96,9 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
     public void convert(BaseRecyclerHolder holder, Comic item, int position) {
         switch (getItemViewType(position)){
             case ITEM_TITLE:
+                if(position == 0){
+                    holder.setVisibility(R.id.v_padding,View.GONE);
+                }
                 holder.setText(R.id.tv_hometitle,((HomeTitle)item).getItemTitle());
                 break;
             case ITEM_FULL:
@@ -120,7 +125,7 @@ public class MainAdapter extends BaseRecyclerAdapter<Comic> {
                 view = inflater.inflate(itemLayoutId, parent, false);
                 break;
             case ITEM_SMALL:
-                view = inflater.inflate(itemLayoutId, parent, false);
+                view = inflater.inflate(itemFullLayoutTreeId, parent, false);
                 break;
             case ITEM_FULL:
                 view = inflater.inflate(itemFullLayoutId, parent, false);

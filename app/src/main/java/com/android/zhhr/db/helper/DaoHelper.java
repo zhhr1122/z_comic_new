@@ -117,6 +117,15 @@ public class DaoHelper<T> {
         return false;
     }
 
+    public Comic findRecentComic(){
+        try{
+            return manager.getDaoSession().getComicDao().queryBuilder().orderDesc(ComicDao.Properties.ClickTime).list().get(0);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
     public List<Comic> queryCollect(){
         List<Comic> list= manager.getDaoSession().getComicDao().queryBuilder()
                 .where(ComicDao.Properties.IsCollected.eq(true))

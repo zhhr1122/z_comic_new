@@ -3,9 +3,11 @@ package com.android.zhhr.presenter;
 import android.app.Activity;
 
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IHomeView;
 import com.android.zhhr.utils.FileUtil;
+import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.PermissionUtils;
 import com.android.zhhr.utils.ShowErrorTextUtil;
@@ -26,6 +28,8 @@ public class HomePresenter extends BasePresenter<IHomeView> {
     private int num = 20;
     private ComicModule mModel;
     private List<Comic> mBanners, mDatas;
+    private DaoHelper mHelper;
+    private Comic recentComic;
 
     public List<Comic> getmBanners() {
         return mBanners;
@@ -38,6 +42,7 @@ public class HomePresenter extends BasePresenter<IHomeView> {
     public HomePresenter(Activity context, IHomeView view) {
         super(context, view);
         this.mModel = new ComicModule(context);
+        mHelper= new DaoHelper(context);
         mBanners = new ArrayList<>();
         mDatas = new ArrayList<>();
     }
@@ -64,7 +69,6 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                     mBanners = comics;
                 }
             }
-
         });
     }
 
@@ -120,4 +124,17 @@ public class HomePresenter extends BasePresenter<IHomeView> {
         });
     }
 
+    public void toRecentComic() {
+        IntentUtil.ToComicChapter(mContext,recentComic.getCurrentChapter(),recentComic);
+    }
+
+    public void getRecent() {
+        recentComic = mHelper.findRecentComic();
+        if(recentComic!=null){
+            String recent = "续看:"+recentComic.getTitle()+" 第"+(recentComic.getCurrentChapter()+1)+"话";
+            mView.fillRecent(recent);
+        }else{
+            mView.fillRecent(null);
+        }
+    }
 }
