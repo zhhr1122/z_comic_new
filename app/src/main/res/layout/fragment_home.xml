@@ -16,7 +16,7 @@
             android:background="@color/colorBg"
             >
             <RelativeLayout
-                android:layout_marginTop="160dp"
+                android:layout_marginTop="200dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -67,15 +67,7 @@
                             android:orientation="vertical"
                             >
                             <ImageView
-                                android:src="@mipmap/fenlei1"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center_horizontal"
-                                />
-                            <TextView
-                                android:layout_marginTop="-5dp"
-                                android:textSize="12dp"
-                                android:text="男生榜"
+                                android:src="@mipmap/home_icon_rank"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -90,15 +82,7 @@
                             android:orientation="vertical"
                             >
                             <ImageView
-                                android:src="@mipmap/fenlei3"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center_horizontal"
-                                />
-                            <TextView
-                                android:layout_marginTop="-5dp"
-                                android:textSize="12dp"
-                                android:text="女生榜"
+                                android:src="@mipmap/home_icon_category"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -113,67 +97,12 @@
                             android:orientation="vertical"
                             >
                             <ImageView
-                                android:src="@mipmap/fenlei2"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center_horizontal"
-                                />
-                            <TextView
-                                android:layout_marginTop="-5dp"
-                                android:textSize="12dp"
-                                android:text="国漫"
+                                android:src="@mipmap/home_icon_new"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 />
                         </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/ll_category4"
-                            android:background="@color/colorBg"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-                            <ImageView
-                                android:src="@mipmap/fenlei4"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center_horizontal"
-                                />
-                            <TextView
-                                android:layout_marginTop="-5dp"
-                                android:textSize="12dp"
-                                android:text="日漫"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/ll_category5"
-                            android:background="@color/colorBg"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-                            <ImageView
-                                android:src="@mipmap/fenlei5"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="center_horizontal"
-                                />
-                            <TextView
-                                android:layout_marginTop="-5dp"
-                                android:textSize="12dp"
-                                android:text="分类"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                />
-                        </LinearLayout>
-
                     </LinearLayout>
                 </LinearLayout>
 
@@ -202,7 +131,35 @@
                 app:indicator_height="8dp"
                 app:indicator_width="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="240dp" />
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/rl_recent"
+                android:paddingRight="10dp"
+                android:layout_marginTop="204dp"
+                android:background="@drawable/background_home_recent"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp">
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tv_recent"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/colorTextColorLight"
+                    android:textSize="12dp"
+                    android:text="最近看的漫画"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/iv_recent"
+                    android:layout_marginLeft="2dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_recent"
+                    android:src="@mipmap/home_icon_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            
         </RelativeLayout>
     </com.android.zhhr.ui.custom.ZElasticRefreshScrollView>
     <RelativeLayout

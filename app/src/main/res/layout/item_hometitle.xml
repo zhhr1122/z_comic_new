@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content">
     <View
+        android:id="@+id/v_padding"
         android:background="@color/colorBgDark"
         android:layout_width="match_parent"
         android:layout_height="10dp"
