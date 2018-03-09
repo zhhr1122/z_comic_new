@@ -11,8 +11,10 @@ import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.MainActivity;
+import com.android.zhhr.ui.activity.RankActivity;
 import com.android.zhhr.ui.activity.SearchActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
+import com.android.zhhr.ui.fragment.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,6 +85,11 @@ public class IntentUtil {
         Intent intent = new Intent(context, DownloadChapterlistActivity.class);
         intent.putExtra(Constants.COMIC_SELECT_DOWNLOAD,map);
         intent.putExtra(Constants.COMIC,comic);
+        context.startActivity(intent);
+    }
+
+    public static void toRankActivity(Context context) {
+        Intent intent = new Intent(context, RankActivity.class);
         context.startActivity(intent);
     }
 }

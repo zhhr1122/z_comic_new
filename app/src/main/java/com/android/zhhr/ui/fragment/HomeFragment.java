@@ -1,5 +1,6 @@
 package com.android.zhhr.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -61,6 +62,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     TextView mTvRecent;
     @Bind(R.id.rl_recent)
     RelativeLayout mRlRecent;
+    @Bind(R.id.tv_hometitle1)
+    TextView mHomeTitle1;
+    @Bind(R.id.tv_hometitle2)
+    TextView mHomeTitle2;
+    @Bind(R.id.iv_search)
+    ImageView mSearch;
 
     MainActivity activity;
 
@@ -145,6 +152,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onAlphaActionBar(float a) {
+                if(a<1){
+                    mHomeTitle1.setTextColor(Color.parseColor("#ffffff"));
+                    mHomeTitle2.setTextColor(Color.parseColor("#ffffff"));
+                    mSearch.setImageResource(R.mipmap.search);
+                }else{
+                    mHomeTitle1.setTextColor(Color.parseColor("#666666"));
+                    mHomeTitle2.setTextColor(Color.parseColor("#ff9a6a"));
+                    mSearch.setImageResource(R.mipmap.search_color);
+                }
                 mActionBarBg.setAlpha(a);
                 if(a==1){
                     if(activity.isTrans()){
@@ -295,7 +311,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     public void toCategory(View view) {
         switch (view.getId()) {
             case R.id.ll_category1:
-                showToast("开发中，敬请期待");
+                IntentUtil.toRankActivity(getActivity().getApplicationContext());
                 break;
             case R.id.ll_category2:
                 showToast("开发中，敬请期待");

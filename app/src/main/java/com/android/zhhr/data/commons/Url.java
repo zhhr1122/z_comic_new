@@ -32,5 +32,7 @@ public class Url {
 
     public static String TencentSearchRecommend = TencentSearchBase+"index";
 
+    public static String TencentRankUrl = "http://m.ac.qq.com/rank/index?";
+
 }
 

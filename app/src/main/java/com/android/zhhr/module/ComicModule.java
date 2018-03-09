@@ -51,6 +51,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
@@ -1012,6 +1013,28 @@ public class ComicModule {
         }).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getRankList(final long currenttime, final String type, final int page, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try {
+                    Document doc = Jsoup.connect(Url.TencentRankUrl+"t="+currenttime+"&type="+type+"&page="+page+"&pageSize=10&style=items").get();
+                    List<Comic> mdats = TencentComicAnalysis.TransToRank(doc);
+                    observableEmitter.onNext(mdats);
+                } catch (IOException e) {
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(observer);
     }
 }

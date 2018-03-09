@@ -79,6 +79,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
+        <activity android:name=".ui.activity.RankActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
 
 
         <!-- Required SDK 核心功能-->

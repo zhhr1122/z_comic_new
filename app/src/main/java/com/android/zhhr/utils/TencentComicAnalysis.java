@@ -228,6 +228,21 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
+    public static List<Comic> TransToRank(Document doc) {
+        List<Comic> mComic = new ArrayList<>();
+        List<Element> detail = doc.getElementsByAttributeValue("class","comic-link");
+        for(int i=0;i<detail.size();i++){
+            Comic comic = new Comic();
+            comic.setTitle(detail.get(i).select("strong").text());
+            comic.setCover(detail.get(i).select("img").attr("src"));
+            Element ElementDescribe = detail.get(i).getElementsByAttributeValue("class","comic-desc").get(0);
+            comic.setDescribe(ElementDescribe.text());
+            comic.setId(Long.parseLong(getID(detail.get(i).attr("href"))));
+            mComic.add(comic);
+        }
+        return mComic;
+    }
+
 
     /**
      * 漫画详情
@@ -314,4 +329,6 @@ public class TencentComicAnalysis {
         String[] ids = splitID.split("/");
         return ids[ids.length-1];
     }
+
+
 }
