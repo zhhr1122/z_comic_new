@@ -235,9 +235,13 @@ public class TencentComicAnalysis {
             Comic comic = new Comic();
             comic.setTitle(detail.get(i).select("strong").text());
             comic.setCover(detail.get(i).select("img").attr("src"));
-            Element ElementDescribe = detail.get(i).getElementsByAttributeValue("class","comic-desc").get(0);
-            comic.setDescribe(ElementDescribe.text());
             comic.setId(Long.parseLong(getID(detail.get(i).attr("href"))));
+            try{
+                Element ElementDescribe = detail.get(i).getElementsByAttributeValue("class","comic-desc").get(0);
+                comic.setDescribe(ElementDescribe.text());
+            }catch (Exception e){
+
+            }
             mComic.add(comic);
         }
         return mComic;

@@ -1024,7 +1024,7 @@ public class ComicModule {
                     Document doc = Jsoup.connect(Url.TencentRankUrl+"t="+currenttime+"&type="+type+"&page="+page+"&pageSize=10&style=items").get();
                     List<Comic> mdats = TencentComicAnalysis.TransToRank(doc);
                     observableEmitter.onNext(mdats);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {

@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.android.zhhr.ui.custom.ElasticScrollView
+        android:id="@+id/ev_scrollview"
         android:layout_marginTop="65dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
