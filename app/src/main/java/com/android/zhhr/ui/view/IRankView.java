@@ -5,4 +5,5 @@ package com.android.zhhr.ui.view;
  */
 
 public interface IRankView<T> extends ILoadDataView<T>{
+    void setType(int position);
 }

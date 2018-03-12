@@ -41,9 +41,15 @@ public class RankAdapter extends BaseRecyclerAdapter<Comic> {
 
     @Override
     public void convert(BaseRecyclerHolder holder, Comic item, int position) {
+        String tags = null;
         switch (getItemViewType(position)){
             case ITEM_FULL:
                 holder.setText(R.id.tv_title,item.getTitle());
+                if(item.getTags()!=null){
+                    tags= item.getTags().toString();
+                }
+                holder.setText(R.id.tv_tag,tags);
+                holder.setText(R.id.tv_update,item.getUpdates());
                 holder.setText(R.id.tv_describe,item.getDescribe());
                 holder.setImageByUrl(R.id.iv_image,item.getCover());
                 switch (position){

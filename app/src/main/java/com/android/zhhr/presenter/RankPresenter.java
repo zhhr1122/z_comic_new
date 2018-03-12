@@ -28,13 +28,15 @@ public class RankPresenter extends BasePresenter<IRankView>{
     private List<Comic> mList;
     private boolean isloadingdata;
 
+    private String type = "upt";
+
     public RankPresenter(Activity context, IRankView view) {
         super(context, view);
         mModel = new ComicModule(context);
         mList = new ArrayList<>();
     }
 
-    public void loadData(String type) {
+    public void loadData() {
         if(!isloadingdata){
             mModel.getRankList(getCurrentTime(),type,page, new DisposableObserver<List<Comic>>() {
                 @Override
@@ -61,15 +63,38 @@ public class RankPresenter extends BasePresenter<IRankView>{
 
                 @Override
                 public void onError(@NonNull Throwable e) {
-                    mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
+                    mView.ShowToast(ShowErrorTextUtil.ShowErrorText(e));
                 }
 
                 @Override
                 public void onComplete() {
                     mView.getDataFinish();
                     page++;
+                    int position = 0;
+                    if(type.equals("upt")){
+                        position = 0;
+                    }else if(type.equals("pay")){
+                        position = 1;
+                    }else if(type.equals("pgv")){
+                        position = 2;
+                    }else {
+                        position = 3;
+                    }
+                    mView.setType(position);
                 }
             });
         }
+    }
+
+    public void setType(String type) {
+        this.type = type;
+        this.mList.clear();
+        this.page = 1;
+        this.isloadingdata = false;
+        loadData();
+    }
+
+    public String getType() {
+        return type;
     }
 }

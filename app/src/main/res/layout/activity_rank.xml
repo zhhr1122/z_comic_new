@@ -46,7 +46,7 @@
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
     </com.android.zhhr.ui.custom.ElasticScrollView>
-    <LinearLayout
+    <com.android.zhhr.ui.custom.CustomTab
         android:id="@+id/ll_actionbar"
         android:orientation="vertical"
         android:background="@color/colorBg"
@@ -180,6 +180,6 @@
             android:background="@color/colorBottom"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"/>
-    </LinearLayout>
+    </com.android.zhhr.ui.custom.CustomTab>
 
 </RelativeLayout>
