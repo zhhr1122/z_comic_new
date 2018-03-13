@@ -37,6 +37,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp" />
                         <TextView
+                            android:textColor="@color/colorTextBlack"
                             android:id="@+id/tv_loading"
                             android:text="努力加载中..."
                             android:gravity="center"

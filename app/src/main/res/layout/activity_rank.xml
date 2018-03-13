@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBg"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.android.zhhr.ui.custom.ElasticScrollView
@@ -30,6 +31,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp" />
                     <TextView
+                        android:textColor="@color/colorTextBlack"
                         android:id="@+id/tv_loading"
                         android:text="真的没有啦..."
                         android:gravity="center"
@@ -85,6 +87,7 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
         <LinearLayout
+            android:background="@color/colorBg"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="45dp">

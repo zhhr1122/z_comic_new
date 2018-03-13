@@ -7,6 +7,10 @@ import com.android.zhhr.utils.LogUtil;
 import com.squareup.leakcanary.LeakCanary;
 
 import cn.jpush.android.api.JPushInterface;
+import skin.support.SkinCompatManager;
+import skin.support.app.SkinCardViewInflater;
+import skin.support.constraint.app.SkinConstraintViewInflater;
+import skin.support.design.app.SkinMaterialViewInflater;
 
 /**
  * For developer startup JPush SDK
@@ -30,5 +34,12 @@ public class MyApplication extends Application {
         //LeakCanary.install(this);
         //Log开关
         LogUtil.init(LogUtil.VERBOSE,"zhhr1122");
+        //换皮肤
+        SkinCompatManager.withoutActivity(this)                         // Basic Widget support
+                .setSkinStatusBarColorEnable(false)                     // Disable statusBarColor skin support，default true   [selectable]
+                .setSkinWindowBackgroundEnable(false)                   // Disable windowBackground skin support，default true [selectable]
+                .loadSkin();
+        //切换为默认皮肤
+        SkinCompatManager.getInstance().restoreDefaultTheme();
     }
 }

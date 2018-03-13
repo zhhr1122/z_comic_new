@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary_night">#814e35</color>
+    <color name="colorPrimaryDark_night">#814e35</color>
+    <color name="colorAccent_night">#814e35</color>
+    <color name="colorBlack_night">#000000</color>
+    <color name="colorBg_night">#1a1714</color>
+    <color name="colorBgDark_night">#211e1b</color>
+    <color name="colorTextBlack_night">#6b6967</color>
+    <color name="colorTextLight_night">#d1d1d1</color>
+    <color name="colorTrans_night">#00000000</color>
+    <color name="colorBottom_night">#312f2c</color>
+    <color name="colorTextColor_night">#666666</color>
+    <color name="colorTextColorDark_night">#333333</color>
+    <color name="colorTextColorLight2_night">#c4c5c6</color>
+    <color name="colorTextColorLight_night">#999999</color>
+    <color name="colorTrack_night">#535252</color>
+
+
+</resources>

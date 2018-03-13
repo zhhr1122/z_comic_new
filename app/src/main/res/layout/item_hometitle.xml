@@ -22,11 +22,18 @@
             android:textColor="@color/colorTextColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <ImageView
+        <TextView
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:background="@drawable/background_more"
+            android:textSize="12dp"
+            android:textColor="@color/colorTextLight"
+            android:text="更多"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

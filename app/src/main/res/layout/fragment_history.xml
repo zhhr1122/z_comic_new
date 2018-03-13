@@ -31,6 +31,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp" />
                     <TextView
+                        android:textColor="@color/colorTextBlack"
                         android:id="@+id/tv_loading"
                         android:text="真的没有啦..."
                         android:gravity="center"

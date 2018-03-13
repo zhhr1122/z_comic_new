@@ -17,6 +17,7 @@ import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
+import skin.support.SkinCompatManager;
 
 /**
  * Created by zhhr on 2018/3/13.
@@ -26,6 +27,7 @@ public class MinePresenter extends BasePresenter<IMineView>{
     private List<MineTitle> mLists;
     private ComicModule mModel;
     private String size;
+    private boolean isNight;
     public MinePresenter(Activity context, IMineView view) {
         super(context, view);
         mLists = new ArrayList<>();
@@ -84,6 +86,30 @@ public class MinePresenter extends BasePresenter<IMineView>{
      * 更换皮肤
      */
     private void switchSkin() {
+        if(isNight){
+            SkinCompatManager.getInstance().restoreDefaultTheme();
+            mView.ShowToast("更换成功");
+            mView.SwitchSkin(!isNight);
+        }else{
+            SkinCompatManager.getInstance().loadSkin("night", new SkinCompatManager.SkinLoaderListener() {
+                @Override
+                public void onStart() {
+                    //mView.ShowToast("开始更换皮肤");
+                }
+
+                @Override
+                public void onSuccess() {
+                    mView.ShowToast("更换成功");
+                    mView.SwitchSkin(isNight);
+                }
+
+                @Override
+                public void onFailed(String errMsg) {
+                    mView.ShowToast("更换失败");
+                }
+            },SkinCompatManager.SKIN_LOADER_STRATEGY_BUILD_IN); // load by suffix
+        }
+        isNight = !isNight;
     }
 
     /**

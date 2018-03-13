@@ -13,8 +13,14 @@ import com.android.zhhr.ui.adapter.base.BaseRecyclerHolder;
  */
 
 public class MineAdapter extends BaseRecyclerAdapter<MineTitle> {
+    private boolean isNight;
     public MineAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
+    }
+
+    public void setNight(boolean night) {
+        isNight = night;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -23,7 +29,11 @@ public class MineAdapter extends BaseRecyclerAdapter<MineTitle> {
         holder.setImageResource(R.id.iv_mine_icon,item.getResID());
         holder.setText(R.id.tv_size,item.getSize());
         if(position == 0){
-            holder.setImageResource(R.id.iv_select,R.mipmap.item_select);
+            if(!isNight){
+                holder.setImageResource(R.id.iv_select,R.mipmap.item_select_dark);
+            }else{
+                holder.setImageResource(R.id.iv_select,R.mipmap.item_selected_dark);
+            }
         }else{
             holder.setImageResource(R.id.iv_select,R.mipmap.add_more);
         }

@@ -92,5 +92,10 @@ dependencies {
 
     compile 'com.daimajia.numberprogressbar:library:1.4@aar'
 
+    compile 'skin.support:skin-support:2.2.3'                   // skin-support basic widget
+    compile 'skin.support:skin-support-design:2.2.3'            // skin-support-design material design support [selectable]
+    compile 'skin.support:skin-support-cardview:2.2.3'          // skin-support-cardview CardView support [selectable]
+    compile 'skin.support:skin-support-constraint-layout:2.2.3' // skin-support-constraint-layout ConstraintLayout support [selectable]
+
     //compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }

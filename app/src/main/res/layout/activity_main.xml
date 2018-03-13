@@ -86,7 +86,6 @@
                 android:id="@+id/iv_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@mipmap/top"
                 android:scaleType="fitXY"
                 />
         </RelativeLayout>
