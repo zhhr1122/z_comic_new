@@ -27,6 +27,7 @@ import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.NetworkUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
+import com.bumptech.glide.Glide;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -1024,6 +1025,27 @@ public class ComicModule {
                     Document doc = Jsoup.connect(Url.TencentRankUrl+"t="+currenttime+"&type="+type+"&page="+page+"&pageSize=10&style=items").get();
                     List<Comic> mdats = TencentComicAnalysis.TransToRank(doc);
                     observableEmitter.onNext(mdats);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void clearCache(Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
+                try {
+                    FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.CACHE);//首先清除API缓存
+                    Glide.get(rxAppCompatActivity).clearDiskCache();//必须在子线程
                 } catch (Exception e) {
                     observableEmitter.onError(e);
                     e.printStackTrace();
