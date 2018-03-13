@@ -8,6 +8,7 @@ import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.IMineView;
 import com.android.zhhr.utils.FileUtil;
+import com.android.zhhr.utils.GlideCacheUtil;
 import com.android.zhhr.utils.IntentUtil;
 import com.bumptech.glide.Glide;
 
@@ -24,6 +25,7 @@ import io.reactivex.observers.DisposableObserver;
 public class MinePresenter extends BasePresenter<IMineView>{
     private List<MineTitle> mLists;
     private ComicModule mModel;
+    private String size;
     public MinePresenter(Activity context, IMineView view) {
         super(context, view);
         mLists = new ArrayList<>();
@@ -31,6 +33,8 @@ public class MinePresenter extends BasePresenter<IMineView>{
     }
 
     public void loadData() {
+        size = GlideCacheUtil.getInstance().getCacheSize(mContext);
+        mLists.clear();
         MineTitle mTitle = new MineTitle();
         mTitle.setTitle("夜间模式");
         mTitle.setResID(R.mipmap.icon_night);
@@ -38,6 +42,7 @@ public class MinePresenter extends BasePresenter<IMineView>{
         mTitle = new MineTitle();
         mTitle.setResID(R.mipmap.icon_cache);
         mTitle.setTitle("清除缓存");
+        mTitle.setSize(size);
         mLists.add(mTitle);
         mTitle = new MineTitle();
         mTitle.setResID(R.mipmap.icon_feedback);
@@ -89,10 +94,13 @@ public class MinePresenter extends BasePresenter<IMineView>{
         customDialog.setListener(new CustomDialog.onClickListener() {
             @Override
             public void OnClickConfirm() {
-                mModel.clearCache(new DisposableObserver<Boolean>() {
+                mModel.clearCache(new DisposableObserver<String>() {
+
                     @Override
-                    public void onNext(@NonNull Boolean aBoolean) {
-                        Glide.get(mContext).clearMemory();//必须在主线程
+                    public void onNext(@NonNull String s) {
+                        GlideCacheUtil.getInstance().clearImageMemoryCache(mContext);
+                        size = s;
+                        loadData();
                     }
 
                     @Override

@@ -24,6 +24,7 @@ import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.FileUtil;
+import com.android.zhhr.utils.GlideCacheUtil;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.NetworkUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
@@ -1040,12 +1041,13 @@ public class ComicModule {
     }
 
     public void clearCache(Observer observer) {
-        Observable.create(new ObservableOnSubscribe<Boolean>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Boolean> observableEmitter) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<String> observableEmitter) throws Exception {
                 try {
                     FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.CACHE);//首先清除API缓存
-                    Glide.get(rxAppCompatActivity).clearDiskCache();//必须在子线程
+                    GlideCacheUtil.getInstance().clearImageAllCache(rxAppCompatActivity);
+                    observableEmitter.onNext(GlideCacheUtil.getInstance().getCacheSize(rxAppCompatActivity));
                 } catch (Exception e) {
                     observableEmitter.onError(e);
                     e.printStackTrace();

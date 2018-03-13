@@ -55,6 +55,11 @@ public class MineFragment  extends BaseFragment<MinePresenter> implements IMineV
                 mPresenter.onItemClick(position);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mPresenter.loadData();
     }
 
