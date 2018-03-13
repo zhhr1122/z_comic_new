@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/ll_actionbar"
+        android:orientation="vertical"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_actionbar"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorBg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:text="我的"
+                android:gravity="center"
+                android:id="@+id/tv_title"
+                android:textSize="17dp"
+                android:textColor="@color/colorTextColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+        <View
+            android:background="@color/colorBgDark"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:background="@color/colorBg"
+        android:layout_below="@id/ll_actionbar"
+        android:id="@+id/rl_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <View
+            android:id="@+id/v_top"
+            android:background="@color/colorBgDark"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+        <ImageView
+            android:layout_below="@id/v_top"
+            android:scaleType="fitXY"
+            android:layout_margin="22dp"
+            android:id="@+id/iv_cover"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+        <ImageView
+            android:src="@drawable/icon_round"
+            android:layout_below="@id/v_top"
+            android:layout_margin="22dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_cover"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="10dp"
+                android:textSize="18dp"
+                android:text="Z_COMIC"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorTextColorDark"
+                android:layout_gravity="bottom"
+                android:id="@+id/tv_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:text="项目地址："
+                android:gravity="center_vertical"
+                android:textColor="@color/colorTextColorLight"
+                android:layout_gravity="bottom"
+                android:id="@+id/tv_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:text="https://github.com/zhhr1122/z_comic_new"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorTextColorLight"
+                android:layout_gravity="bottom"
+                android:id="@+id/tv_describe"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_below="@id/iv_cover"
+            android:background="@color/colorBgDark"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+        <TextView
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center"
+            android:text="star"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/btn_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+   <android.support.v7.widget.RecyclerView
+       android:overScrollMode="never"
+       android:layout_below="@id/rl_information"
+       android:id="@+id/rv_mine"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+   </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

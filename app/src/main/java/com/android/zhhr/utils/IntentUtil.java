@@ -3,6 +3,7 @@ package com.android.zhhr.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
@@ -91,5 +92,17 @@ public class IntentUtil {
     public static void toRankActivity(Context context) {
         Intent intent = new Intent(context, RankActivity.class);
         context.startActivity(intent);
+    }
+
+
+    public static void toUrl(Context context,String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
+    }
+
+    public static void toQQchat(Context context,String number) {
+        String url = "mqqwpa://im/chat?chat_type=wpa&uin="+number;//uin是发送过去的qq号码
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 }

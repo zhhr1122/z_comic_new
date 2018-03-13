@@ -57,4 +57,8 @@ public class GlideImageLoader extends ImageLoader {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
     }
+
+    public static void loadRoundImage(Context context, String url, ImageView mCover) {
+        Glide.with(context).load(url).centerCrop().transform(new GlideCircleTransform(context)).into(mCover);
+    }
 }

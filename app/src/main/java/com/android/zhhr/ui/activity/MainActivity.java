@@ -87,6 +87,15 @@ public class MainActivity extends BaseFragmentActivity {
         initStatusBar(false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @OnClick(R.id.btn_mine)
+    public void toMineFragment(View view){
+        selectTab(2);
+        resetBottomBtn();
+        mMine.setBackgroundResource(R.drawable.mine_press);
+        initStatusBar(false);
+    }
+
     public void resetBottomBtn(){
         mHome.setBackgroundResource(R.drawable.homepage);
         mMine.setBackgroundResource(R.drawable.mine);
