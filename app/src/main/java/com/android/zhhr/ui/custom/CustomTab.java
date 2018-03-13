@@ -2,12 +2,15 @@ package com.android.zhhr.ui.custom;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.android.zhhr.R;
 
 /**
  * Created by zhhr on 2018/3/13.
@@ -45,12 +48,12 @@ public class CustomTab extends LinearLayout{
         for(int i=0;i<4;i++){
             if(i!=postion){
                 TextView mTextView  = (TextView) mTabs[i].getChildAt(0);
-                mTextView.setTextColor(Color.parseColor("#999999"));
+                mTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorTextColorLight));
                 ImageView mBottom = (ImageView) mTabs[i].getChildAt(1);
                 mBottom.setVisibility(View.GONE);
             }else{
                 TextView mTextView  = (TextView) mTabs[i].getChildAt(0);
-                mTextView.setTextColor(Color.parseColor("#333333"));
+                mTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextColorDark));
                 ImageView mBottom = (ImageView) mTabs[i].getChildAt(1);
                 mBottom.setVisibility(View.VISIBLE);
             }

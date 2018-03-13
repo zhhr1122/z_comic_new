@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
@@ -169,45 +171,27 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
         img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
         for(int position=0;position<mComic.getChapters().size();position++){
             IndexItemView itemView = (IndexItemView) mlayout.getChildAt(position);
-            LinearLayout ll = (LinearLayout) itemView.getChildAt(0);
-            ImageView imageView = (ImageView) ll.getChildAt(0);
-            TextView textView = (TextView) ll.getChildAt(1);
+            TextView textView = itemView.getmTitle();
             if(!isOrder()){
                 if(mComic.getCurrentChapter() == (position+1)){
-                    textView.setTextColor(Color.parseColor("#ff9a6a"));
+                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
                 }else{
-                    textView.setTextColor(Color.parseColor("#666666"));
+                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((position+1)+" - "+mComic.getChapters().get(position));
-                //add start by zhr for sdk
-                if(position>mComic.getChapters().size()-10){
-                    imageView.setVisibility(View.VISIBLE);
-                }else{
-                    imageView.setVisibility(View.GONE);
-                }
-                //add start by zhr for sdk
-
             }else{
                 if(mComic.getChapters().size()-mComic.getCurrentChapter() == position){
-                    textView.setTextColor(Color.parseColor("#ff9a6a"));
+                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
                 }else{
-                    textView.setTextColor(Color.parseColor("#666666"));
+                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((mComic.getChapters().size()-position)+" - "+mComic.getChapters().get(mComic.getChapters().size()-1-position));
-                //add start by zhr for sdk
-                if(position<10){
-                    imageView.setVisibility(View.VISIBLE);
-                }else{
-                    imageView.setVisibility(View.GONE);
-                }
-                //add end
-
             }
         }
         if(!isOrder()){

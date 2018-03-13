@@ -36,12 +36,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:textColor="@color/colorBg"
+                android:textColor="@color/colorWhite"
                 />
             <TextView
                 android:id="@+id/tv_author_tag"
                 android:textSize="12dp"
-                android:textColor="@color/colorBg"
+                android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -97,7 +97,7 @@
                         <Button
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
-                            android:textColor="@color/colorBg"
+                            android:textColor="@color/colorWhite"
                             android:background="@mipmap/detail_read_btn"
                             android:layout_gravity="center"
                             android:text="开始阅读"

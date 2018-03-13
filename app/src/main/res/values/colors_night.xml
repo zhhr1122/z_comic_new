@@ -11,10 +11,11 @@
     <color name="colorTrans_night">#00000000</color>
     <color name="colorBottom_night">#312f2c</color>
     <color name="colorTextColor_night">#666666</color>
-    <color name="colorTextColorDark_night">#333333</color>
+    <color name="colorTextColorDark_night">#6b6967</color>
     <color name="colorTextColorLight2_night">#c4c5c6</color>
-    <color name="colorTextColorLight_night">#999999</color>
+    <color name="colorTextColorLight_night">#484543</color>
     <color name="colorTrack_night">#535252</color>
+    <color name="colorWhite_night">#ffffff</color>
 
 
 </resources>

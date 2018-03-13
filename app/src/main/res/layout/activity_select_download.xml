@@ -11,7 +11,7 @@
         android:layout_height="100dp"
         android:layout_width="match_parent">
         <ImageView
-            android:background="#e2e2e2"
+            android:background="@color/colorBottom"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"/>
         <TextView
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp" />
         <ImageView
-            android:background="#e2e2e2"
+            android:background="@color/colorBottom"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"/>
         <LinearLayout
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <ImageView
-                android:background="#e2e2e2"
+                android:background="@color/colorBottom"
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent" />
             <RelativeLayout
@@ -85,15 +85,14 @@
         </LinearLayout>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
+        android:padding="5dp"
         android:layout_below="@id/rl_order"
         android:layout_above="@id/ll_bottom"
-        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="none"
         android:id="@+id/rv_index"
-        android:background="@color/colorBgDark"
         >
     </android.support.v7.widget.RecyclerView>
     <RelativeLayout

@@ -72,7 +72,6 @@ public class SelectDownloadActivity extends BaseActivity<SelectDownloadPresenter
             }
         });
         mRecycleView.setAdapter(mAdapter);
-        mRecycleView.addItemDecoration(new DividerGridItemDecoration(this,R.drawable.decorationlist_dark));
         mChapterNum.setText("共"+mPresenter.getmChapters().size()+"话");
     }
 

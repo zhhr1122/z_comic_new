@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -145,7 +146,7 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @OnClick(R.id.rl_collect)
     public void ToCollect(){
         ResetTitle();
-        mCollect.setTextColor(Color.parseColor("#333333"));
+        mCollect.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
         mViewpager.setCurrentItem(0);
         mBottomCollect.setVisibility(View.VISIBLE);
 
@@ -153,22 +154,22 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     @OnClick(R.id.rl_history)
     public void ToHistory(){
         ResetTitle();
-        mHistory.setTextColor(Color.parseColor("#333333"));
+        mHistory.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
         mViewpager.setCurrentItem(1);
         mBottomHistory.setVisibility(View.VISIBLE);
     }
     @OnClick(R.id.rl_download)
     public void ToDownload(){
         ResetTitle();
-        mDownload.setTextColor(Color.parseColor("#333333"));
+        mDownload.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
         mViewpager.setCurrentItem(2);
         mBottomDownload.setVisibility(View.VISIBLE);
     }
 
     public void ResetTitle(){
-        mDownload.setTextColor(Color.parseColor("#999999"));
-        mCollect.setTextColor(Color.parseColor("#999999"));
-        mHistory.setTextColor(Color.parseColor("#999999"));
+        mDownload.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
+        mCollect.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
+        mHistory.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
         mBottomCollect.setVisibility(View.GONE);
         mBottomDownload.setVisibility(View.GONE);
         mBottomHistory.setVisibility(View.GONE);

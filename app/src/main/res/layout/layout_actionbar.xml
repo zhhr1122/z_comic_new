@@ -34,7 +34,7 @@
         android:gravity="center"
         android:id="@+id/tv_actionbar_title"
         android:textSize="15dp"
-        android:textColor="@color/colorBg"
+        android:textColor="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
