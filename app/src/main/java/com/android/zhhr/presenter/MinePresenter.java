@@ -3,6 +3,7 @@ package com.android.zhhr.presenter;
 import android.app.Activity;
 
 import com.android.zhhr.R;
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.MineTitle;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.CustomDialog;
@@ -11,6 +12,7 @@ import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.GlideCacheUtil;
 import com.android.zhhr.utils.IntentUtil;
 import com.bumptech.glide.Glide;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,12 @@ public class MinePresenter extends BasePresenter<IMineView>{
         mLists.add(mTitle);
         mView.fillData(mLists);
         mView.getDataFinish();
+        try{
+            isNight = Hawk.get(Constants.MODEL);
+        }catch (Exception e){
+            isNight = false;
+        }
+        mView.SwitchSkin(isNight);
     }
 
     public void onItemClick(int position) {
@@ -89,6 +97,7 @@ public class MinePresenter extends BasePresenter<IMineView>{
         if(isNight){
             SkinCompatManager.getInstance().restoreDefaultTheme();
             mView.ShowToast("更换成功");
+            Hawk.put(Constants.MODEL,Constants.DEFAULT_MODEL);
             mView.SwitchSkin(!isNight);
         }else{
             SkinCompatManager.getInstance().loadSkin("night", new SkinCompatManager.SkinLoaderListener() {
@@ -100,6 +109,7 @@ public class MinePresenter extends BasePresenter<IMineView>{
                 @Override
                 public void onSuccess() {
                     mView.ShowToast("更换成功");
+                    Hawk.put(Constants.MODEL,Constants.NIGHT_MODEL);
                     mView.SwitchSkin(isNight);
                 }
 

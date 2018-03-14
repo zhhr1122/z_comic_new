@@ -95,5 +95,6 @@ public class MineFragment  extends BaseFragment<MinePresenter> implements IMineV
     @Override
     public void SwitchSkin(boolean isNight) {
         mineAdapter.setNight(isNight);
+        mActivity.switchModel();
     }
 }

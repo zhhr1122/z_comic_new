@@ -42,4 +42,11 @@ public class Constants {
 
 
     public static final int OK = 1;
+
+    public static final String MODEL = "model";
+
+    public static final boolean DEFAULT_MODEL = false;
+
+    public static final boolean NIGHT_MODEL = true;
+
 }

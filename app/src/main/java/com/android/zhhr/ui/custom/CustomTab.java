@@ -12,11 +12,13 @@ import android.widget.TextView;
 
 import com.android.zhhr.R;
 
+import skin.support.widget.SkinCompatLinearLayout;
+
 /**
  * Created by zhhr on 2018/3/13.
  */
 
-public class CustomTab extends LinearLayout{
+public class CustomTab extends SkinCompatLinearLayout {
     private LinearLayout mTab;
     private RelativeLayout mTabs[] = new RelativeLayout[4];
     public CustomTab(Context context) {
@@ -28,11 +30,7 @@ public class CustomTab extends LinearLayout{
     }
 
     public CustomTab(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr,0);
-    }
-
-    public CustomTab(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr);
     }
 
     @Override

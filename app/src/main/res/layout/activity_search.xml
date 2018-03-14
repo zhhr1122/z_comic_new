@@ -40,12 +40,12 @@
                 android:layout_height="wrap_content"
                 android:hint="输入作品名或作者名"
                 android:textSize="14dp"
-                android:textColor="@color/colorTextBlack"
+                android:textColor="@color/colorSearchHintTextColorLight"
                 android:background="@null"
                 android:ellipsize="start"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:textColorHint="@color/colorTextColorLight"/>
+                android:textColorHint="@color/colorHintTextColorLight"/>
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/iv_clear"
@@ -178,6 +178,14 @@
         android:textColor="@color/colorTextColorLight"
         android:background="@color/colorBg"
         />
+    <View
+        android:id="@+id/v_night"
+        android:visibility="gone"
+        android:alpha="0.8"
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></View>
 
 
 </RelativeLayout>

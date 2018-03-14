@@ -13,9 +13,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.android.zhhr.R;
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.presenter.BasePresenter;
+import com.orhanobut.hawk.Hawk;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -23,6 +27,9 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatActivity {
+
+    protected View NightModel;
+    protected boolean isNight;
 
     private ConnectivityManager manager;
     //未指定类型的Presenter
@@ -63,7 +70,26 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         isTrans = isTransparent;
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        switchModel();
+    }
+
+    protected void switchModel() {
+        NightModel  = findViewById(R.id.v_night);
+        try{
+            isNight = Hawk.get(Constants.MODEL);
+            if(isNight){
+                NightModel.setVisibility(View.VISIBLE);
+            }else{
+                NightModel.setVisibility(View.GONE);
+            }
+        }catch (Exception e){
+            NightModel.setVisibility(View.GONE);
+        }
     }
 
 

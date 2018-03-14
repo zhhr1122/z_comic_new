@@ -6,5 +6,5 @@ package com.android.zhhr.ui.view;
 
 public interface IMineView<T> extends ILoadDataView<T>{
 
-    public void SwitchSkin(boolean isNight);
+    void SwitchSkin(boolean isNight);
 }

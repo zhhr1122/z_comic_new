@@ -21,4 +21,6 @@ public interface IChapterView<T> extends ILoadDataView<T>{
     void nextPage();
 
     void setTitle(String name);
+
+    void SwitchSkin();
 }

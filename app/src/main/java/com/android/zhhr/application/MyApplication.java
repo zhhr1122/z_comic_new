@@ -2,8 +2,10 @@ package com.android.zhhr.application;
 
 import android.app.Application;
 
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhhr.utils.LogUtil;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.leakcanary.LeakCanary;
 
 import cn.jpush.android.api.JPushInterface;
@@ -34,12 +36,22 @@ public class MyApplication extends Application {
         //LeakCanary.install(this);
         //Log开关
         LogUtil.init(LogUtil.VERBOSE,"zhhr1122");
+        //SharedPreferences
+        Hawk.init(this).build();
         //换皮肤
         SkinCompatManager.withoutActivity(this)                         // Basic Widget support
                 .setSkinStatusBarColorEnable(false)                     // Disable statusBarColor skin support，default true   [selectable]
                 .setSkinWindowBackgroundEnable(false)                   // Disable windowBackground skin support，default true [selectable]
                 .loadSkin();
         //切换为默认皮肤
-        SkinCompatManager.getInstance().restoreDefaultTheme();
+        try{
+            if(!(boolean)Hawk.get(Constants.MODEL)){
+                SkinCompatManager.getInstance().restoreDefaultTheme();
+            }else{
+                SkinCompatManager.getInstance().loadSkin("night", SkinCompatManager.SKIN_LOADER_STRATEGY_BUILD_IN); // load by suffix
+            }
+        }catch (Exception e){ // 默认加载默认模式
+            SkinCompatManager.getInstance().restoreDefaultTheme();
+        }
     }
 }

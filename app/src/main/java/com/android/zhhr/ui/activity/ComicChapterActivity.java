@@ -323,6 +323,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
 
     @Override
+    public void SwitchSkin() {
+        switchModel();
+    }
+
+    @Override
     public void ShowToast(String t) {
         showToast(t);
     }
@@ -509,6 +514,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         }else {
             mSwitchModel.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick(R.id.iv_light)
+    public void toSwitchNight(View view){
+       mPresenter.switchNight(isNight);
     }
 
     @OnClick(R.id.iv_download)

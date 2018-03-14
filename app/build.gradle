@@ -97,5 +97,7 @@ dependencies {
     compile 'skin.support:skin-support-cardview:2.2.3'          // skin-support-cardview CardView support [selectable]
     compile 'skin.support:skin-support-constraint-layout:2.2.3' // skin-support-constraint-layout ConstraintLayout support [selectable]
 
+    compile 'com.orhanobut:hawk:2.0.1'
+
     //compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }

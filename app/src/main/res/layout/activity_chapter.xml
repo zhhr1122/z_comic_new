@@ -26,5 +26,13 @@
     </com.android.zhhr.ui.custom.ReaderMenuLayout>
     <include layout="@layout/layout_switch_model"></include>
     <include layout="@layout/layout_loading"></include>
+    <View
+        android:id="@+id/v_night"
+        android:visibility="gone"
+        android:alpha="0.8"
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></View>
 
 </RelativeLayout>

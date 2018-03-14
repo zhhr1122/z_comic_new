@@ -3,7 +3,7 @@
     <color name="colorPrimary">#ff9a6a</color>
     <color name="colorPrimaryDark">#ff9a6a</color>
     <color name="colorAccent">#ff9a6a</color>
-    <color name="colorBlack">#000000</color>
+    <color name="colorBlack">#666666</color>
     <color name="colorBg">#ffffff</color>
     <color name="colorBgDark">#f4f4f4</color>
     <color name="colorTextBlack">#666666</color>
@@ -16,6 +16,6 @@
     <color name="colorTextColorLight">#999999</color>
     <color name="colorTrack">#535252</color>
     <color name="colorWhite">#ffffff</color>
-
-
+    <color name="colorHintTextColorLight">#999999</color>
+    <color name="colorSearchHintTextColorLight">#666666</color>
 </resources>

@@ -11,12 +11,14 @@ import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.ShowErrorTextUtil;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
+import skin.support.SkinCompatManager;
 
 /**
  * Created by 皓然 on 2017/7/20.
@@ -418,5 +420,34 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                 }
             }
         });
+    }
+
+    public void switchNight(final boolean isNight) {
+        if(isNight){
+            SkinCompatManager.getInstance().restoreDefaultTheme();
+            mView.ShowToast("更换成功");
+            Hawk.put(Constants.MODEL,Constants.DEFAULT_MODEL);
+            mView.SwitchSkin();
+        }else{
+            SkinCompatManager.getInstance().loadSkin("night", new SkinCompatManager.SkinLoaderListener() {
+                @Override
+                public void onStart() {
+                    //mView.ShowToast("开始更换皮肤");
+                }
+
+                @Override
+                public void onSuccess() {
+                    mView.ShowToast("更换成功");
+                    Hawk.put(Constants.MODEL,Constants.NIGHT_MODEL);
+                    mView.SwitchSkin();
+                }
+
+                @Override
+                public void onFailed(String errMsg) {
+                    mView.ShowToast("更换失败");
+                }
+            },SkinCompatManager.SKIN_LOADER_STRATEGY_BUILD_IN); // load by suffix
+
+        }
     }
 }

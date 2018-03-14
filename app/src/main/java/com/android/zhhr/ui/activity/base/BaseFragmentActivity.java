@@ -13,10 +13,13 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.android.zhhr.R;
+import com.android.zhhr.data.commons.Constants;
+import com.orhanobut.hawk.Hawk;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -24,6 +27,7 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseFragmentActivity extends RxAppCompatActivity {
+    View NightModel;
     protected FragmentManager fragmentManager;
     protected FragmentTransaction fragmentTransaction;
     protected List<Fragment> fragments;
@@ -33,6 +37,7 @@ public abstract class BaseFragmentActivity extends RxAppCompatActivity {
     public boolean isTrans() {
         return isTrans;
     }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -47,6 +52,26 @@ public abstract class BaseFragmentActivity extends RxAppCompatActivity {
         ButterKnife.bind(this);
         initView();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        switchModel();
+    }
+
+    public void switchModel() {
+        NightModel  = findViewById(R.id.v_night);
+        try{
+            if(Hawk.get(Constants.MODEL)){
+                NightModel.setVisibility(View.VISIBLE);
+            }else{
+                NightModel.setVisibility(View.GONE);
+            }
+        }catch (Exception e){
+            NightModel.setVisibility(View.GONE);
+        }
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initStatusBar(boolean isTransparent) {
