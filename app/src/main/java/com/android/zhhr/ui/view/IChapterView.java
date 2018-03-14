@@ -23,4 +23,6 @@ public interface IChapterView<T> extends ILoadDataView<T>{
     void setTitle(String name);
 
     void SwitchSkin();
+
+    void setSwitchNightVisible(int visible,boolean isNight);
 }

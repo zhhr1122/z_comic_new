@@ -34,5 +34,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         ></View>
+    <com.android.zhhr.ui.custom.SwitchNightRelativeLayout
+        android:id="@+id/rl_switch_night"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.android.zhhr.ui.custom.SwitchNightRelativeLayout>
 
 </RelativeLayout>

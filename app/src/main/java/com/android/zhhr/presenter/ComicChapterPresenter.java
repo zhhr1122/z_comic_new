@@ -2,6 +2,7 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Chapters;
@@ -9,6 +10,7 @@ import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 import com.orhanobut.hawk.Hawk;
@@ -424,20 +426,19 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
     public void switchNight(final boolean isNight) {
         if(isNight){
+            mView.setSwitchNightVisible(View.GONE,isNight);
             SkinCompatManager.getInstance().restoreDefaultTheme();
-            mView.ShowToast("更换成功");
             Hawk.put(Constants.MODEL,Constants.DEFAULT_MODEL);
             mView.SwitchSkin();
         }else{
             SkinCompatManager.getInstance().loadSkin("night", new SkinCompatManager.SkinLoaderListener() {
                 @Override
                 public void onStart() {
-                    //mView.ShowToast("开始更换皮肤");
+                    mView.setSwitchNightVisible(View.GONE,isNight);
                 }
 
                 @Override
                 public void onSuccess() {
-                    mView.ShowToast("更换成功");
                     Hawk.put(Constants.MODEL,Constants.NIGHT_MODEL);
                     mView.SwitchSkin();
                 }

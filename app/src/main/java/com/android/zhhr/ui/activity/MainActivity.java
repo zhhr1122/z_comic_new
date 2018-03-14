@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
 import com.android.zhhr.ui.custom.FloatEditLayout;
+import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.fragment.BookShelfFragment;
 
 import java.util.ArrayList;
@@ -28,7 +29,11 @@ public class MainActivity extends BaseFragmentActivity {
     Button mMine;
     @Bind(R.id.rl_edit_bottom)
     FloatEditLayout mEditBottom;
+    @Bind(R.id.rl_switch_night)
+    SwitchNightRelativeLayout mSwitchNight;
+
     BookShelfFragment bookShelfFragment;
+
 
 
     public FloatEditLayout getmEditBottom() {
@@ -104,5 +109,9 @@ public class MainActivity extends BaseFragmentActivity {
 
     public void setEditBottomVisible(int Visible){
         mEditBottom.setVisibility(Visible);
+    }
+
+    public void setSwitchNightVisible(int Visible,boolean isNight){
+        mSwitchNight.setVisibility(Visible,isNight);
     }
 }

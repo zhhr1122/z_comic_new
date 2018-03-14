@@ -206,7 +206,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             mRead.setText("续看第"+mCurrent+"话");
         }
         for(int i=0;i<comic.getChapters().size();i++){
-            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i,comic.getChapters().size());
+            IndexItemView indexItemView = new IndexItemView(this,comic.getChapters().get(i),i);
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }

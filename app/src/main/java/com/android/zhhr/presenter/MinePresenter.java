@@ -1,11 +1,13 @@
 package com.android.zhhr.presenter;
 
 import android.app.Activity;
+import android.view.View;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.MineTitle;
 import com.android.zhhr.module.ComicModule;
+import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.IMineView;
 import com.android.zhhr.utils.FileUtil;
@@ -95,20 +97,19 @@ public class MinePresenter extends BasePresenter<IMineView>{
      */
     private void switchSkin() {
         if(isNight){
+            ((MainActivity)mContext).setSwitchNightVisible(View.GONE,isNight);
             SkinCompatManager.getInstance().restoreDefaultTheme();
-            mView.ShowToast("更换成功");
             Hawk.put(Constants.MODEL,Constants.DEFAULT_MODEL);
             mView.SwitchSkin(!isNight);
         }else{
             SkinCompatManager.getInstance().loadSkin("night", new SkinCompatManager.SkinLoaderListener() {
                 @Override
                 public void onStart() {
-                    //mView.ShowToast("开始更换皮肤");
+                    ((MainActivity)mContext).setSwitchNightVisible(View.GONE,isNight);
                 }
 
                 @Override
                 public void onSuccess() {
-                    mView.ShowToast("更换成功");
                     Hawk.put(Constants.MODEL,Constants.NIGHT_MODEL);
                     mView.SwitchSkin(isNight);
                 }

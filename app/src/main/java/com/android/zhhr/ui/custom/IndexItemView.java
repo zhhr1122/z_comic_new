@@ -27,8 +27,6 @@ import java.util.concurrent.locks.Lock;
 public class IndexItemView extends RelativeLayout{
     private TextView mTitle;
 
-    private String title;
-    private int postion;
     private View view;
     private Drawable img_location;
     private onItemClickLinstener listener;
@@ -45,10 +43,8 @@ public class IndexItemView extends RelativeLayout{
         return mTitle;
     }
 
-    public IndexItemView(Context context, String title, final int position,int size) {
+    public IndexItemView(Context context, String title, final int position) {
         super(context);
-        this.title = title;
-        this.postion  = position;
         img_location = context.getResources().getDrawable(R.mipmap.location);
         img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
         view = LayoutInflater.from(getContext()).inflate(R.layout.item_detail, null);

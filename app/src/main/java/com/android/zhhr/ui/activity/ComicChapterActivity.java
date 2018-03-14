@@ -29,6 +29,7 @@ import com.android.zhhr.ui.custom.ComicReaderViewpager;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
+import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.custom.SwitchRelativeLayout;
 import com.android.zhhr.ui.custom.ZBubbleSeekBar;
 import com.android.zhhr.ui.view.IChapterView;
@@ -81,6 +82,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     Button mJcomic;
     @Bind(R.id.iv_down_model)
     Button mDown;
+
+    @Bind(R.id.rl_switch_night)
+    SwitchNightRelativeLayout mSwitchNight;
 
 
 
@@ -328,6 +332,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
 
     @Override
+    public void setSwitchNightVisible(int visible, boolean isNight) {
+        mSwitchNight.setVisibility(visible,isNight);
+    }
+
+    @Override
     public void ShowToast(String t) {
         showToast(t);
     }
@@ -540,5 +549,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     public void SwitchToUpToDown(View view){
         mPresenter.setReaderModuel(Constants.UP_TO_DOWN);
     }
+
+
 
 }
