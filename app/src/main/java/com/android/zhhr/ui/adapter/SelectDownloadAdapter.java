@@ -2,6 +2,7 @@ package com.android.zhhr.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.android.zhhr.R;
@@ -60,29 +61,29 @@ public class SelectDownloadAdapter extends BaseRecyclerAdapter<String> {
             switch (map.get(position)){
                 case Constants.CHAPTER_SELECTED:
                     holder.setFrameLayoutImageResource(R.id.fl_position_wrapper,R.drawable.btn_selected_download);
-                    holder.setTextViewColor(R.id.tv_position, Color.WHITE);
+                    holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorBg));
                     holder.setVisibility(R.id.iv_download_status, View.GONE);
                     break;
                 case Constants.CHAPTER_DOWNLOAD:
                     holder.setFrameLayoutImageResource(R.id.fl_position_wrapper,R.drawable.btn_downloaded_download);
-                    holder.setTextViewColor(R.id.tv_position, Color.parseColor("#666666"));
+                    holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorTextBlack));
                     holder.setVisibility(R.id.iv_download_status, View.VISIBLE);
                     holder.setImageResource(R.id.iv_download_status,R.mipmap.icon_download_finished);
                     break;
                 case Constants.CHAPTER_DOWNLOADING:
                     holder.setFrameLayoutImageResource(R.id.fl_position_wrapper,R.drawable.btn_downloaded_download);
-                    holder.setTextViewColor(R.id.tv_position, Color.parseColor("#666666"));
+                    holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorTextBlack));
                     holder.setVisibility(R.id.iv_download_status, View.VISIBLE);
                     holder.setImageResource(R.id.iv_download_status,R.mipmap.icon_download_downloading);
                     break;
                 case Constants.CHAPTER_FREE:
                     holder.setFrameLayoutImageResource(R.id.fl_position_wrapper,R.drawable.btn_select_download);
-                    holder.setTextViewColor(R.id.tv_position, Color.parseColor("#666666"));
+                    holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorTextBlack));
                     holder.setVisibility(R.id.iv_download_status, View.GONE);
                     break;
                 default:
                     holder.setFrameLayoutImageResource(R.id.fl_position_wrapper,R.drawable.btn_select_download);
-                    holder.setTextViewColor(R.id.tv_position, Color.parseColor("#666666"));
+                    holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorTextBlack));
                     holder.setVisibility(R.id.iv_download_status, View.GONE);
                     break;
             }

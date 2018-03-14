@@ -778,7 +778,7 @@ public class ComicModule {
                                     mHelper.insert(item);
                                 }catch (SQLiteConstraintException exception){
                                     LogUtil.e("插入下载列表失败，更新数据库");
-                                    mHelper.update(item);
+                                    //mHelper.update(item);
                                 }
                             }
                         }

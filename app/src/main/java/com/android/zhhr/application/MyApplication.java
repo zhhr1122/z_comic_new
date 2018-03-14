@@ -40,6 +40,9 @@ public class MyApplication extends Application {
         Hawk.init(this).build();
         //换皮肤
         SkinCompatManager.withoutActivity(this)                         // Basic Widget support
+                .addInflater(new SkinMaterialViewInflater())            // material design 控件换肤初始化[可选]
+                .addInflater(new SkinConstraintViewInflater())          // ConstraintLayout 控件换肤初始化[可选]
+                .addInflater(new SkinCardViewInflater())                // CardView v7 控件换肤初始化[可选]
                 .setSkinStatusBarColorEnable(false)                     // Disable statusBarColor skin support，default true   [selectable]
                 .setSkinWindowBackgroundEnable(false)                   // Disable windowBackground skin support，default true [selectable]
                 .loadSkin();
