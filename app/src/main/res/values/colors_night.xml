@@ -19,4 +19,9 @@
     <color name="colorHintTextColorLight_night">#878685</color>
     <color name="colorSearchHintTextColorLight_night">#878685</color>
 
+    <color name="colordialogTextBlack_night">#919191</color>
+    <color name="colordialogTextDark_night">#666666</color>
+    <color name="colordialogBottom_night">#363635</color>
+    <color name="colordialogPirmary_night">#663e2a</color>
+
 </resources>

@@ -1,7 +1,9 @@
 package com.android.zhhr.ui.custom;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -42,16 +44,19 @@ public class CustomTab extends SkinCompatLinearLayout {
         super.onFinishInflate();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void setCurrentPosition(int postion){
         for(int i=0;i<4;i++){
             if(i!=postion){
                 TextView mTextView  = (TextView) mTabs[i].getChildAt(0);
-                mTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorTextColorLight));
+                mTextView.setTextAppearance(R.style.colorTextColorLight);
+                //mTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorTextColorLight));
                 ImageView mBottom = (ImageView) mTabs[i].getChildAt(1);
                 mBottom.setVisibility(View.GONE);
             }else{
                 TextView mTextView  = (TextView) mTabs[i].getChildAt(0);
-                mTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextColorDark));
+                mTextView.setTextAppearance(R.style.colorTextBlack);
+                //mTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextColorDark));
                 ImageView mBottom = (ImageView) mTabs[i].getChildAt(1);
                 mBottom.setVisibility(View.VISIBLE);
             }

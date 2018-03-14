@@ -18,4 +18,9 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorHintTextColorLight">#999999</color>
     <color name="colorSearchHintTextColorLight">#666666</color>
+
+    <color name="colordialogTextBlack">#333333</color>
+    <color name="colordialogTextDark">#666666</color>
+    <color name="colordialogBottom">#e2e2e2</color>
+    <color name="colordialogPirmary">#ff9a6a</color>
 </resources>

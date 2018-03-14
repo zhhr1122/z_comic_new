@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp">
     <LinearLayout
+        android:background="@color/colorBg"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +36,7 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
         <ImageView
-            android:background="#e2e2e2"
+            android:background="@color/colorBottom"
             android:layout_width="0.5dp"
             android:layout_height="match_parent" />
         <RelativeLayout

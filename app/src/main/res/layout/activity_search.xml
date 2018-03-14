@@ -178,14 +178,7 @@
         android:textColor="@color/colorTextColorLight"
         android:background="@color/colorBg"
         />
-    <View
-        android:id="@+id/v_night"
-        android:visibility="gone"
-        android:alpha="0.8"
-        android:background="#000"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        ></View>
+    <include layout="@layout/layout_night_cover"></include>
 
 
 </RelativeLayout>

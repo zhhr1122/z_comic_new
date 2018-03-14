@@ -115,7 +115,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     private float Dy = 0;
     private Rect normal = new Rect();
     private int mCurrent;
-    private Bitmap mCoverBitmap;
 
 
     @Override
@@ -162,20 +161,6 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
     @Override
     protected void onResume() {
         mPresenter.getCurrentChapters();
-        if(mPresenter.getmComic()!=null){
-            Glide.with(this)
-                    .load(mPresenter.getmComic().getCover())
-                    .placeholder(R.mipmap.pic_default)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .bitmapTransform(new CenterCrop(this))
-                    .into(mHeaderView);
-            Glide.with(this)
-                    .load(mPresenter.getmComic().getCover())
-                    .placeholder(R.mipmap.pic_default)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .bitmapTransform(new BlurTransformation(this, 10), new CenterCrop(this))
-                    .into(mHeaderViewBg);
-        }
         super.onResume();
     }
 

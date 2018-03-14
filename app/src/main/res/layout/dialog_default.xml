@@ -12,19 +12,19 @@
             android:gravity="center"
             android:textSize="16dp"
             android:text="提示"
-            android:textColor="#333333"
+            android:textColor="@color/colorTextColorDark"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#e2e2e2"
+            android:background="@color/colordialogBottom"
             />
         <TextView
             android:id="@+id/tv_content"
             android:text="内容"
             android:textSize="16dp"
-            android:textColor="#666666"
+            android:textColor="@color/colordialogTextBlack"
             android:gravity="center_vertical"
             android:layout_marginLeft="15dp"
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#e2e2e2"
+            android:background="@color/colordialogBottom"
             />
         <LinearLayout
             android:orientation="horizontal"
@@ -44,7 +44,7 @@
                 android:text="取消"
                 android:textSize="16dp"
                 android:gravity="center"
-                android:textColor="#666666"
+                android:textColor="@color/colordialogTextBlack"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -52,14 +52,14 @@
             <ImageView
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"
-                android:background="#e2e2e2"
+                android:background="@color/colordialogBottom"
                 />
             <TextView
                 android:id="@+id/tv_confirm"
                 android:text="确定"
                 android:textSize="16dp"
                 android:gravity="center"
-                android:textColor="#ff9a6a"
+                android:textColor="@color/colordialogPirmary"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

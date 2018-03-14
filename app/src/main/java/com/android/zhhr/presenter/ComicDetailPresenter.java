@@ -1,9 +1,11 @@
 package com.android.zhhr.presenter;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,6 +168,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void orderIndex(LinearLayout mlayout) {
         Drawable img_location = context.getResources().getDrawable(R.mipmap.location);
         img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
@@ -174,21 +177,25 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             TextView textView = itemView.getmTitle();
             if(!isOrder()){
                 if(mComic.getCurrentChapter() == position){
-                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+                    textView.setTextAppearance(R.style.colorTextPrimary);
+                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
                 }else{
-                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
+                    textView.setTextAppearance(R.style.colorTextBlack);
+                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((position+1)+" - "+mComic.getChapters().get(position));
             }else{
                 if(mComic.getChapters().size()-mComic.getCurrentChapter() == position+1){
-                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+                    textView.setTextAppearance(R.style.colorTextPrimary);
+                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
                 }else{
-                    textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
+                    textView.setTextAppearance(R.style.colorTextBlack);
+                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((mComic.getChapters().size()-position)+" - "+mComic.getChapters().get(mComic.getChapters().size()-1-position));

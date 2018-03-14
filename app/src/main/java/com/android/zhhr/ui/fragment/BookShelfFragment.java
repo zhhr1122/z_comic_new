@@ -1,6 +1,8 @@
 package com.android.zhhr.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -143,33 +145,43 @@ public class BookShelfFragment extends BaseFragment<BookShelfPresenter> implemen
     public void ShowToast(String t) {
         showToast(t);
     }
+    @TargetApi(Build.VERSION_CODES.M)
     @OnClick(R.id.rl_collect)
     public void ToCollect(){
         ResetTitle();
-        mCollect.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
+        mCollect.setTextAppearance(R.style.colorTextBlack);
+        //mCollect.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
         mViewpager.setCurrentItem(0);
         mBottomCollect.setVisibility(View.VISIBLE);
 
     }
+    @TargetApi(Build.VERSION_CODES.M)
     @OnClick(R.id.rl_history)
     public void ToHistory(){
         ResetTitle();
-        mHistory.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
+        mHistory.setTextAppearance(R.style.colorTextBlack);
+        //mHistory.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
         mViewpager.setCurrentItem(1);
         mBottomHistory.setVisibility(View.VISIBLE);
     }
+    @TargetApi(Build.VERSION_CODES.M)
     @OnClick(R.id.rl_download)
     public void ToDownload(){
         ResetTitle();
-        mDownload.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
+        mDownload.setTextAppearance(R.style.colorTextBlack);
+        //mDownload.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorDark));
         mViewpager.setCurrentItem(2);
         mBottomDownload.setVisibility(View.VISIBLE);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void ResetTitle(){
-        mDownload.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
+        mDownload.setTextAppearance(R.style.colorTextColorLight);
+        mCollect.setTextAppearance(R.style.colorTextColorLight);
+        mHistory.setTextAppearance(R.style.colorTextColorLight);
+       /* mDownload.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
         mCollect.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
-        mHistory.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));
+        mHistory.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextColorLight));*/
         mBottomCollect.setVisibility(View.GONE);
         mBottomDownload.setVisibility(View.GONE);
         mBottomHistory.setVisibility(View.GONE);

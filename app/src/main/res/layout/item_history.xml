@@ -60,14 +60,31 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_select"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/continue_read"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" >
+            <ImageView
+                android:id="@+id/iv_select"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/download_icon_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/tv_download_info"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/colorTextColor"
+                android:textSize="12dp"
+                android:text="续看"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
         <View
             android:id="@+id/v_bottom_line"
             android:layout_alignParentBottom="true"

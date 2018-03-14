@@ -33,7 +33,6 @@
                             android:id="@+id/iv_loading_top"
                             android:layout_margin="5dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/loading_top"
                             android:layout_width="30dp"
                             android:layout_height="30dp" />
                         <TextView

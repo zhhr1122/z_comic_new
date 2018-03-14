@@ -9,13 +9,11 @@
         android:layout_height="match_parent"
         >
         <ImageView
-            android:src="@mipmap/pic_default"
             android:id="@+id/iv_image"
             android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
         <ImageView
-            android:src="@mipmap/pic_default"
             android:alpha="0"
             android:id="@+id/iv_image_bg"
             android:scaleType="fitXY"
@@ -95,10 +93,11 @@
                         </LinearLayout>
 
                         <Button
+                            style="?android:attr/borderlessButtonStyle"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textColor="@color/colorWhite"
-                            android:background="@mipmap/detail_read_btn"
+                            android:background="@drawable/btn_start_read"
                             android:layout_gravity="center"
                             android:text="开始阅读"
                             android:gravity="center"
@@ -356,12 +355,5 @@
         >
     </LinearLayout>
     <include layout="@layout/layout_loading"></include>
-    <View
-        android:id="@+id/v_night"
-        android:visibility="gone"
-        android:alpha="0.8"
-        android:background="#000"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        ></View>
+    <include layout="@layout/layout_night_cover"></include>
 </RelativeLayout>

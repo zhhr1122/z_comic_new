@@ -29,4 +29,20 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="colorTextBlack">
+        <item name="android:textColor">@color/colorTextBlack</item>
+    </style>
+
+    <style name="colorTextPrimary">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="colorTextColorLight">
+        <item name="android:textColor">@color/colorTextLight</item>
+    </style>
+
+    <style name="colorTextColorBg">
+        <item name="android:textColor">@color/colorBg</item>
+    </style>
+
 </resources>

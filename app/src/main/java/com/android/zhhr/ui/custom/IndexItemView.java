@@ -1,9 +1,11 @@
 package com.android.zhhr.ui.custom;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -65,13 +67,16 @@ public class IndexItemView extends RelativeLayout{
         void onItemClick(View view, int position);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void setCurrentColor(boolean isCurrent){
         if(isCurrent){
-            mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+            mTitle.setTextAppearance(R.style.colorTextPrimary);
+            //mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
             mTitle.setCompoundDrawables(null, null, img_location, null);
             mTitle.setCompoundDrawablePadding(DisplayUtil.dip2px(getContext(),10));
         }else{
-            mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextBlack));
+            mTitle.setTextAppearance(R.style.colorTextBlack);
+            //mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextBlack));
             mTitle.setCompoundDrawables(null, null, null, null);
         }
     }
