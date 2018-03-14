@@ -173,7 +173,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             IndexItemView itemView = (IndexItemView) mlayout.getChildAt(position);
             TextView textView = itemView.getmTitle();
             if(!isOrder()){
-                if(mComic.getCurrentChapter() == (position+1)){
+                if(mComic.getCurrentChapter() == position){
                     textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
@@ -183,7 +183,7 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
                 }
                 textView.setText((position+1)+" - "+mComic.getChapters().get(position));
             }else{
-                if(mComic.getChapters().size()-mComic.getCurrentChapter() == position){
+                if(mComic.getChapters().size()-mComic.getCurrentChapter() == position+1){
                     textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
