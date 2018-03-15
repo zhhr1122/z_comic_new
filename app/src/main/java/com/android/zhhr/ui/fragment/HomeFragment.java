@@ -1,9 +1,11 @@
 package com.android.zhhr.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -149,16 +151,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             }
 
+            @TargetApi(Build.VERSION_CODES.M)
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onAlphaActionBar(float a) {
                 if(a<1){
-                    mHomeTitle1.setTextColor(Color.parseColor("#ffffff"));
-                    mHomeTitle2.setTextColor(Color.parseColor("#ffffff"));
+                    mHomeTitle1.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorWhite));
+                    mHomeTitle2.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorWhite));
                     mSearch.setImageResource(R.mipmap.search);
                 }else{
-                    mHomeTitle1.setTextColor(Color.parseColor("#666666"));
-                    mHomeTitle2.setTextColor(Color.parseColor("#ff9a6a"));
+                    mHomeTitle1.setTextAppearance(R.style.colorTextBlack);
+                    mHomeTitle2.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorPrimary));
                     mSearch.setImageResource(R.mipmap.search_color);
                 }
                 mActionBarBg.setAlpha(a);

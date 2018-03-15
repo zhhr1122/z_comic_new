@@ -26,6 +26,7 @@
                 android:layout_height="15dp"
                 />
             <TextView
+                android:textColor="@color/colorTextColor"
                 android:layout_below="@id/iv_location"
                 android:text="当前"
                 android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
                 android:layout_height="15dp"
                 />
             <TextView
+                android:textColor="@color/colorTextColor"
                 android:layout_below="@id/iv_scroll"
                 android:text="到底"
                 android:layout_width="wrap_content"

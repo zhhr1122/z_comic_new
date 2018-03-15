@@ -23,10 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingRight="13dp"
+            android:paddingLeft="13dp"
             android:background="@drawable/background_more"
             android:textSize="12dp"
             android:textColor="@color/colorTextLight"

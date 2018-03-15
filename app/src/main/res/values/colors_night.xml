@@ -7,7 +7,7 @@
     <color name="colorBg_night">#636262</color>
     <color name="colorBgDark_night">#878685</color>
     <color name="colorTextBlack_night">#ffffff</color>
-    <color name="colorTextLight_night">#d1d1d1</color>
+    <color name="colorTextLight_night">#ffffff</color>
     <color name="colorTrans_night">#00000000</color>
     <color name="colorBottom_night">#949493</color>
     <color name="colorTextColor_night">#ffffff</color>
