@@ -317,7 +317,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                 IntentUtil.toRankActivity(getActivity().getApplicationContext());
                 break;
             case R.id.ll_category2:
-                showToast("开发中，敬请期待");
+                IntentUtil.toCategoryActivity(getActivity().getApplicationContext());
                 break;
             case R.id.ll_category3:
                 showToast("开发中，敬请期待");

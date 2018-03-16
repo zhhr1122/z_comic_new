@@ -97,7 +97,7 @@ public class RankActivity extends BaseActivity<RankPresenter> implements IRankVi
 
     @OnClick(R.id.iv_back_color)
     public void finish(View view){
-        this.finish();
+        super.finish();
     }
 
     @OnClick(R.id.iv_search)

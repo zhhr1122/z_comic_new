@@ -39,6 +39,9 @@ android {
             dirs 'libs'
         }
     }
+    dexOptions{
+        jumboMode true
+    }
 }
 
 dependencies {

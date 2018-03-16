@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBg"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.android.zhhr.ui.custom.ElasticHeadScrollView
+        android:id="@+id/ev_scrollview"
+        android:layout_marginTop="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/rv_select"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+            </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_bookshelf"
+                android:layout_below="@id/rv_select"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </com.android.zhhr.ui.custom.ElasticHeadScrollView>
+    <RelativeLayout
+        android:id="@+id/ll_actionbar"
+        android:orientation="vertical"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_actionbar"
+            android:background="@color/colorBg"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_back_color"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_back_color"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="12.5dp"
+                    />
+                <TextView
+                    android:text="排行榜"
+                    android:gravity="center"
+                    android:id="@+id/tv_title"
+                    android:textSize="17dp"
+                    android:textColor="@color/colorTextColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/iv_search"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/search_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <View
+            android:background="@color/colorBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+    </RelativeLayout>
+    <include layout="@layout/layout_night_cover"></include>
+
+</RelativeLayout>

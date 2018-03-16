@@ -1061,4 +1061,26 @@ public class ComicModule {
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(observer);
     }
+
+    public void getCategroyList(Map<String, Integer> mSelectMap, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<Comic>>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                try {
+                    Document doc = Jsoup.connect(Url.TencentCategoryUrl).get();
+                    List<Comic> mdats = TencentComicAnalysis.TransToComic(doc);
+                    observableEmitter.onNext(mdats);
+                } catch (Exception e) {
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+                    observableEmitter.onComplete();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
 }

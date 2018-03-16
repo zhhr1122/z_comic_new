@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
+import com.android.zhhr.ui.activity.CategroyActivity;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
@@ -104,5 +105,10 @@ public class IntentUtil {
     public static void toQQchat(Context context,String number) {
         String url = "mqqwpa://im/chat?chat_type=wpa&uin="+number;//uin是发送过去的qq号码
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+    }
+
+    public static void toCategoryActivity(Context context) {
+        Intent intent = new Intent(context, CategroyActivity.class);
+        context.startActivity(intent);
     }
 }

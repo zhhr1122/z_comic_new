@@ -34,5 +34,7 @@ public class Url {
 
     public static String TencentRankUrl = "http://m.ac.qq.com/rank/index?";
 
+    public static String TencentCategoryUrl = "http://ac.qq.com/Comic/index/state/pink";
+
 }
 
