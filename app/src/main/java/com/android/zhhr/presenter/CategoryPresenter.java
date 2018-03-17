@@ -23,12 +23,14 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
     private List<Type> mSelectList;
     private Map<String,Integer> mSelectMap;
     protected ComicModule mModel;
+    private int page;
 
     public CategoryPresenter(Activity context, ICategoryView view) {
         super(context, view);
         this.mSelectList = new ArrayList<>();
         this.mSelectMap =new HashMap<>();
         this.mModel = new ComicModule(context);
+        this.page = 1;
     }
 
     public void loadData() {
@@ -63,7 +65,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
     }
 
     public void loadCategoryList(){
-        mModel.getCategroyList(mSelectMap, new DisposableObserver<List<Comic>>() {
+        mModel.getCategroyList(mSelectMap,page, new DisposableObserver<List<Comic>>() {
             @Override
             public void onNext(@NonNull List<Comic> comics) {
                 mView.fillData(comics);
@@ -85,6 +87,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
         if(type.getTitle()!=null){
             mSelectMap.put(type.getType(),type.getValue());
             mView.setMap(mSelectMap);
+            loadCategoryList();
         }
     }
 }

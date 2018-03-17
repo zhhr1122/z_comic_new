@@ -1,6 +1,8 @@
 package com.android.zhhr.ui.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -48,8 +50,10 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
         return R.layout.activity_category;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
+        initStatusBar(false);
         mSelectAdapter = new CategoryAdapter(this,R.layout.item_categroy_select);
         mCategoryAdapter = new CategoryListAdapter(this,R.layout.item_homepage_three);
 

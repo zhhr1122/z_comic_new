@@ -1062,12 +1062,29 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void getCategroyList(Map<String, Integer> mSelectMap, Observer observer) {
+    public void getCategroyList(final Map<String, Integer> mSelectMap, final int page, Observer observer) {
         Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
-                    Document doc = Jsoup.connect(Url.TencentCategoryUrl).get();
+                    String theme= "";
+                    String audience = "";
+                    String finish = "";
+                    String nation = "";
+                    if(mSelectMap.get("theme")!=0){
+                        theme = "/theme/"+mSelectMap.get("theme");
+                    }
+                    if(mSelectMap.get("audience")!=0){
+                        audience = "/audience/"+mSelectMap.get("audience");
+                    }
+                    if(mSelectMap.get("finish")!=0){
+                        finish = "/finish/"+mSelectMap.get("finish");
+                    }
+                    if(mSelectMap.get("nation")!=0){
+                        nation = "/nation/"+mSelectMap.get("nation");
+                    }
+                    String url = Url.TencentCategoryUrlHead+audience+theme+finish+Url.TencentCategoryUrlMiddle+nation+Url.TencentCategoryUrlFoot+page;
+                    Document doc = Jsoup.connect(url).get();
                     List<Comic> mdats = TencentComicAnalysis.TransToComic(doc);
                     observableEmitter.onNext(mdats);
                 } catch (Exception e) {

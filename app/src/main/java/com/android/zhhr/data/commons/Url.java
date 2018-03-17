@@ -33,8 +33,12 @@ public class Url {
     public static String TencentSearchRecommend = TencentSearchBase+"index";
 
     public static String TencentRankUrl = "http://m.ac.qq.com/rank/index?";
+    public static String TencentCategoryUrlHead = "http://ac.qq.com/Comic/all";
 
-    public static String TencentCategoryUrl = "http://ac.qq.com/Comic/index/state/pink";
+    public static String TencentCategoryUrlMiddle = "/state/pink";
+
+    public static String TencentCategoryUrlFoot = "/search/time/page/";
+
 
 }
 
