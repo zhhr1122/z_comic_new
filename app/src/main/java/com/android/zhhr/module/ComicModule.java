@@ -144,14 +144,14 @@ public class ComicModule {
                 case Constants.TYPE_BOY_RANK:
                     homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("少年漫画");
-                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    homeTitle.setTitleType(Constants.TYPE_BOY_RANK);
                     mdats.add(homeTitle);
                     mdats.addAll(TencentComicAnalysis.TransToBoysComic(doc));
                     break;
                 case Constants.TYPE_GIRL_RANK:
                     homeTitle = new HomeTitle();
                     homeTitle.setItemTitle("少女漫画");
-                    homeTitle.setTitleType(Constants.TYPE_HOT_SERIAL);
+                    homeTitle.setTitleType(Constants.TYPE_GIRL_RANK);
                     mdats.add(homeTitle);
                     mdats.addAll(TencentComicAnalysis.TransToGirlsComic(doc));
                     break;

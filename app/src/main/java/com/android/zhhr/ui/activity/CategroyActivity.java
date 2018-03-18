@@ -14,11 +14,12 @@ import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.CategoryAdapter;
 import com.android.zhhr.ui.adapter.CategoryListAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
+import com.android.zhhr.ui.custom.ElasticHeadScrollView;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.view.ICategoryView;
 import com.android.zhhr.utils.IntentUtil;
+import com.android.zhhr.utils.LogUtil;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,8 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
 
     @Bind(R.id.rv_bookshelf)
     RecyclerView mSelectListRecyclerView;
+    @Bind(R.id.ev_scrollview)
+    ElasticHeadScrollView mScrollView;
 
     CategoryAdapter mSelectAdapter;
 
@@ -42,7 +45,7 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
 
     @Override
     protected void initPresenter(Intent intent) {
-        mPresenter = new CategoryPresenter(this,this);
+        mPresenter = new CategoryPresenter(this,this,intent);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
     protected void initView() {
         initStatusBar(false);
         mSelectAdapter = new CategoryAdapter(this,R.layout.item_categroy_select);
-        mCategoryAdapter = new CategoryListAdapter(this,R.layout.item_homepage_three);
+        mCategoryAdapter = new CategoryListAdapter(this,R.layout.item_homepage_three,R.layout.item_loading);
 
         NoScrollGridLayoutManager gridLayoutManager = new NoScrollGridLayoutManager(this,7);
         gridLayoutManager.setScrollEnabled(false);
@@ -74,6 +77,21 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
             public void onItemClick(RecyclerView parent, View view, int position) {
                 Type type = mSelectAdapter.getItems(position);
                 mPresenter.onItemClick(type,position);
+            }
+        });
+
+        mScrollView.setListener(new ElasticHeadScrollView.OnScrollListener() {
+            @Override
+            public void OnScrollToBottom() {
+                mPresenter.loadCategoryList();
+            }
+        });
+
+        mCategoryAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position) {
+                Comic comic = mCategoryAdapter.getItems(position);
+                IntentUtil.ToComicDetail(CategroyActivity.this,comic.getId()+"",comic.getTitle());
             }
         });
 

@@ -111,4 +111,10 @@ public class IntentUtil {
         Intent intent = new Intent(context, CategroyActivity.class);
         context.startActivity(intent);
     }
+
+    public static void toCategoryActivity(Context context,String type,int value) {
+        Intent intent = new Intent(context, CategroyActivity.class);
+        intent.putExtra(type,value);
+        context.startActivity(intent);
+    }
 }

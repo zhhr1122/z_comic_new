@@ -49,4 +49,12 @@ public class Constants {
 
     public static final boolean NIGHT_MODEL = true;
 
+    public final static String CATEGORY_TITLE_THEME = "theme";
+    public final static String CATEGORY_TITLE_FINISH = "finish";
+    public final static String CATEGORY_TITLE_AUDIENCE = "audience";
+    public final static String CATEGORY_TITLE_NATION = "nation";
+
+
+
+
 }

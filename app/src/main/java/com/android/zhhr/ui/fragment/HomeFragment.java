@@ -282,10 +282,22 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     public void onTitleClick(RecyclerView parent, View view, int type) {
         switch (type){
             case Constants.TYPE_RANK_LIST:
-                ShowToast("更多排行开发中");
+                IntentUtil.toRankActivity(getActivity());
                 break;
             case Constants.TYPE_RECOMMEND:
                 ShowToast("更多热门推荐开发中");
+                break;
+            case Constants.TYPE_GIRL_RANK:
+               IntentUtil.toCategoryActivity(getActivity(),Constants.CATEGORY_TITLE_AUDIENCE,2);
+                break;
+            case Constants.TYPE_BOY_RANK:
+                IntentUtil.toCategoryActivity(getActivity(),Constants.CATEGORY_TITLE_AUDIENCE,1);
+                break;
+            case Constants.TYPE_HOT_SERIAL:
+                IntentUtil.toCategoryActivity(getActivity(),Constants.CATEGORY_TITLE_FINISH,1);
+                break;
+            case Constants.TYPE_HOT_JAPAN:
+                IntentUtil.toCategoryActivity(getActivity(),Constants.CATEGORY_TITLE_NATION,4);
                 break;
             default:
                 ShowToast("开发中");

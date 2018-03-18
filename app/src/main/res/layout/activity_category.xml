@@ -20,6 +20,8 @@
                 android:layout_height="200dp">
             </android.support.v7.widget.RecyclerView>
             <android.support.v7.widget.RecyclerView
+                android:layout_marginRight="-6dp"
+                android:layout_marginLeft="-6dp"
                 android:id="@+id/rv_bookshelf"
                 android:layout_below="@id/rv_select"
                 android:layout_width="match_parent"
@@ -51,7 +53,7 @@
                     android:padding="12.5dp"
                     />
                 <TextView
-                    android:text="排行榜"
+                    android:text="分类"
                     android:gravity="center"
                     android:id="@+id/tv_title"
                     android:textSize="17dp"

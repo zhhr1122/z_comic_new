@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.LogUtil;
 
 /***
  * 下拉回弹的ScrollView
@@ -58,7 +59,7 @@ public class ElasticHeadScrollView extends ScrollView {
     protected void onScrollChanged(int x, int y, int oldx, int oldy) {
         super.onScrollChanged(x, y, oldx, oldy);
         int height = mRecyclerView.getHeight()-y+DisplayUtil.getBottomStatusHeight(context);
-        if(height == DisplayUtil.dip2px(context,535)||height == DisplayUtil.dip2px(context,534)){
+        if(height == DisplayUtil.dip2px(context,375)){
             if(listener!=null){
                 listener.OnScrollToBottom();
             }
