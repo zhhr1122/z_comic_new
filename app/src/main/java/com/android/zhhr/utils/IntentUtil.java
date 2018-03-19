@@ -7,7 +7,7 @@ import android.net.Uri;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.ui.activity.CategroyActivity;
+import com.android.zhhr.ui.activity.CategoryActivity;
 import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
@@ -16,7 +16,6 @@ import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.activity.RankActivity;
 import com.android.zhhr.ui.activity.SearchActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
-import com.android.zhhr.ui.fragment.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,12 +107,12 @@ public class IntentUtil {
     }
 
     public static void toCategoryActivity(Context context) {
-        Intent intent = new Intent(context, CategroyActivity.class);
+        Intent intent = new Intent(context, CategoryActivity.class);
         context.startActivity(intent);
     }
 
     public static void toCategoryActivity(Context context,String type,int value) {
-        Intent intent = new Intent(context, CategroyActivity.class);
+        Intent intent = new Intent(context, CategoryActivity.class);
         intent.putExtra(type,value);
         context.startActivity(intent);
     }

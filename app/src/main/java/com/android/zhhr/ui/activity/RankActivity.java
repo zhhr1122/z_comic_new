@@ -87,6 +87,7 @@ public class RankActivity extends BaseActivity<RankPresenter> implements IRankVi
     @Override
     public void getDataFinish() {
         mAdapter.notifyDataSetChanged();
+        mScrollView.setInnerHeight();
     }
 
 

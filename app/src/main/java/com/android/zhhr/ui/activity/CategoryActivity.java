@@ -18,7 +18,6 @@ import com.android.zhhr.ui.custom.ElasticHeadScrollView;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.view.ICategoryView;
 import com.android.zhhr.utils.IntentUtil;
-import com.android.zhhr.utils.LogUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ import butterknife.OnClick;
  * Created by zhhr on 2018/3/16.
  */
 
-public class CategroyActivity extends BaseActivity<CategoryPresenter> implements ICategoryView<List<Comic>>{
+public class CategoryActivity extends BaseActivity<CategoryPresenter> implements ICategoryView<List<Comic>>{
     @Bind(R.id.rv_select)
     RecyclerView mSelectRecyclerView;
 
@@ -91,7 +90,7 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 Comic comic = mCategoryAdapter.getItems(position);
-                IntentUtil.ToComicDetail(CategroyActivity.this,comic.getId()+"",comic.getTitle());
+                IntentUtil.ToComicDetail(CategoryActivity.this,comic.getId()+"",comic.getTitle());
             }
         });
 
@@ -103,6 +102,7 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
         mSelectAdapter.setSelectMap(mMap);
         mSelectAdapter.updateWithClear(mList);
         mSelectAdapter.notifyDataSetChanged();
+        mScrollView.setInnerHeight();
     }
 
     @Override
@@ -119,6 +119,7 @@ public class CategroyActivity extends BaseActivity<CategoryPresenter> implements
     public void fillData(List<Comic> data) {
         mCategoryAdapter.updateWithClear(data);
         mCategoryAdapter.notifyDataSetChanged();
+        mScrollView.setInnerHeight();
     }
 
     @Override

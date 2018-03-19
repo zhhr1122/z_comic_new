@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 
@@ -31,6 +32,7 @@ public class ElasticHeadScrollView extends ScrollView {
     private Rect normal = new Rect();
 
     private RecyclerView mRecyclerView;
+    private RecyclerView mSelectRecycleView;
     private Context context;
 
 
@@ -75,6 +77,7 @@ public class ElasticHeadScrollView extends ScrollView {
             inner = (ViewGroup) getChildAt(0);
             if(inner.getChildCount()!=1){
                 mRecyclerView = (RecyclerView) inner.findViewById(R.id.rv_bookshelf);
+                mSelectRecycleView = (RecyclerView) inner.findViewById(R.id.rv_select);
             }
         }
         setOverScrollMode(OVER_SCROLL_NEVER);//取消5.0效果
@@ -166,5 +169,15 @@ public class ElasticHeadScrollView extends ScrollView {
 
     public interface OnScrollListener{
         void OnScrollToBottom();
+    }
+
+    /**
+     * 强制设置内层VIEW的高度，防止刷新较慢导致显示不全
+     */
+    public void setInnerHeight(){
+        if(inner!=null){
+            int height = mRecyclerView.getHeight()+mSelectRecycleView.getHeight();
+            inner.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
+        }
     }
 }

@@ -211,6 +211,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
             indexItemView.setListener(this);
             mIndex.addView(indexItemView);
         }
+        mScrollView.setInnerHeight();
         setCollect(comic.getIsCollected());
         setCurrent(mCurrent+1);
     }

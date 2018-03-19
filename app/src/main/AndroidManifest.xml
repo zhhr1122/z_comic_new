@@ -83,7 +83,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
-        <activity android:name=".ui.activity.CategroyActivity"
+        <activity android:name=".ui.activity.CategoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>

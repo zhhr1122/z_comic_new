@@ -115,6 +115,7 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
     public void fillData(List<Comic> data) {
         mEmptyView.setVisibility(View.GONE);
         mAdapter.updateWithClear(data);
+        mScrollView.setInnerHeight();
     }
 
     @Override

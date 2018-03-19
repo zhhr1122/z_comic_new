@@ -283,13 +283,13 @@
                         android:orientation="vertical"
                         >
                     </LinearLayout>
-                    <android.support.v7.widget.RecyclerView
+                    <!--<android.support.v7.widget.RecyclerView
                         android:background="@color/colorBg"
                         android:layout_below="@id/ll_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/recycle_view">
-                    </android.support.v7.widget.RecyclerView>
+                    </android.support.v7.widget.RecyclerView>-->
                     <ImageView
                         android:background="@color/colorBg"
                         android:layout_centerHorizontal="true"
