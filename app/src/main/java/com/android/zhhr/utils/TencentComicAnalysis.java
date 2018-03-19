@@ -85,6 +85,25 @@ public class TencentComicAnalysis {
         return mdats;
     }
 
+    //处理漫画列表
+    public static List<Comic> TransToNewListComic(Document doc){
+        List<Comic> mdats = new ArrayList<>();
+        List<Element> detail = doc.getElementsByAttributeValue("class","ret-works-cover");
+        List<Element> infos = doc.getElementsByAttributeValue("class","ret-works-info");
+        for(int i=0;i<detail.size();i++){
+            Comic comic = new Comic();
+            comic.setTitle(detail.get(i).select("a").attr("title"));
+            comic.setCover(detail.get(i).select("img").attr("data-original"));
+            Element info = infos.get(i).getElementsByAttributeValue("class","ret-works-tags").get(0);
+            comic.setAuthor(infos.get(i).getElementsByAttributeValue("class","ret-works-author").get(0).attr("title"));
+            comic.setUpdates(info.select("em").text());
+            comic.setDescribe(info.select("span").text());
+            comic.setId(Long.parseLong(getID(infos.get(i).select("a").attr("href"))));
+            mdats.add(comic);
+        }
+        return mdats;
+    }
+
     public static List<Comic> TransToSearchResultComic(Document doc){
         List<Comic> mdats = new ArrayList<>();
         List<Element> detail = doc.getElementsByAttributeValue("class","comic-item");

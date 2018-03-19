@@ -13,6 +13,7 @@ import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
 import com.android.zhhr.ui.activity.MainActivity;
+import com.android.zhhr.ui.activity.NewListActivity;
 import com.android.zhhr.ui.activity.RankActivity;
 import com.android.zhhr.ui.activity.SearchActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
@@ -114,6 +115,11 @@ public class IntentUtil {
     public static void toCategoryActivity(Context context,String type,int value) {
         Intent intent = new Intent(context, CategoryActivity.class);
         intent.putExtra(type,value);
+        context.startActivity(intent);
+    }
+
+    public static void toNewActivity(Context context) {
+        Intent intent = new Intent(context, NewListActivity.class);
         context.startActivity(intent);
     }
 }

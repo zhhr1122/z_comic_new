@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBg"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.android.zhhr.ui.custom.ElasticImageScrollView
+        android:id="@+id/ev_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:background="@mipmap/head_new_bg"
+                android:id="@+id/iv_new"
+                android:layout_width="match_parent"
+                android:layout_height="175dp">
+            </ImageView>
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/iv_new"
+                android:id="@+id/rv_bookshelf"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </com.android.zhhr.ui.custom.ElasticImageScrollView>
+    <RelativeLayout
+        android:id="@+id/ll_actionbar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <RelativeLayout
+                android:id="@+id/rl_title"
+                android:alpha="0"
+                android:background="@color/colorBg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:background="@color/colorBg"
+                    android:text="当季新作"
+                    android:gravity="center"
+                    android:id="@+id/tv_title"
+                    android:textSize="17dp"
+                    android:textColor="@color/colorTextColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_back_color"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_back_color"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="12.5dp"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/layout_night_cover"></include>
+
+</RelativeLayout>

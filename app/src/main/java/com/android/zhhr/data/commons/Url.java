@@ -39,6 +39,8 @@ public class Url {
 
     public static String TencentCategoryUrlFoot = "/search/time/page/";
 
+    public static String TencentNewUrl = "http://ac.qq.com/Comic/index/search/week/page/";
+
 
 }
 
