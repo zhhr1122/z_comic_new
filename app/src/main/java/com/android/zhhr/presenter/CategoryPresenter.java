@@ -31,6 +31,10 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
     private List<Comic> mList;
     private boolean isloadingdata;
 
+    private String mCategroyTitle;
+
+    private String[] themes,finish,audience,nation;
+
     public CategoryPresenter(Activity context, ICategoryView view, Intent intent) {
         super(context, view);
         this.mSelectList = new ArrayList<>();
@@ -39,7 +43,6 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
         this.mModel = new ComicModule(context);
         this.isloadingdata = false;
         this.page = 1;
-
         mSelectMap.put(Constants.CATEGORY_TITLE_THEME,intent.getIntExtra(Constants.CATEGORY_TITLE_THEME,0));
         mSelectMap.put(Constants.CATEGORY_TITLE_FINISH,intent.getIntExtra(Constants.CATEGORY_TITLE_FINISH,0));
         mSelectMap.put(Constants.CATEGORY_TITLE_AUDIENCE,intent.getIntExtra(Constants.CATEGORY_TITLE_AUDIENCE,0));
@@ -47,22 +50,22 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
     }
 
     public void loadData() {
-       String[] themes = new String[]{"全部","爆笑","热血","冒险","恐怖","科幻","魔幻","玄幻","校园","悬疑","推理","萌系","穿越","后宫"};
+       themes = new String[]{"全部","爆笑","热血","冒险","恐怖","科幻","魔幻","玄幻","校园","悬疑","推理","萌系","穿越","后宫"};
         for(int i=0;i<14;i++){
             Type item = new Type(Constants.CATEGORY_TITLE_THEME,themes[i],i);
             mSelectList.add(item);
         }
-        String[] finish =  new String[]{"全部","连载","完结",null,null,null,null};
+        finish =  new String[]{"全部","连载","完结",null,null,null,null};
         for(int i=0;i<7;i++){
             Type item = new Type(Constants.CATEGORY_TITLE_FINISH,finish[i],i);
             mSelectList.add(item);
         }
-        String[] audience =  new String[]{"全部","少年","少女","青年","少儿",null,null};
+        audience =  new String[]{"全部","少年","少女","青年","少儿",null,null};
         for(int i=0;i<7;i++){
             Type item = new Type(Constants.CATEGORY_TITLE_AUDIENCE,audience[i],i);
             mSelectList.add(item);
         }
-        String[] nation =  new String[]{"全部","内地","港台","韩国","日本",null,null};
+        nation =  new String[]{"全部","内地","港台","韩国","日本",null,null};
         for(int i=0;i<7;i++){
             Type item = new Type(Constants.CATEGORY_TITLE_NATION,nation[i],i);
             mSelectList.add(item);
@@ -108,7 +111,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
         }
     }
 
-    public void onItemClick(Type type, int position) {
+    public void onItemClick(Type type) {
         if(type.getTitle()!=null){
             mSelectMap.put(type.getType(),type.getValue());
             mView.setMap(mSelectMap);
@@ -117,5 +120,23 @@ public class CategoryPresenter extends BasePresenter<ICategoryView>{
             this.isloadingdata = false;
             loadCategoryList();
         }
+    }
+
+    public String getTitle(){
+        mCategroyTitle = "·精品";
+        if(mSelectMap.get(Constants.CATEGORY_TITLE_THEME)!=0){
+            mCategroyTitle = mCategroyTitle +"&"+ themes[mSelectMap.get(Constants.CATEGORY_TITLE_THEME)];
+        }
+        if(mSelectMap.get(Constants.CATEGORY_TITLE_FINISH)!=0){
+            mCategroyTitle = mCategroyTitle +"&"+ finish[mSelectMap.get(Constants.CATEGORY_TITLE_FINISH)];
+        }
+        if(mSelectMap.get(Constants.CATEGORY_TITLE_AUDIENCE)!=0){
+            mCategroyTitle = mCategroyTitle +"&"+ audience[mSelectMap.get(Constants.CATEGORY_TITLE_AUDIENCE)];
+        }
+        if(mSelectMap.get(Constants.CATEGORY_TITLE_NATION)!=0){
+            mCategroyTitle = mCategroyTitle +"&"+ nation[mSelectMap.get(Constants.CATEGORY_TITLE_NATION)];
+        }
+        mCategroyTitle = mCategroyTitle+"·";
+        return mCategroyTitle;
     }
 }

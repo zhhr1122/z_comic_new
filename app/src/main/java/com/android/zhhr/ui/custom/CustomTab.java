@@ -2,9 +2,7 @@ package com.android.zhhr.ui.custom;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +12,11 @@ import android.widget.TextView;
 
 import com.android.zhhr.R;
 
-import skin.support.widget.SkinCompatLinearLayout;
-
 /**
  * Created by zhhr on 2018/3/13.
  */
 
-public class CustomTab extends SkinCompatLinearLayout {
+public class CustomTab extends LinearLayout {
     private LinearLayout mTab;
     private RelativeLayout mTabs[] = new RelativeLayout[4];
     public CustomTab(Context context) {

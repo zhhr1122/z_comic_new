@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
@@ -37,6 +39,10 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
     RecyclerView mSelectListRecyclerView;
     @Bind(R.id.ev_scrollview)
     ElasticHeadScrollView mScrollView;
+    @Bind(R.id.tv_actionbar_category)
+    TextView mCategoryText;
+    @Bind(R.id.rl_actionbar_category)
+    RelativeLayout mCategoryRelativeLayout;
 
     CategoryAdapter mSelectAdapter;
 
@@ -75,7 +81,7 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 Type type = mSelectAdapter.getItems(position);
-                mPresenter.onItemClick(type,position);
+                mPresenter.onItemClick(type);
             }
         });
 
@@ -84,13 +90,20 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
             public void OnScrollToBottom() {
                 mPresenter.loadCategoryList();
             }
+
+            @Override
+            public void onAlphaActionBar(float a) {
+                mCategoryRelativeLayout.setAlpha(a);
+            }
         });
 
         mCategoryAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                Comic comic = mCategoryAdapter.getItems(position);
-                IntentUtil.ToComicDetail(CategoryActivity.this,comic.getId()+"",comic.getTitle());
+                if(position!=mCategoryAdapter.getItemCount()-1){
+                    Comic comic = mCategoryAdapter.getItems(position);
+                    IntentUtil.ToComicDetail(CategoryActivity.this,comic.getId()+"",comic.getTitle());
+                }
             }
         });
 
@@ -102,12 +115,15 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
         mSelectAdapter.setSelectMap(mMap);
         mSelectAdapter.updateWithClear(mList);
         mSelectAdapter.notifyDataSetChanged();
-        mScrollView.setInnerHeight();
+        mCategoryText.setText(mPresenter.getTitle());
+        //mScrollView.setInnerHeight();
     }
 
     @Override
     public void setMap(Map<String, Integer> mMap) {
         mSelectAdapter.setSelectMap(mMap);
+        mCategoryText.setText(mPresenter.getTitle());
+
     }
 
     @Override
@@ -119,7 +135,7 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
     public void fillData(List<Comic> data) {
         mCategoryAdapter.updateWithClear(data);
         mCategoryAdapter.notifyDataSetChanged();
-        mScrollView.setInnerHeight();
+        //mScrollView.setInnerHeight();
     }
 
     @Override

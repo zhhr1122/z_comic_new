@@ -187,6 +187,7 @@ public class ElasticScrollView extends ScrollView {
     public void setInnerHeight(){
         if(inner!=null){
             int height = mRecyclerView.getHeight()+mLoadingTop.getHeight();
+            LogUtil.d("inner height = "+height);
             inner.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
         }
     }

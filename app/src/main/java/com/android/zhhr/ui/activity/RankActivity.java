@@ -68,8 +68,10 @@ public class RankActivity extends BaseActivity<RankPresenter> implements IRankVi
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                Comic comic = mAdapter.getItems(position);
-                IntentUtil.ToComicDetail(RankActivity.this,comic.getId()+"",comic.getTitle());
+                if(position!=mAdapter.getItemCount()-1){
+                    Comic comic = mAdapter.getItems(position);
+                    IntentUtil.ToComicDetail(RankActivity.this,comic.getId()+"",comic.getTitle());
+                }
             }
         });
     }
@@ -87,7 +89,7 @@ public class RankActivity extends BaseActivity<RankPresenter> implements IRankVi
     @Override
     public void getDataFinish() {
         mAdapter.notifyDataSetChanged();
-        mScrollView.setInnerHeight();
+        //mScrollView.setInnerHeight();
     }
 
 

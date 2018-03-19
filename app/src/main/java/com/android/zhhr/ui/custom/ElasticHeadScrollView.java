@@ -61,9 +61,14 @@ public class ElasticHeadScrollView extends ScrollView {
     protected void onScrollChanged(int x, int y, int oldx, int oldy) {
         super.onScrollChanged(x, y, oldx, oldy);
         int height = mRecyclerView.getHeight()-y+DisplayUtil.getBottomStatusHeight(context);
-        if(height == DisplayUtil.dip2px(context,375)){
-            if(listener!=null){
+        if(listener!=null){
+            if(height == DisplayUtil.dip2px(context,375)){
                 listener.OnScrollToBottom();
+            }
+            if(y<=DisplayUtil.dip2px(context,40)){
+                listener.onAlphaActionBar(((float) y)/DisplayUtil.dip2px(context,40));
+            }else {
+                listener.onAlphaActionBar(1f);
             }
         }
     }
@@ -169,6 +174,7 @@ public class ElasticHeadScrollView extends ScrollView {
 
     public interface OnScrollListener{
         void OnScrollToBottom();
+        void onAlphaActionBar(float a);
     }
 
     /**

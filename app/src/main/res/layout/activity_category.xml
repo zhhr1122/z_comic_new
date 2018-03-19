@@ -70,11 +70,30 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
         </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:alpha="0"
+        android:id="@+id/rl_actionbar_category"
+        android:background="@color/colorBg"
+        android:layout_below="@id/ll_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:id="@+id/tv_actionbar_category"
+            android:textSize="14dp"
+            android:textColor="@color/colorTextColorLight"
+            android:gravity="center"
+            android:text="分类"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
         <View
+            android:layout_alignParentBottom="true"
             android:background="@color/colorBottom"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"/>
+
     </RelativeLayout>
+
     <include layout="@layout/layout_night_cover"></include>
 
 </RelativeLayout>
