@@ -33,8 +33,10 @@ import com.bumptech.glide.Glide;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -259,7 +261,7 @@ public class ComicModule {
                            Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
                            mComic = TencentComicAnalysis.TransToComicDetail(doc);
                        }else{
-                           Document doc = Jsoup.connect(Url.KukuComicDetail+(Long.parseLong(mComicId)/1000000)).get();
+                           Document doc = Jsoup.connect(Url.KukuComicBase+"/comiclist/"+(Long.parseLong(mComicId)/1000000)).get();
                            mComic = KukuComicAnalysis.TransToComicDetail(doc);
                        }
 
@@ -314,10 +316,11 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void getChaptersList(final String comic_id, final int comic_chapters, Observer observer){
+    public void getChaptersList(final Comic mComic, final int comic_chapters, Observer observer){
         //拉取漫画用了多级缓存
         //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
         DBDownloadItems items;
+        final String comic_id = mComic.getId()+"";
         try{
             items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
         }catch (Exception e){
@@ -331,25 +334,58 @@ public class ComicModule {
             observer.onNext(chapters);
             observer.onComplete();
         }else{
-            //否则就联网拉取数据，先读取接口的缓存
-            Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
-            //真正调用联网接口
-            CacheProviders.getComicCacheInstance()
-                    .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
-                    .retryWhen(new RetryFunction())
-                    .map(new Function<Chapters, Object>() {
-                        @Override
-                        public Object apply(@NonNull Chapters chapters) throws Exception {
-                            chapters.setComic_id(comic_id);
-                            chapters.setChapters(comic_chapters);
-                            return chapters;
+            Observable comicObservable;
+            //如果是腾讯漫画
+            if(mComic.getFrom() == Constants.FROM_TENCENT){
+                //否则就联网拉取数据，先读取接口的缓存
+                Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
+                //真正调用联网接口
+                comicObservable = CacheProviders.getComicCacheInstance()
+                        .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                        .retryWhen(new RetryFunction())
+                        .map(new Function<Chapters, Object>() {
+                            @Override
+                            public Object apply(@NonNull Chapters chapters) throws Exception {
+                                chapters.setComic_id(comic_id);
+                                chapters.setChapters(comic_chapters);
+                                return chapters;
+                            }
+                        });
+            }else{ //如果是酷酷漫画
+                final Chapters chapters = new Chapters();
+                chapters.setComic_id(comic_id);
+                chapters.setChapters(comic_chapters);
+                final List<String> imageUrl = new ArrayList<>();
+                comicObservable = Observable.create(new ObservableOnSubscribe<Chapters>() {
+                    @Override
+                    public void subscribe(@NonNull ObservableEmitter<Chapters> observableEmitter) throws Exception {
+                        try{
+                            int page = 1;
+                            String url = Url.KukuComicBase+mComic.getChapters_url().get(comic_chapters);
+                            while (true){
+                                Document doc = Jsoup.connect(url+page+".htm").get();
+                                String image = doc.select("script").get(3).toString();
+                                imageUrl.add(Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0]);
+                                page++;
+                            }
+                        } catch (HttpStatusException e){
+                            chapters.setComiclist(imageUrl);
+                            observableEmitter.onNext(chapters);
+                        } catch (Exception e){
+                            observableEmitter.onError(e);
+                        }finally {
+                            observableEmitter.onComplete();
                         }
-                    })
-                    .subscribeOn(Schedulers.io())
+                    }
+
+                });
+            }
+            comicObservable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
                     .subscribe(observer);
+
         }
     }
 

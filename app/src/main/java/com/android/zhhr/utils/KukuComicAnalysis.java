@@ -65,21 +65,27 @@ public class KukuComicAnalysis {
 
             //设置标签
             List<String> tags = new ArrayList<>();
-            tags.add("");
+            tags.add("热血");
             comic.setTags(tags);
 
             //设置图片
             comic.setCover(detail.select("img").attr("src"));
             //设置作者
-            comic.setAuthor("岸本齐史");
+            String infos[]= detail.getElementsByAttributeValue("align","center").get(6).text().split(" | ");
+            comic.setAuthor(infos[0].split("：")[1]);
             //设置收藏数
             comic.setCollections("未知");
             //设置章节数
+            List<Element> ElementChapters = detail.getElementsByAttributeValue("id","comiclistn").get(0).select("dd");
             List<String> chapters = new ArrayList<>();
-            for(int i=0;i<100;i++){
-                chapters.add("测试");
+            List<String> chapters_url = new ArrayList<>();
+            for(int i=0;i<ElementChapters.size();i++){
+                chapters.add(ElementChapters.get(i).select("a").get(0).text());
+                String url = ElementChapters.get(i).select("a").get(0).attr("href");
+                chapters_url.add(url.substring(0,url.length()-5));
             }
             comic.setChapters(chapters);
+            comic.setChapters_url(chapters_url);
 
             Element ElementDescribe = detail.getElementsByAttributeValue("id","ComicInfo").get(0);
             comic.setDescribe(ElementDescribe.text());
@@ -87,17 +93,17 @@ public class KukuComicAnalysis {
 
             comic.setPopularity("未知");
             //设置状态
-            String status = "已完结";
+            String status = infos[2].split("：")[1];
             //设置更新日期
-            if(status.equals("已完结")){
+            if(status.equals("完结")){
                 comic.setStatus("已完结");
-                comic.setUpdates("全"+34+"话");
+                comic.setUpdates("全"+chapters.size()+"话");
             }else {
-                comic.setUpdates("2018/3/19");
+                comic.setUpdates(infos[4].split("：")[1]);
                 comic.setStatus("更新最新话");
             }
 
-            comic.setPoint("0.7");
+            comic.setPoint("暂无评分");
             //设置阅读方式
             comic.setReadType(Constants.UP_TO_DOWN);
             comic.setState(DownState.START);

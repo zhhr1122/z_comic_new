@@ -45,7 +45,10 @@ public class Url {
 
     public static String KukuSearchUrlFoot = "&Submit=%C8%B7%B6%A8";
 
-    public static String KukuComicDetail = "http://comic.kukudm.com/comiclist/";
+    public static String KukuComicBase = "http://comic.kukudm.com";
+
+    public static String KukuComicImageBae ="http://n.1whour.com/";
+
 
 
 }
