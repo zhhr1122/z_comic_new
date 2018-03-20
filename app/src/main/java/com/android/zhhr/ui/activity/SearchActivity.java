@@ -154,7 +154,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 Comic comic = mResultAdapter.getItems(position);
-                IntentUtil.ToComicDetail(SearchActivity.this,comic.getId()+"",comic.getTitle());
+                IntentUtil.ToComicDetail(SearchActivity.this,comic.getId()+"",comic.getTitle(),comic.getFrom());
             }
         });
         mHistoryAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {

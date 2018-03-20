@@ -27,6 +27,10 @@ public class Comic extends BaseBean {
     //章节标题
     @Convert(columnType = String.class, converter = StringConverter.class)
     protected List<String> chapters;
+
+    @Convert(columnType = String.class, converter = StringConverter.class)
+    protected List<String> chapters_url;
+
     //标签
     @Convert(columnType = String.class, converter = StringConverter.class)
     protected List<String> tags;
@@ -67,6 +71,9 @@ public class Comic extends BaseBean {
     protected int download_num;
     //下载完成多少话
     protected int download_num_finish;
+    //来自什么资源
+    protected int from;
+    
     public int getDownload_num_finish() {
         return this.download_num_finish;
     }
@@ -205,19 +212,21 @@ public class Comic extends BaseBean {
     public void setId(long id) {
         this.id = id;
     }
-    @Generated(hash = 1447888425)
+    @Generated(hash = 1962665814)
     public Comic(long id, String title, String cover, String author,
-            List<String> chapters, List<String> tags, String collections,
-            String describe, String point, String popularity, String topics,
-            String updates, String status, int readType, int currentChapter,
-            long collectTime, long clickTime, long downloadTime,
-            boolean isCollected, int stateInte, int current_page,
-            int current_page_all, int download_num, int download_num_finish) {
+            List<String> chapters, List<String> chapters_url, List<String> tags,
+            String collections, String describe, String point, String popularity,
+            String topics, String updates, String status, int readType,
+            int currentChapter, long collectTime, long clickTime,
+            long downloadTime, boolean isCollected, int stateInte,
+            int current_page, int current_page_all, int download_num,
+            int download_num_finish, int from) {
         this.id = id;
         this.title = title;
         this.cover = cover;
         this.author = author;
         this.chapters = chapters;
+        this.chapters_url = chapters_url;
         this.tags = tags;
         this.collections = collections;
         this.describe = describe;
@@ -237,6 +246,7 @@ public class Comic extends BaseBean {
         this.current_page_all = current_page_all;
         this.download_num = download_num;
         this.download_num_finish = download_num_finish;
+        this.from = from;
     }
     @Generated(hash = 1347984162)
     public Comic() {
@@ -270,6 +280,18 @@ public class Comic extends BaseBean {
     }
     public void setCurrent_page_all(int current_page_all) {
         this.current_page_all = current_page_all;
+    }
+    public int getFrom() {
+        return this.from;
+    }
+    public void setFrom(int from) {
+        this.from = from;
+    }
+    public List<String> getChapters_url() {
+        return this.chapters_url;
+    }
+    public void setChapters_url(List<String> chapters_url) {
+        this.chapters_url = chapters_url;
     }
 
 

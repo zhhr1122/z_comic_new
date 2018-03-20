@@ -13,6 +13,7 @@ public class Constants {
     public final static String COMIC_READ_TYPE = "comic_read_type";
     public final static String COMIC_SELECT_DOWNLOAD = "comic_select_download";
     public final static String COMIC = "comic";
+    public final static String COMIC_FROM = "comic_from";
     public final static int RIGHT_TO_LEFT =0;
     public final static int LEFT_TO_RIGHT =1;
     public final static int UP_TO_DOWN = 2;
@@ -54,7 +55,14 @@ public class Constants {
     public final static String CATEGORY_TITLE_AUDIENCE = "audience";
     public final static String CATEGORY_TITLE_NATION = "nation";
 
+    /**
+     * 漫画来源 腾讯 0 酷酷 1
+     */
+
+    public final static int FROM_TENCENT = 0;
+
+    public final static int FROM_KUKU = 1;
 
 
-
+    public static boolean isNeedKuku = true;
 }

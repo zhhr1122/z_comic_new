@@ -1,7 +1,6 @@
 package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
@@ -45,7 +44,6 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  */
 
 public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> implements IDetailView<Comic>,IndexItemView.onItemClickLinstener{
-    private String comic_id;
     @Bind(R.id.iv_image)
     ImageView mHeaderView;
     @Bind(R.id.sv_comic)
@@ -119,7 +117,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @Override
     protected void initPresenter(Intent intent) {
-        mPresenter = new ComicDetailPresenter(this,this);
+        mPresenter = new ComicDetailPresenter(this,this,intent);
     }
 
     @Override
@@ -129,14 +127,13 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @Override
     protected void initView() {
-        comic_id = getIntent().getStringExtra(Constants.COMIC_ID);
         mLoadingTitle.setText(getIntent().getStringExtra(Constants.COMIC_TITLE));
         mScrollView.setScaleTopListener(new MyScaleTopListener());
 
         mLoading.setImageResource(R.drawable.loading);
         AnimationDrawable animationDrawable = (AnimationDrawable) mLoading.getDrawable();
         animationDrawable.start();
-        mPresenter.getDetail(comic_id);
+        mPresenter.getDetail();
         mFloatButtom.setOnFloatBottomClickListener(new DetailFloatLinearLayout.FloatButtomOnclickListener() {
             @Override
             public void onClickLocation(View view) {
@@ -417,7 +414,7 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
 
     @OnClick(R.id.iv_error)
     public void reload(View view){
-        mPresenter.getDetail(comic_id);
+        mPresenter.getDetail();
         mRLloading.setVisibility(View.VISIBLE);
         mReload.setVisibility(View.GONE);
         mLoadingText.setText("正在重新加载，请稍后");

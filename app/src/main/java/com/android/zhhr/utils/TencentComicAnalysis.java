@@ -112,6 +112,7 @@ public class TencentComicAnalysis {
             comic.setTitle(detail.get(i).select("strong").text());
             comic.setCover(detail.get(i).select("img").attr("src"));
             comic.setId(Long.parseLong(getID(detail.get(i).select("a").attr("href"))));
+            comic.setFrom(Constants.FROM_TENCENT);
             List<Element> info = detail.get(i).select("small");
             comic.setUpdates(info.get(0).text());
             String descriptions = info.get(1).text();
@@ -306,10 +307,9 @@ public class TencentComicAnalysis {
     /**
      * 漫画详情
      * @param doc
-     * @param context
      * @return
      */
-    public static Comic TransToComicDetail(Document doc, final Context context){
+    public static Comic TransToComicDetail(Document doc){
         //设置标题
         final Comic comic = new Comic();
         try{

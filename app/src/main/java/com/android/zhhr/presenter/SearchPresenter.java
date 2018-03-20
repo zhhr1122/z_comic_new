@@ -25,11 +25,13 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     private ComicModule mModel;
     private boolean isDynamicLoading;
     private List<Comic> mHistroys;
+    private List<Comic> mResult;
     public SearchPresenter(Activity context, ISearchView view) {
         super(context, view);
         mModel = new ComicModule(context);
         isDynamicLoading = false;
         mHistroys = new ArrayList<>();
+        mResult = new ArrayList<>();
     }
 
 
@@ -62,6 +64,13 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
        final String title =  mView.getSearchText();
         if(title!=null){
             mModel.getSearchResult(title, new DisposableObserver<List<Comic>>() {
+
+                @Override
+                protected void onStart() {
+                    super.onStart();
+                    mResult.clear();
+                }
+
                 @Override
                 public void onError(Throwable throwable) {
                     mView.showErrorView(title);
@@ -74,8 +83,9 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 @Override
                 public void onNext(List<Comic> comics) {
+                    mResult.addAll(comics);
                     if(comics!=null&&comics.size()!=0){
-                        mView.fillResult(comics);
+                        mView.fillResult(mResult);
                     }
                 }
             });
@@ -103,7 +113,14 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
     public void getSearchResult(final String title) {
         mView.setSearchText(title);
         if(title!=null){
-            mModel.getSearchResult(title, new Observer<List<Comic>>() {
+            mModel.getSearchResult(title, new DisposableObserver<List<Comic>>() {
+
+                @Override
+                protected void onStart() {
+                    mResult.clear();
+                    super.onStart();
+                }
+
                 @Override
                 public void onError(Throwable throwable) {
                     mView.showErrorView(title);
@@ -114,30 +131,22 @@ public class SearchPresenter extends BasePresenter<ISearchView>{
 
                 }
 
-                @Override
-                public void onSubscribe(@NonNull Disposable disposable) {
-
-                }
 
                 @Override
                 public void onNext(List<Comic> comics) {
+                    mResult.addAll(comics);
                     if(comics!=null&&comics.size()!=0){
-                        mView.fillResult(comics);
+                        mView.fillResult(mResult);
                     }
                 }
             });
-            mModel.updateSearchResultToDB(title, new Observer<Boolean>() {
+            mModel.updateSearchResultToDB(title, new DisposableObserver<Boolean>() {
                 @Override
                 public void onError(Throwable throwable) {
                 }
 
                 @Override
                 public void onComplete() {
-
-                }
-
-                @Override
-                public void onSubscribe(@NonNull Disposable disposable) {
 
                 }
 

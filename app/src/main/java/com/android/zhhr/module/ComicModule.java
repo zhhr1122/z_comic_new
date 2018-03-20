@@ -25,6 +25,7 @@ import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.GlideCacheUtil;
+import com.android.zhhr.utils.KukuComicAnalysis;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.NetworkUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
@@ -38,6 +39,9 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -243,15 +247,22 @@ public class ComicModule {
     }
 
     //详情页相关
-    public void getComicDetail(final String mComicId,Observer observer){
+    public void getComicDetail(final String mComicId, final int from, Observer observer){
        Observable.create(new ObservableOnSubscribe<Comic>() {
            @Override
            public void subscribe(@NonNull ObservableEmitter<Comic> observableEmitter) throws Exception {
                try {
                    Comic comicFromDB = (Comic) mHelper.findComic(Long.parseLong(mComicId));
                    if(NetworkUtils.isAvailable(rxAppCompatActivity)){
-                       Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
-                       Comic mComic = TencentComicAnalysis.TransToComicDetail(doc,rxAppCompatActivity);
+                       Comic mComic;
+                       if(from == Constants.FROM_TENCENT){
+                           Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
+                           mComic = TencentComicAnalysis.TransToComicDetail(doc);
+                       }else{
+                           Document doc = Jsoup.connect(Url.KukuComicDetail+(Long.parseLong(mComicId)/1000000)).get();
+                           mComic = KukuComicAnalysis.TransToComicDetail(doc);
+                       }
+
                        if(comicFromDB!=null) {
                            mComic.setCurrentChapter(comicFromDB.getCurrentChapter());
                            mComic.setStateInte(comicFromDB.getStateInte());
@@ -264,6 +275,7 @@ public class ComicModule {
                            mComic.setCurrent_page_all(comicFromDB.getCurrent_page_all());
                            mComic.setIsCollected(comicFromDB.getIsCollected());
                            mComic.setReadType(comicFromDB.getReadType());
+                           mComic.setFrom(from);
                        }else{
                            mComic.setCurrentChapter(0);
                        }
@@ -397,9 +409,21 @@ public class ComicModule {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
                 try {
+                    //腾讯的漫画
                     Document doc = Jsoup.connect(Url.TencentSearchResultUrl+title).get();
                     List<Comic> mdats = TencentComicAnalysis.TransToSearchResultComic(doc);
                     observableEmitter.onNext(mdats);
+
+                    //酷酷的漫画
+                    if(Constants.isNeedKuku){
+                        String kukuUrl = Url.KukuSearchUrlHead+ URLEncoder.encode(title, "GBK")+Url.KukuSearchUrlFoot;
+                        Document doc_kuku = Jsoup.connect(kukuUrl).get();
+                        List<Comic> mkukudatas = KukuComicAnalysis.TransToSearchResultComic_Kuku(doc_kuku);
+                        observableEmitter.onNext(mkukudatas);
+                    }
+
+                }catch (SocketTimeoutException e){
+                    e.printStackTrace();
                 } catch (Exception e) {
                     observableEmitter.onError(e);
                     e.printStackTrace();

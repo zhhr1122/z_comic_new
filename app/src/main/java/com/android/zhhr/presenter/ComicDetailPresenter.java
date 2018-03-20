@@ -3,6 +3,7 @@ package com.android.zhhr.presenter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.IndexItemView;
@@ -36,6 +38,8 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     private Context context;
     private long mComicId;
     private boolean isOrder;
+    private String comic_id;
+    private int from;
 
     public Comic getmComic() {
         return mComic;
@@ -55,23 +59,25 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
 
     private Comic mComic;
     private ComicModule mModel;
-    public ComicDetailPresenter(Activity context, IDetailView view) {
+    public ComicDetailPresenter(Activity context, IDetailView view, Intent intent) {
         super(context, view);
         this.context = context;
         this.mComic = new Comic();
         this.mModel = new ComicModule(context);
+        this.comic_id = intent.getStringExtra(Constants.COMIC_ID);
+        //默认漫画都来自腾讯
+        this.from = intent.getIntExtra(Constants.COMIC_FROM,0);
     }
 
     /**
      * 加载详情
-     * @param comic_id
      */
-    public void getDetail(String comic_id){
+    public void getDetail(){
         if(comic_id==null){
             mView.ShowToast("获取ID失败");
         }else{
             mComicId =  Long.parseLong(comic_id);
-            mModel.getComicDetail(comic_id,new DisposableObserver<Comic>() {
+            mModel.getComicDetail(comic_id,from,new DisposableObserver<Comic>() {
 
                 @Override
                 public void onError(Throwable throwable) {

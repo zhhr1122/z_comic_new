@@ -41,6 +41,12 @@ public class Url {
 
     public static String TencentNewUrl = "http://ac.qq.com/Comic/index/search/week/page/";
 
+    public static String KukuSearchUrlHead = "http://so.kukudm.com/search.asp?kw=";
+
+    public static String KukuSearchUrlFoot = "&Submit=%C8%B7%B6%A8";
+
+    public static String KukuComicDetail = "http://comic.kukudm.com/comiclist/";
+
 
 }
 

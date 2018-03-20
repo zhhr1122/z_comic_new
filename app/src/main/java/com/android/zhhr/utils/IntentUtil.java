@@ -41,6 +41,15 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
+    public static void ToComicDetail(Context context, String id,String title,int type){
+        Intent intent = new Intent(context, ComicDetaiActivity.class);
+        intent.putExtra(Constants.COMIC_FROM,type);
+        intent.putExtra(Constants.COMIC_ID,id);
+        intent.putExtra(Constants.COMIC_TITLE,title);
+        context.startActivity(intent);
+    }
+
+
     public static void ToComicChapter(Context context, int chapters,Comic mComic){
         Intent intent = new Intent(context, ComicChapterActivity.class);
         intent.putExtra(Constants.COMIC_CHAPERS,chapters);
