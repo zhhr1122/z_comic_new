@@ -12,7 +12,8 @@ public enum  DownState {
     ERROR(4),
     FINISH(5),
     NONE(6),
-    DELETE(-1);
+    DELETE(-1),
+    CACHE(-2);
     private int state;
 
     public int getState() {

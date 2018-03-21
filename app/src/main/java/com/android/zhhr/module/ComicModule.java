@@ -22,6 +22,7 @@ import com.android.zhhr.net.Function.HttpResultFunc;
 import com.android.zhhr.net.Function.RetryFunction;
 import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.net.cache.CacheProviders;
+import com.android.zhhr.presenter.ComicChapterPresenter;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.GlideCacheUtil;
@@ -260,9 +261,11 @@ public class ComicModule {
                        if(from == Constants.FROM_TENCENT){
                            Document doc = Jsoup.connect(Url.TencentDetail+mComicId).get();
                            mComic = TencentComicAnalysis.TransToComicDetail(doc);
+                           mComic.setFrom(from);
                        }else{
                            Document doc = Jsoup.connect(Url.KukuComicBase+"/comiclist/"+(Long.parseLong(mComicId)/1000000)).get();
                            mComic = KukuComicAnalysis.TransToComicDetail(doc);
+                           mComic.setFrom(from);
                        }
 
                        if(comicFromDB!=null) {
@@ -316,7 +319,7 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void getChaptersList(final Comic mComic, final int comic_chapters, Observer observer){
+    public void getChaptersList(final Comic mComic, final ComicChapterPresenter.OnProgressListener listener, final int comic_chapters, Observer observer){
         //拉取漫画用了多级缓存
         //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
         DBDownloadItems items;
@@ -326,9 +329,14 @@ public class ComicModule {
         }catch (Exception e){
             items = null;
         }
-        if(items!=null&&items.getState() == DownState.FINISH){
+        if(items!=null){
+            LogUtil.d("之前加载过，从数据库中取出");
             Chapters chapters = new Chapters();
-            chapters.setComiclist(items.getChapters_path());
+            if(items.getState() == DownState.FINISH){
+                chapters.setComiclist(items.getChapters_path());
+            }else if(items.getState() == DownState.CACHE){
+                chapters.setComiclist(items.getChapters_url());
+            }
             chapters.setChapters(comic_chapters);
             chapters.setComic_id(comic_id);
             observer.onNext(chapters);
@@ -367,9 +375,24 @@ public class ComicModule {
                                 String image = doc.select("script").get(3).toString();
                                 imageUrl.add(Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0]);
                                 page++;
+                                listener.OnProgress(page);
                             }
                         } catch (HttpStatusException e){
+                            //加载成功一次之后，放入数据库
                             chapters.setComiclist(imageUrl);
+                            DBDownloadItems item = new DBDownloadItems();
+                            item.setId(Long.parseLong(comic_id+comic_chapters));
+                            item.setChapters_title(mComic.getChapters().get(comic_chapters));
+                            item.setComic_id(mComic.getId());
+                            item.setChapters(comic_chapters);
+                            item.setChapters_url(imageUrl);
+                            item.setState(DownState.CACHE);
+                            try{
+                                //把数据先存入数据库
+                                mHelper.insert(item);
+                            }catch (SQLiteConstraintException exception){
+                                LogUtil.e("插入下载列表失败，更新数据库");
+                            }
                             observableEmitter.onNext(chapters);
                         } catch (Exception e){
                             observableEmitter.onError(e);
@@ -377,7 +400,6 @@ public class ComicModule {
                             observableEmitter.onComplete();
                         }
                     }
-
                 });
             }
             comicObservable.subscribeOn(Schedulers.io())
@@ -838,7 +860,7 @@ public class ComicModule {
                                     mHelper.insert(item);
                                 }catch (SQLiteConstraintException exception){
                                     LogUtil.e("插入下载列表失败，更新数据库");
-                                    //mHelper.update(item);
+                                    mHelper.update(item);
                                 }
                             }
                         }

@@ -142,6 +142,8 @@ public class DBDownloadItems extends BaseBean{
                 return DownState.NONE;
             case -1:
                 return DownState.DELETE;
+            case -2:
+                return DownState.CACHE;
             default:
                 return DownState.FINISH;
         }
