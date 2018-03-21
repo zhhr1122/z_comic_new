@@ -1,15 +1,14 @@
 package com.android.zhhr.net;
 
-import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
+import com.android.zhhr.data.entity.db.DBChapters;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
@@ -23,7 +22,7 @@ import retrofit2.http.Url;
 public interface ComicService{
 
     @GET("getChapterList/{id}/{chapter}")
-    Observable<Chapters> getChapters(@Path("id") String id, @Path("chapter") String chapter);
+    Observable<DBChapters> getChapters(@Path("id") String id, @Path("chapter") String chapter);
 
     @GET("getPreNowChapterList/{id}/{chapter}")
     Observable<PreloadChapters> getPreNowChapterList(@Path("id") String id, @Path("chapter") String chapter);

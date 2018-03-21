@@ -5,28 +5,22 @@ import android.view.View;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
-import com.android.zhhr.data.entity.db.DownInfo;
-import com.android.zhhr.net.download.HttpDownOnNextListener;
-import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
+import com.android.zhhr.data.entity.db.DBChapters;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerHolder;
 import com.android.zhhr.ui.adapter.base.BookShelfAdapter;
-import com.android.zhhr.utils.LogUtil;
-
-import java.util.List;
 
 /**
  * Created by 张皓然 on 2018/2/1.
  */
 
-public class DownloadChapterlistAdapter extends BookShelfAdapter<DBDownloadItems> {
+public class DownloadChapterlistAdapter extends BookShelfAdapter<DBChapters> {
 
     public DownloadChapterlistAdapter(Context context, int itemLayoutId) {
         super(context, itemLayoutId);
     }
 
     @Override
-    public void convert(final BaseRecyclerHolder holder, final DBDownloadItems item, final int position) {
+    public void convert(final BaseRecyclerHolder holder, final DBChapters item, final int position) {
         holder.setText(R.id.tv_title,item.getChapters_title());
         holder.setProgress(R.id.pg_download,item.getNum(),item.getCurrent_num());
         if(isEditing()){

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.data.entity.db.DBChapters;
 import com.android.zhhr.presenter.DownloadChapterlistPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.DownloadChapterlistAdapter;
@@ -31,7 +31,7 @@ import butterknife.OnClick;
  * Created by DELL on 2018/2/12.
  */
 
-public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlistPresenter> implements IDownloadlistView<List<DBDownloadItems>>{
+public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlistPresenter> implements IDownloadlistView<List<DBChapters>>{
     @Bind(R.id.tv_title)
     TextView mTitle;
     @Bind(R.id.rv_downloadlist)
@@ -93,7 +93,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                DBDownloadItems info = mAdapter.getItems(position);
+                DBChapters info = mAdapter.getItems(position);
                 mPresenter.onItemClick(info,position);
             }
         });
@@ -135,7 +135,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     }
 
     @Override
-    public void onLoadMoreData(List<DBDownloadItems> downInfos) {
+    public void onLoadMoreData(List<DBChapters> downInfos) {
 
     }
 
@@ -229,7 +229,7 @@ public class DownloadChapterlistActivity extends BaseActivity<DownloadChapterlis
     }
 
     @Override
-    public void fillData(List<DBDownloadItems> mLists) {
+    public void fillData(List<DBChapters> mLists) {
         if(mLists!=null&&mLists.size()!=0){
             mAdapter.updateWithClear(mLists);
             mAdapter.notifyDataSetChanged();

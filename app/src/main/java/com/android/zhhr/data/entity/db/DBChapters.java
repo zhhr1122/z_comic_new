@@ -1,7 +1,6 @@
 package com.android.zhhr.data.entity.db;
 
 import com.android.zhhr.data.entity.BaseBean;
-import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.db.utils.StringConverter;
 
@@ -16,7 +15,7 @@ import java.util.List;
  * Created by 张皓然 on 2018/2/13.
  */
 @Entity
-public class DBDownloadItems extends BaseBean{
+public class DBChapters extends BaseBean{
     @Id
     protected Long id;
     //漫画ID
@@ -38,10 +37,16 @@ public class DBDownloadItems extends BaseBean{
     /*state状态数据库保存*/
     protected int stateInte;
     @Convert(columnType = String.class, converter = StringConverter.class)
-    protected List<String> chapters_url;
+    protected List<String> comiclist;
     @Convert(columnType = String.class, converter = StringConverter.class)
     protected List<String> chapters_path;
 
+    public int getStateInte() {
+        return this.stateInte;
+    }
+    public void setStateInte(int stateInte) {
+        this.stateInte = stateInte;
+    }
     public Long getUpdate_time() {
         return this.update_time;
     }
@@ -96,17 +101,11 @@ public class DBDownloadItems extends BaseBean{
     public void setId(Long id) {
         this.id = id;
     }
-    public int getStateInte() {
-        return this.stateInte;
-    }
-    public void setStateInte(int stateInte) {
-        this.stateInte = stateInte;
-    }
-    @Generated(hash = 2009349481)
-    public DBDownloadItems(Long id, Long comic_id, String title,
-            String chapters_title, int chapters, int num, int current_num,
-            Long create_time, Long update_time, int stateInte,
-            List<String> chapters_url, List<String> chapters_path) {
+    @Generated(hash = 232957805)
+    public DBChapters(Long id, Long comic_id, String title, String chapters_title,
+            int chapters, int num, int current_num, Long create_time,
+            Long update_time, int stateInte, List<String> comiclist,
+            List<String> chapters_path) {
         this.id = id;
         this.comic_id = comic_id;
         this.title = title;
@@ -117,12 +116,14 @@ public class DBDownloadItems extends BaseBean{
         this.create_time = create_time;
         this.update_time = update_time;
         this.stateInte = stateInte;
-        this.chapters_url = chapters_url;
+        this.comiclist = comiclist;
         this.chapters_path = chapters_path;
     }
-    @Generated(hash = 1311776000)
-    public DBDownloadItems() {
+    @Generated(hash = 405250226)
+    public DBChapters() {
     }
+
+
 
     public DownState getState() {
         switch (getStateInte()){
@@ -152,17 +153,17 @@ public class DBDownloadItems extends BaseBean{
     public void setState(DownState state) {
         setStateInte(state.getState());
     }
-    public List<String> getChapters_url() {
-        return this.chapters_url;
-    }
-    public void setChapters_url(List<String> chapters_url) {
-        this.chapters_url = chapters_url;
-    }
     public List<String> getChapters_path() {
         return this.chapters_path;
     }
     public void setChapters_path(List<String> chapters_path) {
         this.chapters_path = chapters_path;
+    }
+    public List<String> getComiclist() {
+        return this.comiclist;
+    }
+    public void setComiclist(List<String> comiclist) {
+        this.comiclist = comiclist;
     }
 
 }

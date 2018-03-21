@@ -2,18 +2,14 @@ package com.android.zhhr.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.net.download.HttpDownManager;
-import com.android.zhhr.ui.activity.DownloadlistActivity;
 import com.android.zhhr.ui.view.IDownloadlistView;
-import com.android.zhhr.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

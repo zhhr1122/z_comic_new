@@ -3,14 +3,11 @@ package com.android.zhhr.ui.adapter;
 import android.content.Context;
 
 import com.android.zhhr.R;
-import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.net.download.HttpDownOnNextListener;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerHolder;
 import com.android.zhhr.utils.LogUtil;
-import com.android.zhhr.utils.TextUtils;
 
 import java.util.List;
 

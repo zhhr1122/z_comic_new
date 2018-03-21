@@ -6,14 +6,13 @@ import android.util.Log;
 
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.commons.Url;
-import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
 import com.android.zhhr.data.entity.HomeTitle;
 import com.android.zhhr.data.entity.HttpResult;
 import com.android.zhhr.data.entity.PreloadChapters;
 import com.android.zhhr.data.entity.SearchBean;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.data.entity.db.DBChapters;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.helper.DaoHelper;
@@ -30,19 +29,16 @@ import com.android.zhhr.utils.KukuComicAnalysis;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.NetworkUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
-import com.bumptech.glide.Glide;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -60,7 +56,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
@@ -263,7 +258,8 @@ public class ComicModule {
                            mComic = TencentComicAnalysis.TransToComicDetail(doc);
                            mComic.setFrom(from);
                        }else{
-                           Document doc = Jsoup.connect(Url.KukuComicBase+"/comiclist/"+(Long.parseLong(mComicId)/1000000)).get();
+                           String url = Url.KukuComicBase+"/comiclist/"+(Long.parseLong(mComicId)/1000000);
+                           Document doc = Jsoup.connect(url).get();
                            mComic = KukuComicAnalysis.TransToComicDetail(doc);
                            mComic.setFrom(from);
                        }
@@ -322,55 +318,50 @@ public class ComicModule {
     public void getChaptersList(final Comic mComic, final ComicChapterPresenter.OnProgressListener listener, final int comic_chapters, Observer observer){
         //拉取漫画用了多级缓存
         //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
-        DBDownloadItems items;
+        DBChapters items;
         final String comic_id = mComic.getId()+"";
-        try{
-            items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
-        }catch (Exception e){
-            items = null;
-        }
-        if(items!=null){
-            LogUtil.d("之前加载过，从数据库中取出");
-            Chapters chapters = new Chapters();
+        items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
+        //判断是否在下载列表中，item不为null表示添加到了数据库，但是只取出其中的下载完成和有缓存的数据
+        if(items!=null&&items.getComiclist()!=null){
+            LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"之前加载过，从数据库中取出");
             if(items.getState() == DownState.FINISH){
-                chapters.setComiclist(items.getChapters_path());
-            }else if(items.getState() == DownState.CACHE){
-                chapters.setComiclist(items.getChapters_url());
+                LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"已经下载完成，加载SD卡中的漫画");
+                items.setComiclist(items.getChapters_path());
             }
-            chapters.setChapters(comic_chapters);
-            chapters.setComic_id(comic_id);
-            observer.onNext(chapters);
+            observer.onNext(items);
             observer.onComplete();
         }else{
+            LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"联网获取");
             Observable comicObservable;
             //如果是腾讯漫画
             if(mComic.getFrom() == Constants.FROM_TENCENT){
+                LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"调用腾讯漫画接口");
                 //否则就联网拉取数据，先读取接口的缓存
-                Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
+                Observable<DBChapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
                 //真正调用联网接口
                 comicObservable = CacheProviders.getComicCacheInstance()
                         .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
                         .retryWhen(new RetryFunction())
-                        .map(new Function<Chapters, Object>() {
+                        .map(new Function<DBChapters, Object>() {
                             @Override
-                            public Object apply(@NonNull Chapters chapters) throws Exception {
-                                chapters.setComic_id(comic_id);
+                            public Object apply(@NonNull DBChapters chapters) throws Exception {
+                                chapters.setComic_id(mComic.getId());
                                 chapters.setChapters(comic_chapters);
                                 return chapters;
                             }
                         });
+                //腾讯漫画采用了RxCache作为缓存，所有不需要存入到数据库也可以进行缓存
             }else{ //如果是酷酷漫画
-                final Chapters chapters = new Chapters();
-                chapters.setComic_id(comic_id);
-                chapters.setChapters(comic_chapters);
+                LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"调用酷酷漫画接口");
                 final List<String> imageUrl = new ArrayList<>();
-                comicObservable = Observable.create(new ObservableOnSubscribe<Chapters>() {
+                comicObservable = Observable.create(new ObservableOnSubscribe<DBChapters>() {
                     @Override
-                    public void subscribe(@NonNull ObservableEmitter<Chapters> observableEmitter) throws Exception {
+                    public void subscribe(@NonNull ObservableEmitter<DBChapters> observableEmitter) throws Exception {
                         try{
                             int page = 1;
                             String url = Url.KukuComicBase+mComic.getChapters_url().get(comic_chapters);
                             while (true){
+                                //解析漫画
                                 Document doc = Jsoup.connect(url+page+".htm").get();
                                 String image = doc.select("script").get(3).toString();
                                 imageUrl.add(Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0]);
@@ -378,22 +369,24 @@ public class ComicModule {
                                 listener.OnProgress(page);
                             }
                         } catch (HttpStatusException e){
-                            //加载成功一次之后，放入数据库
+                            DBChapters chapters = new DBChapters();
+                            chapters.setId(Long.parseLong(comic_id+comic_chapters));
+                            chapters.setChapters_title(mComic.getChapters().get(comic_chapters));
+                            chapters.setComic_id(mComic.getId());
+                            chapters.setChapters(comic_chapters);
                             chapters.setComiclist(imageUrl);
-                            DBDownloadItems item = new DBDownloadItems();
-                            item.setId(Long.parseLong(comic_id+comic_chapters));
-                            item.setChapters_title(mComic.getChapters().get(comic_chapters));
-                            item.setComic_id(mComic.getId());
-                            item.setChapters(comic_chapters);
-                            item.setChapters_url(imageUrl);
-                            item.setState(DownState.CACHE);
-                            try{
-                                //把数据先存入数据库
-                                mHelper.insert(item);
-                            }catch (SQLiteConstraintException exception){
-                                LogUtil.e("插入下载列表失败，更新数据库");
-                            }
+                            chapters.setState(DownState.CACHE);
+                            //传回给VIEW
                             observableEmitter.onNext(chapters);
+                            try{
+                                //酷酷漫画没有采用了RxCache作为缓存，所有需要存入到数据库也进行缓存
+                                //把刚刚拼接成的list存入数据库，并设置状态为cache，和下载列表区分
+                                mHelper.insert(chapters);
+                                LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"存入数据库,id="+comic_id+comic_chapters);
+                            }catch (SQLiteConstraintException exception){
+                                //如果已经在数据库中存在，则不插入数据库
+                                LogUtil.e(mComic.getTitle()+(comic_chapters+1)+"插入数据库失败");
+                            }
                         } catch (Exception e){
                             observableEmitter.onError(e);
                         }finally {
@@ -413,7 +406,7 @@ public class ComicModule {
 
 
     public void getDownloadChaptersList(final String comic_id, final int comic_chapters, Observer observer){
-        Observable<Chapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
+        Observable<DBChapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
         CacheProviders.getComicCacheInstance()
                 .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
                /* .map(new Function<Chapters, Object>() {
@@ -433,9 +426,9 @@ public class ComicModule {
                     }
                 })*/
                 .retryWhen(new RetryFunction())
-                .map(new Function<Chapters, Object>() {
+                .map(new Function<DBChapters, Object>() {
                     @Override
-                    public Object apply(@NonNull Chapters chapters) throws Exception {
+                    public Object apply(@NonNull DBChapters chapters) throws Exception {
                         return chapters.getComiclist();
                     }
                 })
@@ -809,12 +802,12 @@ public class ComicModule {
     }
 
     public void getDownloadItemsFromDB(final long comic_id, Observer observer) {
-        Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
+        Observable.create(new ObservableOnSubscribe<List<DBChapters>>() {
 
             @Override
-            public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<List<DBChapters>> observableEmitter) throws Exception {
                 try{
-                    List<DBDownloadItems> results = mHelper.queryDownloadItems(comic_id);
+                    List<DBChapters> results = mHelper.queryDownloadItems(comic_id);
                     observableEmitter.onNext(results);
                 }catch (Exception e){
                     observableEmitter.onError(e);
@@ -831,13 +824,13 @@ public class ComicModule {
     }
 
     public void getDownloadItemsFromDB(final Comic mComic, final HashMap<Integer,Integer> mMap, Observer observer) {
-        Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
+        Observable.create(new ObservableOnSubscribe<List<DBChapters>>() {
 
             @Override
-            public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<List<DBChapters>> observableEmitter) throws Exception {
                 try{
                     if(mMap.size()>0){
-                        DBDownloadItems item;
+                        DBChapters item;
                         //把hashmap進行排序操作
                         List<Map.Entry<Integer,Integer>> list = new ArrayList<>(mMap.entrySet());
                         Collections.sort(list,new Comparator<Map.Entry<Integer,Integer>>() {
@@ -849,7 +842,7 @@ public class ComicModule {
                         //遍历map
                         for(Map.Entry<Integer,Integer> mapping:list){
                             if(mapping.getValue() == Constants.CHAPTER_SELECTED){
-                                item = new DBDownloadItems();
+                                item = new DBChapters();
                                 item.setId(Long.parseLong(mComic.getId()+""+mapping.getKey()));
                                 item.setChapters_title(mComic.getChapters().get(mapping.getKey()));
                                 item.setComic_id(mComic.getId());
@@ -865,7 +858,7 @@ public class ComicModule {
                             }
                         }
                     }
-                    List<DBDownloadItems> results = mHelper.queryDownloadItems(mComic.getId());
+                    List<DBChapters> results = mHelper.queryDownloadItems(mComic.getId());
                     //修改漫画下载总数
                     observableEmitter.onNext(results);
                 }catch (Exception e){
@@ -907,8 +900,8 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void download(final DBDownloadItems info, final int page, Observer observer) {
-        comicService.download("bytes=0" + "-", info.getChapters_url().get(page))
+    public void download(final DBChapters info, final int page, Observer observer) {
+        comicService.download("bytes=0" + "-", info.getComiclist().get(page))
                 /*指定线程*/
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -936,7 +929,7 @@ public class ComicModule {
 
 
 
-    public void updateDownloadItemsList(final List<DBDownloadItems> mLists, Observer observer) {
+    public void updateDownloadItemsList(final List<DBChapters> mLists, Observer observer) {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
 
             @Override
@@ -1073,11 +1066,11 @@ public class ComicModule {
                 .subscribe(observer);
     }
 
-    public void deleteDownloadItem(final List<DBDownloadItems> mLists, final Comic comic ,Observer observer) {
-        Observable.create(new ObservableOnSubscribe<List<DBDownloadItems>>() {
+    public void deleteDownloadItem(final List<DBChapters> mLists, final Comic comic , Observer observer) {
+        Observable.create(new ObservableOnSubscribe<List<DBChapters>>() {
 
             @Override
-            public void subscribe(@NonNull ObservableEmitter<List<DBDownloadItems>> observableEmitter) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<List<DBChapters>> observableEmitter) throws Exception {
                 try {
                     for (int i = 0; i < mLists.size(); i++) {
                         mLists.get(i).setStateInte(-1);
@@ -1085,7 +1078,7 @@ public class ComicModule {
                         FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.COMIC + comic.getId() + "/" + mLists.get(i).getChapters());
                     }
                     mHelper.insertList(mLists);
-                    List<DBDownloadItems> Items = mHelper.queryDownloadItems(comic.getId());
+                    List<DBChapters> Items = mHelper.queryDownloadItems(comic.getId());
                     observableEmitter.onNext(Items);
                 } catch (Exception e) {
                     observableEmitter.onError(e);

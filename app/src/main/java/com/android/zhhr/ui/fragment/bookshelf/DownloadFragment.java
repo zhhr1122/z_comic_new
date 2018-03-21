@@ -7,18 +7,13 @@ import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
 import com.android.zhhr.presenter.DownloadPresenter;
-import com.android.zhhr.ui.adapter.CollectAdapter;
 import com.android.zhhr.ui.adapter.DownloadAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
-import com.android.zhhr.ui.custom.DividerGridItemDecoration;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.fragment.base.BaseBookShelfFragment;
-import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.ICollectionView;
 import com.android.zhhr.utils.IntentUtil;
-import com.android.zhhr.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

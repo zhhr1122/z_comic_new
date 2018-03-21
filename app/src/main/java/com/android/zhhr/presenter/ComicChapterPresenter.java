@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.view.View;
 
 import com.android.zhhr.data.commons.Constants;
-import com.android.zhhr.data.entity.Chapters;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.PreloadChapters;
+import com.android.zhhr.data.entity.db.DBChapters;
 import com.android.zhhr.db.helper.DaoHelper;
 import com.android.zhhr.module.ComicModule;
-import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.view.IChapterView;
-import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.ShowErrorTextUtil;
 import com.orhanobut.hawk.Hawk;
 
@@ -162,9 +160,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         }
                     });
                 }
-            },(comic_chapters-1+i),new DisposableObserver<Chapters>() {
+            },(comic_chapters-1+i),new DisposableObserver<DBChapters>() {
                 @Override
-                public void onNext(@NonNull Chapters chapters) {
+                public void onNext(@NonNull DBChapters chapters) {
                     //分别设置三个章节
                     if(comic_chapters-1 == chapters.getChapters()){
                         if(comic_chapters-1<0){
@@ -358,11 +356,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             public void OnProgress(int i) {
 
             }
-        }, (chapter + 2), new DisposableObserver<Chapters>() {
+        }, (chapter + 2), new DisposableObserver<DBChapters>() {
 
             @Override
             public void onError(Throwable e) {
-                Chapters chapters = new Chapters();
+                DBChapters chapters = new DBChapters();
                 chapters.setComiclist(new ArrayList<String>());
                 onNext(chapters);
                 isLoadingdata = false;
@@ -377,7 +375,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
 
             @Override
-            public void onNext(@NonNull Chapters chapters) {
+            public void onNext(@NonNull DBChapters chapters) {
                 if (isLoadingdata) {
                     mPreloadChapters.setPrelist(mPreloadChapters.getNowlist());
                     mPreloadChapters.setNowlist(mPreloadChapters.getNextlist());
@@ -408,11 +406,11 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             public void OnProgress(int i) {
 
             }
-        }, chapter - 2, new DisposableObserver<Chapters>() {
+        }, chapter - 2, new DisposableObserver<DBChapters>() {
 
             @Override
             public void onError(Throwable e) {
-                Chapters chapters = new Chapters();
+                DBChapters chapters = new DBChapters();
                 chapters.setComiclist(new ArrayList<String>());
                 onNext(chapters);
                 isLoadingdata = false;
@@ -426,7 +424,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
             }
 
             @Override
-            public void onNext(@NonNull Chapters chapters) {
+            public void onNext(@NonNull DBChapters chapters) {
                 if (isLoadingdata) {
                     mPreloadChapters.setNextlist(mPreloadChapters.getNowlist());
                     mPreloadChapters.setNowlist(mPreloadChapters.getPrelist());

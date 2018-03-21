@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.DownState;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.data.entity.db.DBChapters;
 import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.ISelectDownloadView;
@@ -99,9 +99,9 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
      */
     public void getDataFormDb(){
         SelectedNum = 0;
-        mModel.getDownloadItemsFromDB(mComic.getId(), new DisposableObserver<List<DBDownloadItems>>() {
+        mModel.getDownloadItemsFromDB(mComic.getId(), new DisposableObserver<List<DBChapters>>() {
             @Override
-            public void onNext(@NonNull List<DBDownloadItems> items) {
+            public void onNext(@NonNull List<DBChapters> items) {
                 for(int i=0;i<items.size();i++){
                     if(items.get(i).getState() == DownState.FINISH){
                         map.put(items.get(i).getChapters(), Constants.CHAPTER_DOWNLOAD);

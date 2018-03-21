@@ -1,13 +1,10 @@
 package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -26,8 +23,6 @@ import com.android.zhhr.ui.adapter.ChapterRecycleAdapter;
 import com.android.zhhr.ui.adapter.ChapterViewpagerAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.ComicReaderViewpager;
-import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
-import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.custom.SwitchRelativeLayout;
@@ -35,8 +30,6 @@ import com.android.zhhr.ui.custom.ZBubbleSeekBar;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.IntentUtil;
 import com.xw.repo.BubbleSeekBar;
-
-import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -196,7 +189,6 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 super.onScrolled(recyclerView, dx, dy);
                 View topView = recyclerView.getChildAt(0);          //获取可视的第一个view
                 int lastOffset = topView.getTop();
-                Log.d("zhhr1122","offset="+lastOffset);
                 mPresenter.setLoadingDy(lastOffset);
             }
 

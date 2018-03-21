@@ -3,13 +3,12 @@ package com.android.zhhr.db.helper;
 import android.content.Context;
 
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.DownState;
-import com.android.zhhr.data.entity.db.DBDownloadItems;
+import com.android.zhhr.data.entity.db.DBChapters;
 import com.android.zhhr.data.entity.db.DBSearchResult;
 import com.android.zhhr.data.entity.db.DownInfo;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhr.greendao.gen.ComicDao;
-import com.android.zhr.greendao.gen.DBDownloadItemsDao;
+import com.android.zhr.greendao.gen.DBChaptersDao;
 import com.android.zhr.greendao.gen.DBSearchResultDao;
 import com.android.zhr.greendao.gen.DaoMaster;
 import com.android.zhr.greendao.gen.DaoSession;
@@ -172,20 +171,20 @@ public class DaoHelper<T> {
         return list;
     }
 
-    public DBDownloadItems findDBDownloadItems(long id){
-        DBDownloadItems items =  manager.getDaoSession().getDBDownloadItemsDao().load(id);
+    public DBChapters findDBDownloadItems(long id){
+        DBChapters items =  manager.getDaoSession().getDBChaptersDao().load(id);
         return items;
     }
 
-    public List<DBDownloadItems> queryDownloadItems(long comic_id){
-        List<DBDownloadItems> list= manager.getDaoSession().getDBDownloadItemsDao().queryBuilder()
-                .where(DBDownloadItemsDao.Properties.Comic_id.eq(comic_id),DBDownloadItemsDao.Properties.StateInte.ge(0))
+    public List<DBChapters> queryDownloadItems(long comic_id){
+        List<DBChapters> list= manager.getDaoSession().getDBChaptersDao().queryBuilder()
+                .where(DBChaptersDao.Properties.Comic_id.eq(comic_id),DBChaptersDao.Properties.StateInte.ge(0))
                 .list();
         return list;
     }
 
-    public List<DBDownloadItems> queryDownloadItems(){
-        List<DBDownloadItems> list= manager.getDaoSession().getDBDownloadItemsDao().queryBuilder()
+    public List<DBChapters> queryDownloadItems(){
+        List<DBChapters> list= manager.getDaoSession().getDBChaptersDao().queryBuilder()
                 .list();
         return list;
     }
