@@ -22,8 +22,8 @@
         </android.support.v7.widget.RecyclerView>
         <include layout="@layout/layout_reader_top"></include>
         <include layout="@layout/layout_reader_bottom"></include>
-
     </com.android.zhhr.ui.custom.ReaderMenuLayout>
+    <include layout="@layout/layout_index"></include>
     <include layout="@layout/layout_switch_model"></include>
     <include layout="@layout/layout_loading"></include>
     <include layout="@layout/layout_night_cover"></include>

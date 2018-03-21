@@ -23,4 +23,9 @@
     <color name="colordialogTextDark">#666666</color>
     <color name="colordialogBottom">#e2e2e2</color>
     <color name="colordialogPirmary">#ff9a6a</color>
+
+    <color name="colorIndexbg">#282828</color>
+    <color name="colorIndexbgDark">#181818</color>
+    <color name="colorIndexbgTextDark">#666666</color>
+
 </resources>

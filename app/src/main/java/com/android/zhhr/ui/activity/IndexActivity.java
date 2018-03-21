@@ -2,19 +2,16 @@ package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
-import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.presenter.IndexPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
-import com.android.zhhr.ui.adapter.DetailAdapter;
+import com.android.zhhr.ui.adapter.IndexAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
-import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.view.IIndexView;
 import com.android.zhhr.utils.IntentUtil;
 
@@ -29,7 +26,7 @@ import butterknife.OnClick;
 
 public class IndexActivity extends BaseActivity<IndexPresenter> implements IIndexView,BaseRecyclerAdapter.OnItemClickListener{
     private List<String> comic_chapter_titles;
-    private DetailAdapter mAdapter;
+    private IndexAdapter mAdapter;
     @Bind(R.id.rv_index)
     RecyclerView mRecycleView;
     @Bind(R.id.iv_order)
@@ -53,7 +50,7 @@ public class IndexActivity extends BaseActivity<IndexPresenter> implements IInde
 
     @Override
     protected void initView() {
-        mAdapter = new DetailAdapter(this,R.layout.item_chapter);
+        mAdapter = new IndexAdapter(this,R.layout.item_chapter);
         mRecycleView.setAdapter(mAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this,1);
         mRecycleView.setLayoutManager(layoutManager);

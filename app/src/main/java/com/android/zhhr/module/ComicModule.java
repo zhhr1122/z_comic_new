@@ -320,7 +320,12 @@ public class ComicModule {
         //首先从数据库看有没有下载完，下载完成则直接从数据库读取本地图片
         DBChapters items;
         final String comic_id = mComic.getId()+"";
-        items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
+        try{
+            //防止-1的情况出现
+            items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
+        }catch (Exception e){
+            items = null;
+        }
         //判断是否在下载列表中，item不为null表示添加到了数据库，但是只取出其中的下载完成和有缓存的数据
         if(items!=null&&items.getComiclist()!=null){
             LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"之前加载过，从数据库中取出");

@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import com.android.zhhr.ui.adapter.ChapterRecycleAdapter;
 import com.android.zhhr.ui.adapter.ChapterViewpagerAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.ComicReaderViewpager;
+import com.android.zhhr.ui.custom.IndexLayout;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.custom.SwitchRelativeLayout;
@@ -78,6 +80,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Bind(R.id.rl_switch_night)
     SwitchNightRelativeLayout mSwitchNight;
+
+    @Bind(R.id.rl_index)
+    IndexLayout mIndex;
 
 
 
@@ -139,6 +144,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 }
                 if(mSwitchModel.isShow()){
                     mSwitchModel.setVisibility(View.GONE);
+                }
+                if(mIndex.isShow()){
+                    mIndex.setVisibility(View.GONE);
                 }
                 if(mAdapter.getDirection() == Constants.LEFT_TO_RIGHT){
                     mSeekbar.setProgress(position-mPresenter.getmPreloadChapters().getPrelist().size()+1);
@@ -203,6 +211,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
                 }
                 if(mSwitchModel.isShow()){
                     mSwitchModel.setVisibility(View.GONE);
+                }
+                if(mIndex.isShow()){
+                    mIndex.setVisibility(View.GONE);
                 }
                 if (layoutManager instanceof LinearLayoutManager) {
                     LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
@@ -292,6 +303,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     public void fillData(PreloadChapters datas) {
+        mIndex.setData(mPresenter.getmComic(),mPresenter.getComic_chapters());
         mPresenter.setmPreloadChapters(datas);
         if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
             mVerticalAdapter.setDatas(datas);
@@ -354,6 +366,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         }else{
             menuLayout.setVisibility(View.GONE);
         }
+        if(mIndex.isShow()){
+            mIndex.setVisibility(View.GONE);
+        }
         if(mSwitchModel.isShow()){
             mSwitchModel.setVisibility(View.GONE);
         }
@@ -362,6 +377,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     public void nextChapter(PreloadChapters data, int mPosition,int offset) {
+        mIndex.setData(mPresenter.getmComic(),mPresenter.getComic_chapters());
         if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
             mVerticalAdapter.setDatas(data);
             manager.scrollToPositionWithOffset(mPosition,offset);
@@ -384,6 +400,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     public void preChapter(PreloadChapters data, int mPosition,int offset) {
+        mIndex.setData(mPresenter.getmComic(),mPresenter.getComic_chapters());
         if(mPresenter.getmDirect()==Constants.UP_TO_DOWN){
             mVerticalAdapter.setDatas(data);
             manager.scrollToPositionWithOffset(mPosition,offset);
@@ -504,7 +521,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @OnClick(R.id.iv_index)
     public void toIndex(View view){
-        IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getmComic());
+        //IntentUtil.ToIndex(ComicChapterActivity.this,mPresenter.getmComic());
+        menuLayout.setVisibility(View.GONE);
+        mIndex.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.iv_settiong)
@@ -514,6 +533,9 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
             mSwitchModel.setVisibility(View.VISIBLE);
         }else {
             mSwitchModel.setVisibility(View.GONE);
+        }
+        if(mIndex.isShow()){
+            mIndex.setVisibility(View.GONE);
         }
     }
 
@@ -543,5 +565,22 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     }
 
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {//返回键监听
+        if ((keyCode == KeyEvent.KEYCODE_BACK)&&(mIndex.isShow()||menuLayout.isShow()||mSwitchModel.isShow())) {
+            if(menuLayout.isShow()){
+                menuLayout.setVisibility(View.GONE);
+            }
+            if(mSwitchModel.isShow()){
+                mSwitchModel.setVisibility(View.GONE);
+            }
+            if(mIndex.isShow()){
+                mIndex.setVisibility(View.GONE);
+            }
 
+            return false;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
 }

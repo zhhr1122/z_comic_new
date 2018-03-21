@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.zhhr.ui.custom.IndexLayout
+    android:visibility="gone"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_index"
+    android:background="@color/colorIndexbg"
+    android:layout_alignParentRight="true"
+    android:layout_width="300dp"
+    android:layout_height="match_parent">
+    <TextView
+        android:textSize="14dp"
+        android:id="@+id/tv_index_title"
+        android:gravity="center"
+        android:text="标题"
+        android:textColor="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+    <TextView
+        android:paddingLeft="15dp"
+        android:textSize="12dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/tv_index_title"
+        android:id="@+id/tv_status"
+        android:textColor="@color/colorIndexbgTextDark"
+        android:background="@color/colorIndexbgDark"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+    <android.support.v7.widget.RecyclerView
+        android:overScrollMode="never"
+        android:layout_below="@id/tv_status"
+        android:id="@+id/rv_index"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+</com.android.zhhr.ui.custom.IndexLayout>
