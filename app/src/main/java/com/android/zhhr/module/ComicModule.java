@@ -323,6 +323,9 @@ public class ComicModule {
         try{
             //防止-1的情况出现
             items = mHelper.findDBDownloadItems(Long.parseLong(comic_id+comic_chapters));
+            if(items.getState()==DownState.DELETE){
+                items = null;
+            }
         }catch (Exception e){
             items = null;
         }
@@ -371,7 +374,9 @@ public class ComicModule {
                                 String image = doc.select("script").get(3).toString();
                                 imageUrl.add(Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0]);
                                 page++;
-                                listener.OnProgress(page);
+                                if(listener!=null){
+                                    listener.OnProgress(page);
+                                }
                             }
                         } catch (HttpStatusException e){
                             DBChapters chapters = new DBChapters();
@@ -400,7 +405,8 @@ public class ComicModule {
                     }
                 });
             }
-            comicObservable.subscribeOn(Schedulers.io())
+            comicObservable
+                    .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
@@ -410,26 +416,11 @@ public class ComicModule {
     }
 
 
-    public void getDownloadChaptersList(final String comic_id, final int comic_chapters, Observer observer){
-        Observable<DBChapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
+    public void getDownloadChaptersList(final Comic comic, final int comic_chapters, Observer observer){
+        getChaptersList(comic,null,comic_chapters,observer);
+      /*  Observable<DBChapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
         CacheProviders.getComicCacheInstance()
                 .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
-               /* .map(new Function<Chapters, Object>() {
-                    @Override
-                    public Object apply(@NonNull Chapters chapters) throws Exception {
-                        ArrayList<DownInfo> mLists = new ArrayList<>();
-                        for(int i=0;i<chapters.getComiclist().size();i++){
-                            DownInfo item = new DownInfo(chapters.getComiclist().get(i));
-                            item.setId(Long.parseLong(comic_id+comic_chapters+i));
-                            item.setState(DownState.START);
-                            item.setComic_id(Long.parseLong(comic_id+comic_chapters));
-                            item.setSavePath(FileUtil.SDPATH+FileUtil.COMIC+comic_id+"/"+comic_chapters+"/"+i+".png");
-                            mHelper.insert(item);//保存到数据库
-                            mLists.add(item);
-                        }
-                        return mLists;
-                    }
-                })*/
                 .retryWhen(new RetryFunction())
                 .map(new Function<DBChapters, Object>() {
                     @Override
@@ -441,7 +432,7 @@ public class ComicModule {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
-                .subscribe(observer);
+                .subscribe(observer);*/
     }
     //搜索相关
 
@@ -847,7 +838,15 @@ public class ComicModule {
                         //遍历map
                         for(Map.Entry<Integer,Integer> mapping:list){
                             if(mapping.getValue() == Constants.CHAPTER_SELECTED){
-                                item = new DBChapters();
+                                try{
+                                    //有可能阅读的时候加载过一次，存入了数据库，所以要在数据库中查询一下
+                                    item = mHelper.findDBDownloadItems(Long.parseLong(mComic.getId()+""+mapping.getKey()));
+                                    if(item.getState()==DownState.DELETE){
+                                        item = new DBChapters();//没查询到或者已经被删除过都置为new
+                                    }
+                                }catch (Exception e){
+                                    item = new DBChapters();//没查询到或者已经被删除过都置为new
+                                }
                                 item.setId(Long.parseLong(mComic.getId()+""+mapping.getKey()));
                                 item.setChapters_title(mComic.getChapters().get(mapping.getKey()));
                                 item.setComic_id(mComic.getId());
@@ -858,6 +857,7 @@ public class ComicModule {
                                     mHelper.insert(item);
                                 }catch (SQLiteConstraintException exception){
                                     LogUtil.e("插入下载列表失败，更新数据库");
+                                    //已经存在，所以更新一下状态state
                                     mHelper.update(item);
                                 }
                             }

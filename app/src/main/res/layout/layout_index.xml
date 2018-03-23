@@ -15,19 +15,44 @@
         android:textColor="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
-    <TextView
-        android:paddingLeft="15dp"
-        android:textSize="12dp"
-        android:gravity="center_vertical"
-        android:layout_below="@id/tv_index_title"
-        android:id="@+id/tv_status"
-        android:textColor="@color/colorIndexbgTextDark"
+    <RelativeLayout
+        android:id="@+id/rl_status"
         android:background="@color/colorIndexbgDark"
+        android:layout_below="@id/tv_index_title"
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="30dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:textSize="12dp"
+            android:gravity="center_vertical"
+            android:id="@+id/tv_status"
+            android:textColor="@color/colorIndexbgTextDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginRight="15dp"
+            android:id="@+id/tv_order"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/colorIndexbgTextLight"
+            android:textSize="12dp"
+            android:text="正序"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_order"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/zhengxu"
+            android:layout_toLeftOf="@id/tv_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:overScrollMode="never"
-        android:layout_below="@id/tv_status"
+        android:layout_below="@id/rl_status"
         android:id="@+id/rv_index"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

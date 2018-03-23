@@ -85,7 +85,7 @@ public class DownloadlistPresenter extends BasePresenter<IDownloadlistView>{
         for(Map.Entry<Integer,Integer> mapping:list){
             //System.out.println(mapping.getKey()+":"+mapping.getValue());
             if(mapping.getValue() != Constants.CHAPTER_FREE){
-                mModel.getDownloadChaptersList(mComic.getId()+"",mapping.getKey(),new Observer<ArrayList<DownInfo>>(){
+                mModel.getDownloadChaptersList(mComic,mapping.getKey(),new Observer<ArrayList<DownInfo>>(){
 
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

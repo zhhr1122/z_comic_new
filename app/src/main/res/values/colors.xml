@@ -26,6 +26,6 @@
 
     <color name="colorIndexbg">#282828</color>
     <color name="colorIndexbgDark">#181818</color>
-    <color name="colorIndexbgTextDark">#666666</color>
-
+    <color name="colorIndexbgTextDark">#666666</color>999999
+    <color name="colorIndexbgTextLight">#999999</color>
 </resources>

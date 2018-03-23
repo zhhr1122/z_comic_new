@@ -102,7 +102,7 @@ public class CollectionFragment extends BaseBookShelfFragment<CollectionPresente
     public void onItemClick(RecyclerView parent, View view, int position) {
         if(!mAdapter.isEditing()){
             Comic comic = mAdapter.getItems(position);
-            IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle());
+            IntentUtil.ToComicDetail(mActivity,comic.getId()+"",comic.getTitle(),comic.getFrom());
         }else{
             mPresenter.uptdateToSelected(position);
         }

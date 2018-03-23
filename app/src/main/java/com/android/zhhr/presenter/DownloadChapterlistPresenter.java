@@ -234,7 +234,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
         //首先判断是否已经获取过下载地址
         if(info.getNum()==0){
             //获取下载地址
-            mModel.getDownloadChaptersList(mComic.getId()+"",info.getChapters(),new Observer<ArrayList<String>>(){
+            mModel.getDownloadChaptersList(mComic,info.getChapters(),new Observer<DBChapters>(){
 
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
@@ -244,13 +244,13 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                 }
 
                 @Override
-                public void onNext(@NonNull ArrayList<String> mLists) {
+                public void onNext(@NonNull DBChapters chapters) {
                     //修改状态
                    if(info.getState()!=DownState.STOP){
                        info.setState(DownState.DOWN);
                        //设置下载地址
-                       info.setComiclist(mLists);
-                       info.setNum(mLists.size());
+                       info.setComiclist(chapters.getComiclist());
+                       info.setNum(chapters.getComiclist().size());
                        info.setCurrent_num(0);
                        //把获取到的下载地址存进数据库
                        helper.update(info);

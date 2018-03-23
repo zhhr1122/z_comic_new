@@ -99,6 +99,7 @@ public class SelectDownloadPresenter extends BasePresenter<ISelectDownloadView>{
      */
     public void getDataFormDb(){
         SelectedNum = 0;
+        map.clear();
         mModel.getDownloadItemsFromDB(mComic.getId(), new DisposableObserver<List<DBChapters>>() {
             @Override
             public void onNext(@NonNull List<DBChapters> items) {
