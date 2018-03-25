@@ -31,6 +31,7 @@ import io.reactivex.observers.DisposableObserver;
  */
 
 public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistView>{
+    public static boolean isLoading;
     private Comic mComic;
     private ComicModule mModel;
     private ArrayList<DBChapters> mLists;
@@ -91,6 +92,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 初始化按照章節下載
      */
     public void initData() {
+        isLoading = true;
         downloadedNum = 0;
         mLists = new ArrayList<>();
         //把数据存入数据库/从数据库拉取数据
@@ -144,6 +146,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 开始所有下载
      */
     public void startAll() {
+        //isLoading = true;
         //找出最前面四个可以下载的bean
         for(int i=0;i<mLists.size();i++){
             if(mLists.get(i).getState()==DownState.NONE){
@@ -159,6 +162,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      */
     public void ReStartAll() {
         //找出最前面四个可以下载的bean
+        //isLoading = true;
         for(int i=0;i<mLists.size();i++){
             if(mLists.get(i).getState()!=DownState.FINISH){
                 mLists.get(i).setState(DownState.NONE);
@@ -198,6 +202,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      */
     public void stop(DBChapters info, int position, boolean isContinue) {
         if (info == null) return;
+        isLoading = false;
         info.setState(DownState.STOP);
         //停止单张图片的下载
         if(info.getComiclist()!=null&&info.getCurrent_num()+1<info.getComiclist().size()){
@@ -229,6 +234,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * @param info
      */
     public void startDown(final DBChapters info, final int position) {
+        isLoading = true;
         //加入到下载队列中
         downloadMap.put(info.getChapters(),info);
         //首先判断是否已经获取过下载地址
@@ -327,7 +333,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
                     stop(info,position,false);
                     break;
                 case START:
-                    //mPresenter.startDown(info);
+                    stop(info,position,true);
                     break;
                 case PAUSE:
                     //mPresenter.startDown(info,position);
@@ -461,6 +467,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 暂停所有下载
      */
     public void pauseAll() {
+        isLoading = false;
         mModel.updateDownloadItemsList(mLists,new DisposableObserver<Boolean>() {
 
             @Override
@@ -486,6 +493,7 @@ public class DownloadChapterlistPresenter extends BasePresenter<IDownloadlistVie
      * 停止所有下载
      */
     public void stopAll() {
+        isLoading = false;
         for(int i=0;i<mLists.size();i++){
             DBChapters items = mLists.get(i);
             if (items.getState() != DownState.FINISH){

@@ -255,6 +255,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
             }
         });
+        mRLloading.setOnClickListener(null);
         //设置加载时候的标题
         mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
         initReaderModule(mPresenter.getmDirect());
@@ -504,6 +505,13 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @Override
+    protected void onPause() {
+        mPresenter.interruptThread();
+        super.onPause();
     }
 
     @OnClick({R.id.iv_back,R.id.iv_back_color})

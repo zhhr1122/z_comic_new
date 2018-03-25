@@ -22,6 +22,7 @@ import com.android.zhhr.net.Function.RetryFunction;
 import com.android.zhhr.net.MainFactory;
 import com.android.zhhr.net.cache.CacheProviders;
 import com.android.zhhr.presenter.ComicChapterPresenter;
+import com.android.zhhr.presenter.DownloadChapterlistPresenter;
 import com.android.zhhr.utils.DBEntityUtils;
 import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.GlideCacheUtil;
@@ -340,14 +341,13 @@ public class ComicModule {
             observer.onComplete();
         }else{
             LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"联网获取");
-            Observable comicObservable;
             //如果是腾讯漫画
             if(mComic.getFrom() == Constants.FROM_TENCENT){
                 LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"调用腾讯漫画接口");
                 //否则就联网拉取数据，先读取接口的缓存
                 Observable<DBChapters> observable = comicService.getChapters(comic_id,comic_chapters+"");
                 //真正调用联网接口
-                comicObservable = CacheProviders.getComicCacheInstance()
+                CacheProviders.getComicCacheInstance()
                         .getChapters(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
                         .retryWhen(new RetryFunction())
                         .map(new Function<DBChapters, Object>() {
@@ -357,22 +357,28 @@ public class ComicModule {
                                 chapters.setChapters(comic_chapters);
                                 return chapters;
                             }
-                        });
+                        }).subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
+                        .subscribe(observer);
                 //腾讯漫画采用了RxCache作为缓存，所有不需要存入到数据库也可以进行缓存
             }else{ //如果是酷酷漫画
                 LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"调用酷酷漫画接口");
                 final List<String> imageUrl = new ArrayList<>();
-                comicObservable = Observable.create(new ObservableOnSubscribe<DBChapters>() {
+                Observable.create(new ObservableOnSubscribe<DBChapters>() {
                     @Override
                     public void subscribe(@NonNull ObservableEmitter<DBChapters> observableEmitter) throws Exception {
                         try{
                             int page = 1;
                             String url = Url.KukuComicBase+mComic.getChapters_url().get(comic_chapters);
-                            while (true){
+                            while (ComicChapterPresenter.isLoading|| DownloadChapterlistPresenter.isLoading){
                                 //解析漫画
                                 Document doc = Jsoup.connect(url+page+".htm").get();
                                 String image = doc.select("script").get(3).toString();
-                                imageUrl.add(Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0]);
+                                String image_url = Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0];
+                                imageUrl.add(image_url);
+                                LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url);
                                 page++;
                                 if(listener!=null){
                                     listener.OnProgress(page);
@@ -403,15 +409,12 @@ public class ComicModule {
                             observableEmitter.onComplete();
                         }
                     }
-                });
+                }).subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                       // .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//暂时先关闭生命周期处理，防止崩溃
+                        .subscribe(observer);
             }
-            comicObservable
-                    .subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
-                    .subscribe(observer);
-
         }
     }
 
