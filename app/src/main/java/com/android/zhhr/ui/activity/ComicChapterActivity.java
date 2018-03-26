@@ -534,7 +534,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         mIndex.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.iv_settiong)
+    @OnClick(R.id.iv_setting)
     public void toSwitch(View view){
         menuLayout.setVisibility(View.GONE);
         if(!mSwitchModel.isShow()){
@@ -545,6 +545,10 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         if(mIndex.isShow()){
             mIndex.setVisibility(View.GONE);
         }
+    }
+    @OnClick(R.id.iv_switch)
+    public void toHorizontal(View view){
+        showToast("开发中");
     }
 
     @OnClick(R.id.iv_light)

@@ -85,10 +85,10 @@ public class ComicModule {
                     Document recommend = Jsoup.connect(Url.TencentHomePage).get();
                     Document japan = Jsoup.connect(Url.TencentJapanHot).get();
                     Document doc = Jsoup.connect(Url.TencentTopUrl+"1").get();
-                    addComic(recommend,mdats,Constants.TYPE_RECOMMEND);
+                    //addComic(recommend,mdats,Constants.TYPE_RECOMMEND);
+                    addComic(recommend,mdats,Constants.TYPE_HOT_SERIAL);
                     addComic(recommend,mdats,Constants.TYPE_BOY_RANK);
                     addComic(recommend,mdats,Constants.TYPE_GIRL_RANK);
-                    addComic(recommend,mdats,Constants.TYPE_HOT_SERIAL);
                     addComic(japan,mdats,Constants.TYPE_HOT_JAPAN);
                     addComic(doc,mdats,Constants.TYPE_RANK_LIST);
 
