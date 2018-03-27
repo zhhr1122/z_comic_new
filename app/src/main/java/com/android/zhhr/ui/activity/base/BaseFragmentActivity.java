@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.orhanobut.hawk.Hawk;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.List;
@@ -51,6 +52,8 @@ public abstract class BaseFragmentActivity extends RxAppCompatActivity {
         }
         ButterKnife.bind(this);
         initView();
+
+        PgyCrashManager.register(this);
     }
 
     @Override

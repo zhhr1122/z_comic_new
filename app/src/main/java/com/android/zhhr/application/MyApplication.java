@@ -6,6 +6,7 @@ import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.db.manager.DaoManager;
 import com.android.zhhr.utils.LogUtil;
 import com.orhanobut.hawk.Hawk;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.squareup.leakcanary.LeakCanary;
 
 import cn.jpush.android.api.JPushInterface;
@@ -35,7 +36,7 @@ public class MyApplication extends Application {
         //内存溢出测试
         //LeakCanary.install(this);
         //Log开关
-        LogUtil.init(LogUtil.VERBOSE,"zhhr1122");
+        LogUtil.init(LogUtil.NOTHING,"zhhr1122");
         //SharedPreferences
         Hawk.init(this).build();
         //换皮肤
@@ -56,5 +57,8 @@ public class MyApplication extends Application {
         }catch (Exception e){ // 默认加载默认模式
             SkinCompatManager.getInstance().restoreDefaultTheme();
         }
+
+        PgyCrashManager.register(this);
+
     }
 }

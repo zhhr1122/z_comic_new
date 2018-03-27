@@ -17,6 +17,7 @@ import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.presenter.BasePresenter;
 import com.orhanobut.hawk.Hawk;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import butterknife.Bind;
@@ -70,6 +71,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         isTrans = isTransparent;
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
+
+        PgyCrashManager.register(this);
     }
 
     @Override

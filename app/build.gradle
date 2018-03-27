@@ -15,7 +15,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -101,6 +101,8 @@ dependencies {
     compile 'skin.support:skin-support-constraint-layout:2.2.3' // skin-support-constraint-layout ConstraintLayout support [selectable]
 
     compile 'com.orhanobut:hawk:2.0.1'
+
+    compile 'com.pgyersdk:sdk:2.8.1'
 
     //compile(name: 'libzadsdk_v1.0.0', ext: 'aar')
 }
