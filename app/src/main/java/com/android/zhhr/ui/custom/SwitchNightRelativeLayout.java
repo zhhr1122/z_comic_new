@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.ToastUtils;
 
 /**
  * Created by zhhr on 2018/3/14.
@@ -83,7 +85,8 @@ public class SwitchNightRelativeLayout extends RelativeLayout{
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         SwitchNightRelativeLayout.super.setVisibility(View.GONE);
-                        Toast.makeText(mContext, "切换成功", Toast.LENGTH_SHORT).show();
+                        new ToastUtils((ViewGroup) getParent()).showToast("切换成功");
+                        //Toast.makeText(mContext, "切换成功", Toast.LENGTH_SHORT).show();
                     }
                 });
                 mImageView.startAnimation(animationSet1);

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.presenter.BasePresenter;
+import com.android.zhhr.utils.ToastUtils;
 import com.orhanobut.hawk.Hawk;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -44,6 +45,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
     //初始化布局
     protected abstract void initView();
 
+    protected ToastUtils toast;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         ButterKnife.bind(this);
         initPresenter(getIntent());
         checkPresenterIsNull();
+        toast = new ToastUtils(this);
         initView();
     }
 
@@ -81,6 +85,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         switchModel();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PgyCrashManager.unregister();
+    }
+
     protected void switchModel() {
         NightModel  = findViewById(R.id.v_night);
         try{
@@ -104,7 +114,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
 
     //设置打印方法
     public void showToast(String text){
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        toast.showToast(text);
+        //Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     /***

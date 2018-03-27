@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.android.zhhr.presenter.BasePresenter;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
+import com.android.zhhr.utils.ToastUtils;
 
 import butterknife.ButterKnife;
 
@@ -35,6 +36,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         return mActivity;
     }
 
+    protected ToastUtils toast;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -48,6 +51,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         ButterKnife.bind(this, view);
         initPresenter();
         checkPresenterIsNull();
+        toast = new ToastUtils(getActivity());
         initView(view, savedInstanceState);
         return view;
     }
@@ -59,6 +63,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     }
 
     public void showToast(String text){
-        Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
+        toast.showToast(text);
+        //Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
     }
 }

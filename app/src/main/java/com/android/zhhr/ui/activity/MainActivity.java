@@ -2,14 +2,20 @@ package com.android.zhhr.ui.activity;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
 import com.android.zhhr.ui.custom.FloatEditLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
+import com.android.zhhr.ui.custom.ToastLayout;
 import com.android.zhhr.ui.fragment.BookShelfFragment;
+import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -33,6 +39,8 @@ public class MainActivity extends BaseFragmentActivity {
     SwitchNightRelativeLayout mSwitchNight;
 
     BookShelfFragment bookShelfFragment;
+
+    ToastUtils toast;
 
 
 
@@ -60,6 +68,7 @@ public class MainActivity extends BaseFragmentActivity {
                 bookShelfFragment.OnClickDelete();
             }
         });
+        toast =  new ToastUtils(MainActivity.this);
         selectTab(0);
     }
 
@@ -113,5 +122,19 @@ public class MainActivity extends BaseFragmentActivity {
 
     public void setSwitchNightVisible(int Visible,boolean isNight){
         mSwitchNight.setVisibility(Visible,isNight);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if((keyCode == KeyEvent.KEYCODE_BACK)){
+            if(toast.isShow()){
+                return super.onKeyDown(keyCode, event);
+            }else{
+                toast.showToast("再按一次返回键退出");
+                return false;
+            }
+        }else{
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }

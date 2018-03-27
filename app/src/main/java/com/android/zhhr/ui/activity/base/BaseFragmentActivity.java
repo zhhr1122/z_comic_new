@@ -62,6 +62,12 @@ public abstract class BaseFragmentActivity extends RxAppCompatActivity {
         switchModel();
     }
 
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        PgyCrashManager.unregister();
+    }
+
     public void switchModel() {
         NightModel  = findViewById(R.id.v_night);
         try{

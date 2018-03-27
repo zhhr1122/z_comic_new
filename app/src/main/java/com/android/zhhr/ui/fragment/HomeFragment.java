@@ -201,7 +201,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
     @Override
     public void ShowToast(String t) {
-        Toast.makeText(mActivity,t,Toast.LENGTH_LONG).show();
+       showToast(t);
     }
 
     @Override
@@ -326,13 +326,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     public void toCategory(View view) {
         switch (view.getId()) {
             case R.id.ll_category1:
-                IntentUtil.toRankActivity(getActivity().getApplicationContext());
+                IntentUtil.toRankActivity(getActivity());
                 break;
             case R.id.ll_category2:
-                IntentUtil.toCategoryActivity(getActivity().getApplicationContext());
+                IntentUtil.toCategoryActivity(getActivity());
                 break;
             case R.id.ll_category3:
-                IntentUtil.toNewActivity(getActivity().getApplicationContext());
+                IntentUtil.toNewActivity(getActivity());
                 break;
             default:
                 break;

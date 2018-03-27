@@ -10,10 +10,8 @@ import com.android.zhhr.module.ComicModule;
 import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.view.IMineView;
-import com.android.zhhr.utils.FileUtil;
 import com.android.zhhr.utils.GlideCacheUtil;
 import com.android.zhhr.utils.IntentUtil;
-import com.bumptech.glide.Glide;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
@@ -87,7 +85,7 @@ public class MinePresenter extends BasePresenter<IMineView>{
                 break;
             case 3:
                 mView.ShowToast( "已为您跳转到作者博客");
-                IntentUtil.toUrl(mContext.getApplicationContext(),"http://blog.csdn.net/zhhr1122");
+                IntentUtil.toUrl(mContext,"http://blog.csdn.net/zhhr1122");
                 break;
         }
     }
