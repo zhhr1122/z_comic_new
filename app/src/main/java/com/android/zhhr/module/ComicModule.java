@@ -1137,7 +1137,7 @@ public class ComicModule {
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> observableEmitter) throws Exception {
                 try {
-                    FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.CACHE);//首先清除API缓存
+                    //FileUtil.deleteDir(FileUtil.SDPATH + FileUtil.CACHE);//首先清除API缓存
                     GlideCacheUtil.getInstance().clearImageAllCache(rxAppCompatActivity);
                     observableEmitter.onNext(GlideCacheUtil.getInstance().getCacheSize(rxAppCompatActivity));
                 } catch (Exception e) {

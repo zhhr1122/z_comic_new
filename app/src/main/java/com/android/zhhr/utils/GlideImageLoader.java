@@ -29,7 +29,7 @@ public class GlideImageLoader extends ImageLoader {
         Glide.with(context)
                 .load(mComic.getCover())
                 .placeholder(R.mipmap.pic_default)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(imageView);
     }
 
@@ -38,14 +38,14 @@ public class GlideImageLoader extends ImageLoader {
                 .load(url)
                 .placeholder(R.mipmap.pic_default)
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(imageView);
     }
     public static void loadImage(Context context,int resid,ImageView imageView) {
         Glide.with(context)
                 .load(resid)
                 .placeholder(R.mipmap.pic_default)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(imageView);
     }
 
@@ -54,7 +54,7 @@ public class GlideImageLoader extends ImageLoader {
                 .load(resid)
                 .placeholder(R.mipmap.pic_default)
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(imageView);
     }
 

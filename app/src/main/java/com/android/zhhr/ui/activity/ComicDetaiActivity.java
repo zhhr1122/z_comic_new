@@ -180,13 +180,13 @@ public class ComicDetaiActivity extends BaseActivity<ComicDetailPresenter> imple
         Glide.with(this)
                 .load(comic.getCover())
                 .placeholder(R.mipmap.pic_default)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .bitmapTransform(new CenterCrop(this))
                 .into(mHeaderView);
         Glide.with(this)
                 .load(comic.getCover())
                 .placeholder(R.mipmap.pic_default)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .bitmapTransform(new BlurTransformation(this, 10), new CenterCrop(this))
                 .into(mHeaderViewBg);
         mActionBarTitle.setText(comic.getTitle());

@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 
+import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.ui.view.IWelcomeView;
 import com.android.zhhr.utils.FileUtil;
+import com.android.zhhr.utils.GlideCacheUtil;
 import com.android.zhhr.utils.IntentUtil;
+import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.PermissionUtils;
+import com.orhanobut.hawk.Hawk;
 
 /**
  * Created by 张皓然 on 2018/1/29.
@@ -41,6 +45,15 @@ public class WelcomePresenter extends BasePresenter<IWelcomeView>{
     public void init(){
         mhandler.postDelayed(runnable,2000);
         FileUtil.init();
+        long lasttime = Hawk.get(Constants.LAST_START_TIME,0L);
+        if(lasttime!=0&&getCurrentTime()-lasttime>=24*60*60*1000*Constants.CACHE_DAYS){
+            //mView.ShowToast("距离上次大于一天");
+            GlideCacheUtil.getInstance().clearImageAllCache(mContext);
+            LogUtil.d("距离上次启动大于一天，清除缓存");
+        }else{
+            LogUtil.d("距离上次启动小于一天，不清除缓存");
+        }
+        Hawk.put(Constants.LAST_START_TIME,getCurrentTime());
     }
 
     /**

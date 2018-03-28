@@ -36,7 +36,7 @@ public class MyApplication extends Application {
         //内存溢出测试
         //LeakCanary.install(this);
         //Log开关
-        LogUtil.init(LogUtil.NOTHING,"zhhr1122");
+        LogUtil.init(LogUtil.VERBOSE,"zhhr1122");
         //SharedPreferences
         Hawk.init(this).build();
         //换皮肤

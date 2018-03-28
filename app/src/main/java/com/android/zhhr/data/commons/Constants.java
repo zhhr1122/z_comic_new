@@ -1,5 +1,7 @@
 package com.android.zhhr.data.commons;
 
+import retrofit2.http.PUT;
+
 /**
  * 一些基本的常量定义
  * Created by 皓然 on 2017/7/13.
@@ -65,4 +67,7 @@ public class Constants {
 
 
     public static boolean isNeedKuku = true;
+
+    public final static String LAST_START_TIME = "last_start_time";
+    public final static int CACHE_DAYS = 1;
 }

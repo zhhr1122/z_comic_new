@@ -169,7 +169,7 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         Glide.with(context)
                 .load(url)
                 .placeholder(R.mipmap.pic_default)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(iv);
         return this;
     }
@@ -182,6 +182,13 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setPhotoViewImageByUrl(int viewId, final String url){
         final ImageView iv = getView(viewId);
+        LogUtil.d(url.substring(1,8));
+        final DiskCacheStrategy cache;//判断图片来自SD卡还是网络
+        if(url.substring(1,8).equals("storage")){
+            cache = DiskCacheStrategy.NONE;
+        }else{
+            cache = DiskCacheStrategy.RESULT;
+        }
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(context)
                 .load(url)
@@ -192,7 +199,7 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
                         LogUtil.e(url+"加载失败"+e.toString());
                         Glide.with(context)
                                 .load(R.mipmap.pic_default)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .diskCacheStrategy(cache)
                                 .into(iv);
                         return false;
                     }
@@ -212,7 +219,7 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
                         Glide.with(context)
                                 .load(url)
                                 .placeholder(R.mipmap.pic_default)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .diskCacheStrategy(cache)
                                 .into(iv);
                     }
                 });

@@ -125,7 +125,7 @@ public class MinePresenter extends BasePresenter<IMineView>{
      * 清除缓存
      */
     private void clearCache() {
-        final CustomDialog customDialog = new CustomDialog(mContext,"提示","确认清除漫画所有缓存？");
+        final CustomDialog customDialog = new CustomDialog(mContext,"提示","确认清除漫画所有缓存？(默认"+Constants.CACHE_DAYS+"天清除一次)");
         customDialog.setListener(new CustomDialog.onClickListener() {
             @Override
             public void OnClickConfirm() {

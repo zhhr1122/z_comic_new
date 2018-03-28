@@ -114,15 +114,23 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
             convertView = mViews.removeFirst();
             holder = (ViewHolder) convertView.getTag();
         }
+        final DiskCacheStrategy cache;//判断图片来自SD卡还是网络
+        if(mdatas.get(mdatas.size()-position-1).substring(1,8).equals("storage")){
+            cache = DiskCacheStrategy.NONE;
+        }else{
+            cache = DiskCacheStrategy.RESULT;
+        }
         if(Direction == Constants.RIGHT_TO_LEFT){
             Glide.with(mContext)
                     .load(mdatas.get(mdatas.size()-position-1))
                     .placeholder(R.mipmap.pic_default_vertical)
+                    .diskCacheStrategy(cache)
                     .into(holder.imageView);
         }else{
             Glide.with(mContext)
                     .load(mdatas.get(position))
                     .placeholder(R.mipmap.pic_default_vertical)
+                    .diskCacheStrategy(cache)
                     .into(holder.imageView);
         }
         holder.imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
