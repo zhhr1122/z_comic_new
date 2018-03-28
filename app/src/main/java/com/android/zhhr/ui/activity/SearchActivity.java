@@ -1,6 +1,8 @@
 package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -76,8 +78,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
         return R.layout.activity_search;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
+        initStatusBar(false);
         LinearLayoutManager manager = new LinearLayoutManager(this);
 
         mDynaicAdapter = new SearchDynamicAdapter(this,R.layout.item_dynamic_search);

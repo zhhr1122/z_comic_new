@@ -13,6 +13,9 @@ import com.android.zhhr.ui.view.IMineView;
 import com.android.zhhr.utils.GlideCacheUtil;
 import com.android.zhhr.utils.IntentUtil;
 import com.orhanobut.hawk.Hawk;
+import com.pgyersdk.javabean.AppBean;
+import com.pgyersdk.update.PgyUpdateManager;
+import com.pgyersdk.update.UpdateManagerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,10 @@ public class MinePresenter extends BasePresenter<IMineView>{
         mTitle.setResID(R.mipmap.icon_author);
         mTitle.setTitle("关于作者");
         mLists.add(mTitle);
+        mTitle = new MineTitle();
+        mTitle.setResID(R.mipmap.icon_author);
+        mTitle.setTitle("检查自动更新");
+        mLists.add(mTitle);
         mView.fillData(mLists);
         mView.getDataFinish();
         try{
@@ -87,7 +94,43 @@ public class MinePresenter extends BasePresenter<IMineView>{
                 mView.ShowToast( "已为您跳转到作者博客");
                 IntentUtil.toUrl(mContext,"http://blog.csdn.net/zhhr1122");
                 break;
+            case 4:
+                CheckVersion();
+                break;
         }
+    }
+
+    /**
+     * 检查新版本
+     */
+    private void CheckVersion() {
+        PgyUpdateManager.register(mContext, new UpdateManagerListener() {
+            @Override
+            public void onNoUpdateAvailable() {
+                mView.ShowToast("没有发现新版本");
+            }
+
+            @Override
+            public void onUpdateAvailable(String result) {
+                final AppBean appBean = getAppBeanFromString(result);
+                final CustomDialog dialog = new CustomDialog(mContext,"自动更新","发现新版本:v"+appBean.getVersionName()+",是否更新?");
+                dialog.setListener(new CustomDialog.onClickListener() {
+                    @Override
+                    public void OnClickConfirm() {
+                        startDownloadTask(
+                                mContext,
+                                appBean.getDownloadURL());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void OnClickCancel() {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     /**

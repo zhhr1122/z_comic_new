@@ -63,6 +63,12 @@ public abstract class BaseFragmentActivity extends RxAppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PgyCrashManager.unregister();
+    }
+
+    @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         PgyCrashManager.unregister();

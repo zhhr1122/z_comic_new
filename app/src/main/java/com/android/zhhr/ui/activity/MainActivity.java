@@ -10,12 +10,17 @@ import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
+import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.custom.FloatEditLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.custom.ToastLayout;
 import com.android.zhhr.ui.fragment.BookShelfFragment;
 import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.ToastUtils;
+import com.pgyersdk.javabean.AppBean;
+import com.pgyersdk.update.PgyUpdateManager;
+import com.pgyersdk.update.UpdateManagerListener;
 
 import java.util.ArrayList;
 
@@ -70,6 +75,43 @@ public class MainActivity extends BaseFragmentActivity {
         });
         toast =  new ToastUtils(MainActivity.this);
         selectTab(0);
+
+       CheckVersion();
+
+    }
+
+    /**
+     * 检查新版本
+     */
+    private void CheckVersion() {
+        PgyUpdateManager.register(this, new UpdateManagerListener() {
+            @Override
+            public void onNoUpdateAvailable() {
+                LogUtil.d("没有发现新版本");
+            }
+
+            @Override
+            public void onUpdateAvailable(String result) {
+                final AppBean appBean = getAppBeanFromString(result);
+                LogUtil.d(appBean.toString());
+                final CustomDialog dialog = new CustomDialog(MainActivity.this,"自动更新","发现新版本:v"+appBean.getVersionName()+",是否更新?");
+                dialog.setListener(new CustomDialog.onClickListener() {
+                    @Override
+                    public void OnClickConfirm() {
+                        startDownloadTask(
+                                MainActivity.this,
+                                appBean.getDownloadURL());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void OnClickCancel() {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     public void quitEdit(){
@@ -80,6 +122,7 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        PgyUpdateManager.unregister();
     }
 
 
