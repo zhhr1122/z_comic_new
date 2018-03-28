@@ -458,28 +458,37 @@ public class ComicModule {
         Observable.create(new ObservableOnSubscribe<List<Comic>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<Comic>> observableEmitter) throws Exception {
+                List<Comic> mdats = new ArrayList<>();
+                List<Comic> mkukudatas = new ArrayList<>();
                 try {
                     //腾讯的漫画
                     Document doc = Jsoup.connect(Url.TencentSearchResultUrl+title).get();
-                    List<Comic> mdats = TencentComicAnalysis.TransToSearchResultComic(doc);
+                    mdats = TencentComicAnalysis.TransToSearchResultComic(doc);
                     observableEmitter.onNext(mdats);
-
-                    //酷酷的漫画
-                    if(Constants.isNeedKuku){
-                        String kukuUrl = Url.KukuSearchUrlHead+ URLEncoder.encode(title, "GBK")+Url.KukuSearchUrlFoot;
-                        Document doc_kuku = Jsoup.connect(kukuUrl).get();
-                        List<Comic> mkukudatas = KukuComicAnalysis.TransToSearchResultComic_Kuku(doc_kuku);
-                        observableEmitter.onNext(mkukudatas);
-                    }
-
                 }catch (SocketTimeoutException e){
                     e.printStackTrace();
                 } catch (Exception e) {
-                    observableEmitter.onError(e);
+                    //observableEmitter.onError(e);
                     e.printStackTrace();
-                }finally {
-                    observableEmitter.onComplete();
                 }
+                if(Constants.isNeedKuku){
+                    try{
+                        //酷酷的漫画
+                        String kukuUrl = Url.KukuSearchUrlHead+ URLEncoder.encode(title, "GBK")+Url.KukuSearchUrlFoot;
+                        Document doc_kuku = Jsoup.connect(kukuUrl).get();
+                        mkukudatas = KukuComicAnalysis.TransToSearchResultComic_Kuku(doc_kuku);
+                        observableEmitter.onNext(mkukudatas);
+                    }catch (SocketTimeoutException e){
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        //observableEmitter.onError(e);
+                        e.printStackTrace();
+                    }
+                }
+                if(mdats.size()==0&&mkukudatas.size()==0){
+                    observableEmitter.onError(new NullPointerException());
+                }
+                observableEmitter.onComplete();
             }
 
         }) .subscribeOn(Schedulers.io())
