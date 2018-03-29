@@ -41,12 +41,13 @@ public abstract class BaseFragmentActivity extends RxAppCompatActivity {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
-        initStatusBar(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(true);
+        }
         if (null != getIntent()) {
             handleIntent(getIntent());
         }

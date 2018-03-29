@@ -11,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
@@ -21,7 +20,6 @@ import com.orhanobut.hawk.Hawk;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -47,12 +45,13 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
 
     protected ToastUtils toast;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        initStatusBar(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(true);
+        }
         //初始化ButterKnife
         ButterKnife.bind(this);
         initPresenter(getIntent());

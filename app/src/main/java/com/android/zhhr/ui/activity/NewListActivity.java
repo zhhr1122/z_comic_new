@@ -64,14 +64,15 @@ public class NewListActivity extends BaseActivity<NewListPresenter> implements I
                 mPresenter.loadData();
             }
 
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onAlphaActionBar(float a) {
                 mTitle.setAlpha(a);
-                if(a!=0){
-                    initStatusBar(false);
-                }else{
-                    initStatusBar(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if(a!=0){
+                        initStatusBar(false);
+                    }else{
+                        initStatusBar(true);
+                    }
                 }
             }
         });

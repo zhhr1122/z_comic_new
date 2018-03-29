@@ -1,10 +1,7 @@
 package com.android.zhhr.ui.fragment;
 
-import android.annotation.TargetApi;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
@@ -151,7 +147,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onAlphaActionBar(float a) {
                 if(a<1){
@@ -168,13 +163,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                     mSearch.setImageResource(R.mipmap.search_color);
                 }
                 mActionBarBg.setAlpha(a);
-                if(a==1){
-                    if(activity.isTrans()){
-                        activity.initStatusBar(false);
-                    }
-                }else{
-                    if(!activity.isTrans()){
-                        activity.initStatusBar(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if(a==1){
+                        if(activity.isTrans()){
+                            activity.initStatusBar(false);
+                        }
+                    }else{
+                        if(!activity.isTrans()){
+                            activity.initStatusBar(true);
+                        }
                     }
                 }
             }

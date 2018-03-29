@@ -2,7 +2,6 @@ package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -20,14 +19,13 @@ import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.presenter.SearchPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.SearchDynamicAdapter;
+import com.android.zhhr.ui.adapter.SearchHistoryAdapter;
 import com.android.zhhr.ui.adapter.SearchResultAdapter;
 import com.android.zhhr.ui.adapter.SearchTopAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
-import com.android.zhhr.ui.adapter.SearchHistoryAdapter;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.custom.NoScrollStaggeredGridLayoutManager;
 import com.android.zhhr.ui.view.ISearchView;
@@ -78,10 +76,11 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements ISe
         return R.layout.activity_search;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
-        initStatusBar(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(false);
+        }
         LinearLayoutManager manager = new LinearLayoutManager(this);
 
         mDynaicAdapter = new SearchDynamicAdapter(this,R.layout.item_dynamic_search);

@@ -2,9 +2,7 @@ package com.android.zhhr.ui.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.android.zhhr.R;
@@ -18,7 +16,6 @@ import com.android.zhhr.ui.custom.ElasticScrollView;
 import com.android.zhhr.ui.custom.NoScrollGridLayoutManager;
 import com.android.zhhr.ui.view.IRankView;
 import com.android.zhhr.utils.IntentUtil;
-import com.android.zhhr.utils.LogUtil;
 
 import java.util.List;
 
@@ -50,10 +47,11 @@ public class RankActivity extends BaseActivity<RankPresenter> implements IRankVi
         return R.layout.activity_rank;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
-        initStatusBar(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(false);
+        }
         mPresenter.loadData();
         final NoScrollGridLayoutManager layoutManager = new NoScrollGridLayoutManager(this,1);
         layoutManager.setScrollEnabled(false);

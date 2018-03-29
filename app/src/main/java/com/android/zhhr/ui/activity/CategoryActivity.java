@@ -58,10 +58,11 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
         return R.layout.activity_category;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
-        initStatusBar(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(false);
+        }
         mSelectAdapter = new CategoryAdapter(this,R.layout.item_categroy_select);
         mCategoryAdapter = new CategoryListAdapter(this,R.layout.item_homepage_three,R.layout.item_loading);
 

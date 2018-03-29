@@ -1,21 +1,16 @@
 package com.android.zhhr.ui.activity;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import com.android.zhhr.R;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
 import com.android.zhhr.ui.custom.CustomDialog;
 import com.android.zhhr.ui.custom.FloatEditLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
-import com.android.zhhr.ui.custom.ToastLayout;
 import com.android.zhhr.ui.fragment.BookShelfFragment;
-import com.android.zhhr.utils.DisplayUtil;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.ToastUtils;
 import com.pgyersdk.javabean.AppBean;
@@ -126,31 +121,34 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.btn_home)
     public void toHomeFragment(View view){
         selectTab(0);
         resetBottomBtn();
         mHome.setBackgroundResource(R.drawable.homepage_press);
-        initStatusBar(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(true);
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.btn_bookshelf)
     public void toBookShelfFragment(View view){
         selectTab(1);
         resetBottomBtn();
         mBookShelf.setBackgroundResource(R.drawable.bookshelf_press);
-        initStatusBar(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(false);
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.btn_mine)
     public void toMineFragment(View view){
         selectTab(2);
         resetBottomBtn();
         mMine.setBackgroundResource(R.drawable.mine_press);
-        initStatusBar(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            initStatusBar(false);
+        }
     }
 
     public void resetBottomBtn(){
