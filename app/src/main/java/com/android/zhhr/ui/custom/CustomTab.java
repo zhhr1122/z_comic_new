@@ -3,6 +3,7 @@ package com.android.zhhr.ui.custom;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,19 +41,24 @@ public class CustomTab extends LinearLayout {
         super.onFinishInflate();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public void setCurrentPosition(int postion){
         for(int i=0;i<4;i++){
             if(i!=postion){
                 TextView mTextView  = (TextView) mTabs[i].getChildAt(0);
-                mTextView.setTextAppearance(R.style.colorTextColorLight);
-                //mTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorTextColorLight));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    mTextView.setTextAppearance(R.style.colorTextColorLight);
+                }else{
+                    mTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorTextColorLight));
+                }
                 ImageView mBottom = (ImageView) mTabs[i].getChildAt(1);
                 mBottom.setVisibility(View.GONE);
             }else{
                 TextView mTextView  = (TextView) mTabs[i].getChildAt(0);
-                mTextView.setTextAppearance(R.style.colorTextBlack);
-                //mTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextColorDark));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    mTextView.setTextAppearance(R.style.colorTextBlack);
+                }else{
+                    mTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextColorDark));
+                }
                 ImageView mBottom = (ImageView) mTabs[i].getChildAt(1);
                 mBottom.setVisibility(View.VISIBLE);
             }

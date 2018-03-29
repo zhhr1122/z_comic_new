@@ -174,7 +174,6 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
     }
 
 
-    @TargetApi(Build.VERSION_CODES.M)
     public void orderIndex(LinearLayout mlayout) {
         Drawable img_location = context.getResources().getDrawable(R.mipmap.location);
         img_location.setBounds(0, 0, img_location.getMinimumWidth(), img_location.getMinimumHeight());
@@ -183,25 +182,37 @@ public class ComicDetailPresenter extends  BasePresenter<IDetailView>{
             TextView textView = itemView.getmTitle();
             if(!isOrder()){
                 if(mComic.getCurrentChapter() == position){
-                    textView.setTextAppearance(R.style.colorTextPrimary);
-                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        textView.setTextAppearance(R.style.colorTextPrimary);
+                    }else{
+                        textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+                    }
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
                 }else{
-                    textView.setTextAppearance(R.style.colorTextBlack);
-                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        textView.setTextAppearance(R.style.colorTextBlack);
+                    }else{
+                        textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
+                    }
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((position+1)+" - "+mComic.getChapters().get(position));
             }else{
                 if(mComic.getChapters().size()-mComic.getCurrentChapter() == position+1){
-                    textView.setTextAppearance(R.style.colorTextPrimary);
-                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        textView.setTextAppearance(R.style.colorTextPrimary);
+                    }else{
+                        textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+                    }
                     textView.setCompoundDrawables(null, null, img_location, null);
                     textView.setCompoundDrawablePadding(DisplayUtil.dip2px(context,10));
                 }else{
-                    textView.setTextAppearance(R.style.colorTextBlack);
-                    //textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        textView.setTextAppearance(R.style.colorTextBlack);
+                    }else {
+                        textView.setTextColor(ContextCompat.getColor(context,R.color.colorTextBlack));
+                    }
                     textView.setCompoundDrawables(null, null, null, null);
                 }
                 textView.setText((mComic.getChapters().size()-position)+" - "+mComic.getChapters().get(mComic.getChapters().size()-1-position));

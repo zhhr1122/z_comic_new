@@ -67,16 +67,21 @@ public class IndexItemView extends RelativeLayout{
         void onItemClick(View view, int position);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public void setCurrentColor(boolean isCurrent){
         if(isCurrent){
-            mTitle.setTextAppearance(R.style.colorTextPrimary);
-            //mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTitle.setTextAppearance(R.style.colorTextPrimary);
+            }else{
+                mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+            }
             mTitle.setCompoundDrawables(null, null, img_location, null);
             mTitle.setCompoundDrawablePadding(DisplayUtil.dip2px(getContext(),10));
         }else{
-            mTitle.setTextAppearance(R.style.colorTextBlack);
-            //mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextBlack));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTitle.setTextAppearance(R.style.colorTextBlack);
+            }else{
+                mTitle.setTextColor(ContextCompat.getColor(getContext(),R.color.colorTextBlack));
+            }
             mTitle.setCompoundDrawables(null, null, null, null);
         }
     }

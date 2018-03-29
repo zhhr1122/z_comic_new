@@ -151,7 +151,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
 
             }
 
-            @TargetApi(Build.VERSION_CODES.M)
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onAlphaActionBar(float a) {
@@ -160,7 +159,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                     mHomeTitle2.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorWhite));
                     mSearch.setImageResource(R.mipmap.search);
                 }else{
-                    mHomeTitle1.setTextAppearance(R.style.colorTextBlack);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        mHomeTitle1.setTextAppearance(R.style.colorTextBlack);
+                    }else{
+                        mHomeTitle1.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorTextBlack));
+                    }
                     mHomeTitle2.setTextColor(ContextCompat.getColor(getActivity(),R.color.colorPrimary));
                     mSearch.setImageResource(R.mipmap.search_color);
                 }
