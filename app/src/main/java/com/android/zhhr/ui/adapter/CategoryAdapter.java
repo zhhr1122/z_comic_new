@@ -37,14 +37,14 @@ public class CategoryAdapter extends BaseRecyclerAdapter<Type> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 holder.setTextViewAppearanceColor(R.id.tv_title,R.style.colorTextPrimary);
             }else{
-                holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorPrimary));
+                holder.setTextViewColor(R.id.tv_title, ContextCompat.getColor(context,R.color.colorPrimary));
             }
         }else{
             holder.setVisibility(R.id.iv_title_bg, View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 holder.setTextViewAppearanceColor(R.id.tv_title,R.style.colorTextBlack);
             }else{
-                holder.setTextViewColor(R.id.tv_position, ContextCompat.getColor(context,R.color.colorTextBlack));
+                holder.setTextViewColor(R.id.tv_title, ContextCompat.getColor(context,R.color.colorTextBlack));
             }
         }
         holder.setText(R.id.tv_title, item.getTitle());
