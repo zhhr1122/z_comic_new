@@ -82,7 +82,7 @@ public class NewListActivity extends BaseActivity<NewListPresenter> implements I
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                if(position!=mAdapter.getItemCount()-1){
+                if(position!=mAdapter.getItemCount()-1&&position>=0){
                     Comic comic = mAdapter.getItems(position);
                     IntentUtil.ToComicDetail(NewListActivity.this,comic.getId()+"",comic.getTitle());
                 }

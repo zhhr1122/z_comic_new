@@ -39,6 +39,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
@@ -289,9 +290,15 @@ public class ComicModule {
                            observableEmitter.onError(new ConnectException());
                        }
                    }
-               } catch (Exception e) {
+               } catch (SocketTimeoutException e){
                    observableEmitter.onError(e);
-                   e.printStackTrace();
+               } catch (Exception e) {
+                   LogUtil.e(e.toString());
+                   if(e instanceof InterruptedIOException){//如果线程错误不做任何处理
+
+                   }else{
+                       observableEmitter.onError(e);
+                   }
                }finally {
                    observableEmitter.onComplete();
                }
@@ -403,8 +410,15 @@ public class ComicModule {
                                 //如果已经在数据库中存在，则不插入数据库
                                 LogUtil.e(mComic.getTitle()+(comic_chapters+1)+"插入数据库失败");
                             }
-                        } catch (Exception e){
+                        }catch (SocketTimeoutException e){
                             observableEmitter.onError(e);
+                        } catch (Exception e){
+                            LogUtil.e(e.toString());
+                            if(e instanceof InterruptedIOException){//如果线程错误不做任何处理
+
+                            }else{
+                                observableEmitter.onError(e);
+                            }
                         }finally {
                             observableEmitter.onComplete();
                         }
@@ -412,7 +426,7 @@ public class ComicModule {
                 }).subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                       // .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//暂时先关闭生命周期处理，防止崩溃
+                        .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//暂时先关闭生命周期处理，防止崩溃
                         .subscribe(observer);
             }
         }
