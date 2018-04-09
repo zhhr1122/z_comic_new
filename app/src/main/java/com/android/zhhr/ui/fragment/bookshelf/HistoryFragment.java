@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
 import com.android.zhhr.data.entity.HomeTitle;
+import com.android.zhhr.data.entity.LoadingItem;
 import com.android.zhhr.presenter.HistoryPresenter;
 import com.android.zhhr.ui.adapter.HistoryAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
@@ -126,7 +127,7 @@ public class HistoryFragment extends BaseBookShelfFragment<HistoryPresenter> imp
 
     @Override
     public void onItemClick(RecyclerView parent, View view, int position) {
-        if(mAdapter.getItems(position) instanceof HomeTitle){
+        if(mAdapter.getItems(position) instanceof HomeTitle || mAdapter.getItems(position) instanceof LoadingItem){
 
         }else if(!mAdapter.isEditing()){
             Comic comic = mAdapter.getItems(position);
