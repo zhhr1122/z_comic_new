@@ -105,7 +105,7 @@ public class KukuComicAnalysis {
 
             comic.setPoint("暂无评分");
             //设置阅读方式
-            comic.setReadType(Constants.UP_TO_DOWN);
+            comic.setReadType(Constants.RIGHT_TO_LEFT);
             comic.setState(DownState.START);
         }catch (Exception e){
 

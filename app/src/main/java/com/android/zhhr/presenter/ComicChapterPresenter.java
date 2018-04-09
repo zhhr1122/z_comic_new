@@ -149,17 +149,21 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     public void loadData(){
         mPreloadChapters = new PreloadChapters();
         final int[] page = new int[3];
+        final int[] all_page = new int[3];
         for(int i=0;i<3;i++){
             final int finalI = i;
             mModel.getChaptersList(mComic, new OnProgressListener() {
                 @Override
-                public void OnProgress(final int num) {
+                public void OnProgress(final int num,int all) {
                     //如果是酷酷动漫，则显示一下加载进度
                     page[finalI] = num;
+                    all_page[finalI] = all;
                     mContext.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView.showErrorView("已加载"+(page[0]+page[1]+page[2])+"页");
+                            if(all_page[0]!=0&&all_page[1]!=0&&all_page[2]!=0){
+                                mView.showErrorView("已加载"+(page[0]+page[1]+page[2])+"页"+"/共"+(all_page[0]+all_page[1]+all_page[2])+"页");
+                            }
                         }
                     });
                 }
@@ -360,7 +364,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
 
         mModel.getChaptersList(mComic, new OnProgressListener() {
             @Override
-            public void OnProgress(int i) {
+            public void OnProgress(int i,int all) {
 
             }
         }, (chapter + 2), new DisposableObserver<DBChapters>() {
@@ -414,9 +418,10 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     public void loadPreData(final int chapter, final int offset){
         mModel.getChaptersList(mComic, new OnProgressListener() {
             @Override
-            public void OnProgress(int i) {
+            public void OnProgress(int i, int all) {
 
             }
+
         }, chapter - 2, new DisposableObserver<DBChapters>() {
 
             @Override
@@ -494,6 +499,6 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
     }
 
     public interface OnProgressListener{
-        void OnProgress(int i);
+        void OnProgress(int i,int all);
     }
 }

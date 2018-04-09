@@ -398,18 +398,32 @@ public class ComicModule {
                     public void subscribe(@NonNull ObservableEmitter<DBChapters> observableEmitter) throws Exception {
                         try{
                             int page = 1;
+                            int size = 0;
                             String url = Url.KukuComicBase+mComic.getChapters_url().get(comic_chapters);
-                            while (ComicChapterPresenter.isLoading|| DownloadChapterlistPresenter.isLoading){
+                           while (ComicChapterPresenter.isLoading|| DownloadChapterlistPresenter.isLoading){
                                 //解析漫画
-                                Document doc = Jsoup.connect(url+page+".htm").get();
-                                String image = doc.select("script").get(3).toString();
-                                String image_url = Url.KukuComicImageBae+image.split("src=")[1].split("\"")[2].split("'")[0];
-                                imageUrl.add(image_url);
-                                LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url);
-                                page++;
-                                if(listener!=null){
-                                    listener.OnProgress(page);
-                                }
+                               Document doc = Jsoup.connect(url+page+".htm").get();
+                               if(size==0){
+                                   String size_pre = doc.getElementsByAttributeValue("valign","top").get(0).text().split("共")[1];
+                                   size = Integer.parseInt(size_pre.split("页")[0]);
+                               }
+                               String image = doc.select("script").get(3).toString();
+                               String image_url[] = image.split("src=");
+                               //酷酷漫画每一个page都加载了两张漫画
+                               String image_url1= Url.KukuComicImageBae+image_url[0].split("\"")[5].split("'")[0];
+                               String image_url2 = Url.KukuComicImageBae+image_url[1].split("\"")[2].split("'")[0];
+                               if(imageUrl.size()<size){
+                                   imageUrl.add(image_url1);
+                                   LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url1);
+                               }
+                               if(imageUrl.size()<size){
+                                   imageUrl.add(image_url2);
+                                   LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url2);
+                               }
+                               if(listener!=null){
+                                   listener.OnProgress(page,size);
+                               }
+                               page = page +2;
                             }
                         } catch (HttpStatusException e){
                             DBChapters chapters = new DBChapters();
