@@ -101,7 +101,7 @@ public class CategoryActivity extends BaseActivity<CategoryPresenter> implements
         mCategoryAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
-                if(position!=mCategoryAdapter.getItemCount()-1){
+                if(position!=mCategoryAdapter.getItemCount()-1&&position>=0){//蒲公英carsh修改，防止数组越界
                     Comic comic = mCategoryAdapter.getItems(position);
                     IntentUtil.ToComicDetail(CategoryActivity.this,comic.getId()+"",comic.getTitle());
                 }

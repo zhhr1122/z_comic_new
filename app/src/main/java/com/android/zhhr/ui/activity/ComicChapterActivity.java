@@ -31,6 +31,7 @@ import com.android.zhhr.ui.custom.SwitchRelativeLayout;
 import com.android.zhhr.ui.custom.ZBubbleSeekBar;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.IntentUtil;
+import com.android.zhhr.utils.LogUtil;
 import com.xw.repo.BubbleSeekBar;
 
 import butterknife.Bind;
@@ -257,7 +258,11 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         });
         mRLloading.setOnClickListener(null);
         //设置加载时候的标题
-        mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
+        try{//蒲公英上这块报数组越界
+            mLoadingTitle.setText(mPresenter.getComic_chapter_title().get(mPresenter.getComic_chapters()));
+        }catch (Exception e){
+            LogUtil.e(e.toString());
+        }
         initReaderModule(mPresenter.getmDirect());
 
         /*if(Constants.isAD){

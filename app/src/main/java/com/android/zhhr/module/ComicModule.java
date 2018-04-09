@@ -97,7 +97,7 @@ public class ComicModule {
                     homeTitle.setItemTitle("");
                     mdats.add(homeTitle);
                     observableEmitter.onNext(mdats);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     observableEmitter.onError(e);
                     e.printStackTrace();
                 }finally {
@@ -372,6 +372,26 @@ public class ComicModule {
                 //腾讯漫画采用了RxCache作为缓存，所有不需要存入到数据库也可以进行缓存
             }else{ //如果是酷酷漫画
                 LogUtil.d(mComic.getTitle()+(comic_chapters+1)+"调用酷酷漫画接口");
+                //否则就联网拉取数据，先读取接口的缓存
+                /*String chapters[] = mComic.getChapters_url().get(comic_chapters).split("/");
+                Observable<DBChapters> observable = comicService.getKuKuChapterList(chapters[2],chapters[3]);
+                //真正调用联网接口
+                CacheProviders.getComicCacheInstance()
+                        .getKuKuChapterList(observable,new DynamicKey(comic_id+comic_chapters),new EvictDynamicKey(false))
+                        .retryWhen(new RetryFunction())
+                        .map(new Function<DBChapters, Object>() {
+                            @Override
+                            public Object apply(@NonNull DBChapters chapters) throws Exception {
+                                chapters.setComic_id(mComic.getId());
+                                chapters.setChapters(comic_chapters);
+                                return chapters;
+                            }
+                        }).subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))//生命周期管理
+                        .subscribe(observer);*/
+                //腾讯漫画采用了RxCache作为缓存，所有不需要存入到数据库也可以进行缓存
                 final List<String> imageUrl = new ArrayList<>();
                 Observable.create(new ObservableOnSubscribe<DBChapters>() {
                     @Override
@@ -932,6 +952,8 @@ public class ComicModule {
     }
 
     public void download(final DBChapters info, final int page, Observer observer) {
+        if(page>=info.getComiclist().size())//防止数组越界
+            return;
         comicService.download("bytes=0" + "-", info.getComiclist().get(page))
                 /*指定线程*/
                 .subscribeOn(Schedulers.io())

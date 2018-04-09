@@ -23,6 +23,10 @@ public class Url {
     public static String TencentComicChapters ="http://10.0.203.98:5000";
     //更换为阿里云
     public static String TencentComicChapters1 = "http://120.79.66.128:5001";
+
+    //更换为阿里云
+    public static String LocalChapters = "http://192.168.0.107:5001";
+
     //腾讯漫画搜索接口
     public static String TencentSearchBase = "http://m.ac.qq.com/search/";
 

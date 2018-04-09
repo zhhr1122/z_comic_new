@@ -25,6 +25,11 @@ public interface ComicCacheProviders {
     @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
     Observable<DBChapters> getChapters(Observable<DBChapters> comics, DynamicKey key, EvictDynamicKey evictDynamicKey);
 
+
+    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
+    Observable<DBChapters> getKuKuChapterList(Observable<DBChapters> comics, DynamicKey key, EvictDynamicKey evictDynamicKey);
+
+
     @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
     Observable<HttpResult<List<SearchBean>>> getDynamicSearchResult(Observable<HttpResult<List<SearchBean>>> Result, DynamicKey key, EvictDynamicKey evictDynamicKey);
 }
