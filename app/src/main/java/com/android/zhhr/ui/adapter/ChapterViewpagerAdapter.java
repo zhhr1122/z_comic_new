@@ -2,19 +2,29 @@ package com.android.zhhr.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.data.entity.PreloadChapters;
+import com.android.zhhr.utils.DisplayUtil;
+import com.android.zhhr.utils.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -120,18 +130,11 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
         }else{
             cache = DiskCacheStrategy.RESULT;
         }
+        PhotoView iv = holder.imageView;
         if(Direction == Constants.RIGHT_TO_LEFT){
-            Glide.with(mContext)
-                    .load(mdatas.get(mdatas.size()-position-1))
-                    .placeholder(R.mipmap.pic_default_vertical)
-                    .diskCacheStrategy(cache)
-                    .into(holder.imageView);
+            setImageView(mdatas.get(mdatas.size()-position-1),iv,true);
         }else{
-            Glide.with(mContext)
-                    .load(mdatas.get(position))
-                    .placeholder(R.mipmap.pic_default_vertical)
-                    .diskCacheStrategy(cache)
-                    .into(holder.imageView);
+            setImageView(mdatas.get(position),iv,false);
         }
         holder.imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
@@ -156,6 +159,56 @@ public class ChapterViewpagerAdapter extends PagerAdapter {
 
     public interface OnceClickListener{
         void onClick(View view, float x, float y);
+    }
+
+    public void setImageView(final String url, final PhotoView iv, final boolean isRightToLeft){
+        LogUtil.d(url.substring(1,8));
+        final DiskCacheStrategy cache;//判断图片来自SD卡还是网络
+        if(url.substring(1,8).equals("storage")){
+            cache = DiskCacheStrategy.NONE;
+        }else{
+            cache = DiskCacheStrategy.RESULT;
+        }
+        Glide.with(mContext)
+                .load(url)
+                .asBitmap()//强制Glide返回一个Bitmap对象
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String s, Target<Bitmap> target, boolean b) {
+                        LogUtil.e(url+"加载失败"+e.toString());
+                        Glide.with(mContext)
+                                .load(R.mipmap.pic_default_vertical)
+                                .diskCacheStrategy(cache)
+                                .into(iv);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap bitmap, String s, Target<Bitmap> target, boolean b, boolean b1) {
+                        return false;
+                    }
+                })
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        int S_width =  DisplayUtil.getScreenWidth(mContext);
+                        int S_height =  DisplayUtil.getScreenHeight(mContext);
+
+                        float scale = ((float) height)/width;
+                        iv.setImageBitmap(bitmap);
+                        if(width>height){
+                            float S_scale = S_height/(S_width*scale);
+                            if(isRightToLeft){
+                                iv.setScale(S_scale,S_height*S_scale,0,false);
+                            }else{
+                                iv.setScale(S_scale,0,0,false);
+                            }
+
+                        }
+                    }
+                });
     }
 
 }
