@@ -399,6 +399,7 @@ public class ComicModule {
                         try{
                             int page = 1;
                             int size = 0;
+                            int offset = 2;
                             String url = Url.KukuComicBase+mComic.getChapters_url().get(comic_chapters);
                            while (ComicChapterPresenter.isLoading|| DownloadChapterlistPresenter.isLoading){
                                 //解析漫画
@@ -410,29 +411,32 @@ public class ComicModule {
                                String image = doc.select("script").get(3).toString();
                                String image_url[] = image.split("src=");
                                //酷酷漫画每一个page都加载了两张漫画
-                               String image_urlaaaa[]= image_url[0].split("\"");
-                               String image_url1;
-                               String image_url2;
-                               //解析漫画，目前发现两种形式，先试试，以后再加
+                               String image_url1 = "";
+                               String image_url2 = "";
+                               //解析漫画，目前发现三种形式，先试试，以后再加
                                try{//适用于大多数
                                    image_url1= Url.KukuComicImageBae+image_url[0].split("\"")[5].split("'")[0];
                                    image_url2 = Url.KukuComicImageBae+image_url[1].split("\"")[2].split("'")[0];
-                               }catch (Exception e){//适用于整本的漫画
+                               }catch (Exception e){//适用于整本的漫画（火影）
                                    image_url1 = Url.KukuComicImageBae+image_url[1].split("\"")[2].split("'")[0];
-                                   image_url2 = Url.KukuComicImageBae+image_url[2].split("\"")[2].split("'")[0];
+                                   if(image_url.length>2){
+                                       image_url2 = Url.KukuComicImageBae+image_url[2].split("\"")[2].split("'")[0];
+                                   }else{
+                                       offset = 1;//寄生兽专属
+                                   }
                                }
                                if(imageUrl.size()<size){
                                    imageUrl.add(image_url1);
                                    LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url1);
                                }
-                               if(imageUrl.size()<size){
+                               if(imageUrl.size()<size&&offset==2){//寄生兽专属
                                    imageUrl.add(image_url2);
                                    LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url2);
                                }
                                if(listener!=null){//及时更新进度
                                    listener.OnProgress(page,size);
                                }
-                               page = page +2;
+                               page = page +offset;
                             }
                         } catch (HttpStatusException e){
                             DBChapters chapters = new DBChapters();
