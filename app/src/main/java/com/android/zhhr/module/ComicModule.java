@@ -410,8 +410,17 @@ public class ComicModule {
                                String image = doc.select("script").get(3).toString();
                                String image_url[] = image.split("src=");
                                //酷酷漫画每一个page都加载了两张漫画
-                               String image_url1= Url.KukuComicImageBae+image_url[0].split("\"")[5].split("'")[0];
-                               String image_url2 = Url.KukuComicImageBae+image_url[1].split("\"")[2].split("'")[0];
+                               String image_urlaaaa[]= image_url[0].split("\"");
+                               String image_url1;
+                               String image_url2;
+                               //解析漫画，目前发现两种形式，先试试，以后再加
+                               try{//适用于大多数
+                                   image_url1= Url.KukuComicImageBae+image_url[0].split("\"")[5].split("'")[0];
+                                   image_url2 = Url.KukuComicImageBae+image_url[1].split("\"")[2].split("'")[0];
+                               }catch (Exception e){//适用于整本的漫画
+                                   image_url1 = Url.KukuComicImageBae+image_url[1].split("\"")[2].split("'")[0];
+                                   image_url2 = Url.KukuComicImageBae+image_url[2].split("\"")[2].split("'")[0];
+                               }
                                if(imageUrl.size()<size){
                                    imageUrl.add(image_url1);
                                    LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url1);
@@ -420,7 +429,7 @@ public class ComicModule {
                                    imageUrl.add(image_url2);
                                    LogUtil.d(mComic.getTitle()+(comic_chapters+1)+image_url2);
                                }
-                               if(listener!=null){
+                               if(listener!=null){//及时更新进度
                                    listener.OnProgress(page,size);
                                }
                                page = page +2;

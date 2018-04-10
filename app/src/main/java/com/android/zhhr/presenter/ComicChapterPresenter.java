@@ -161,7 +161,7 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                     mContext.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(all_page[0]!=0&&all_page[1]!=0&&all_page[2]!=0){
+                            if(all_page[0]!=0||all_page[1]!=0||all_page[2]!=0){
                                 mView.showErrorView("已加载"+(page[0]+page[1]+page[2])+"页"+"/共"+(all_page[0]+all_page[1]+all_page[2])+"页");
                             }
                         }
@@ -215,6 +215,9 @@ public class ComicChapterPresenter extends BasePresenter<IChapterView>{
                         mView.setTitle(comic_chapter_title.get(comic_chapters)+"-1/"+ mPreloadChapters.getNowlist().size());
                         mView.getDataFinish();
                     }else{
+                        if(e instanceof  IndexOutOfBoundsException){ //防止最后一话数组越界报错
+                            return;
+                        }
                         mView.showErrorView(ShowErrorTextUtil.ShowErrorText(e));
                     }
                 }
