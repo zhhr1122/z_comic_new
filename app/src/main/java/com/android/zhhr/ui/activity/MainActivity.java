@@ -12,7 +12,7 @@ import com.android.zhhr.ui.custom.FloatEditLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.fragment.BookShelfFragment;
 import com.android.zhhr.utils.LogUtil;
-import com.android.zhhr.utils.ToastUtils;
+import com.android.zhhr.utils.ZToast;
 import com.pgyersdk.javabean.AppBean;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.pgyersdk.update.UpdateManagerListener;
@@ -40,7 +40,6 @@ public class MainActivity extends BaseFragmentActivity {
 
     BookShelfFragment bookShelfFragment;
 
-    ToastUtils toast;
 
 
 
@@ -68,7 +67,6 @@ public class MainActivity extends BaseFragmentActivity {
                 bookShelfFragment.OnClickDelete();
             }
         });
-        toast =  new ToastUtils(MainActivity.this);
         selectTab(0);
 
        CheckVersion();
@@ -168,10 +166,10 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if((keyCode == KeyEvent.KEYCODE_BACK)){
-            if(toast.isShow()){
+            if(ZToast.isShow()){
                 return super.onKeyDown(keyCode, event);
             }else{
-                toast.showToast("再按一次返回键退出");
+                ZToast.makeText(MainActivity.this,"再按一次返回键退出",1000).show();
                 return false;
             }
         }else{

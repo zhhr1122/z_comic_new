@@ -7,11 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.zhhr.presenter.BasePresenter;
 import com.android.zhhr.ui.activity.base.BaseFragmentActivity;
-import com.android.zhhr.utils.ToastUtils;
+import com.android.zhhr.utils.ZToast;
 
 import butterknife.ButterKnife;
 
@@ -36,7 +35,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         return mActivity;
     }
 
-    protected ToastUtils toast;
+    protected ZToast toast;
 
     @Override
     public void onAttach(Activity activity) {
@@ -51,7 +50,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         ButterKnife.bind(this, view);
         initPresenter();
         checkPresenterIsNull();
-        toast = new ToastUtils(getActivity());
         initView(view, savedInstanceState);
         return view;
     }
@@ -63,7 +61,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     }
 
     public void showToast(String text){
-        toast.showToast(text);
+        toast.makeText(mActivity, text,1000).show();
         //Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
     }
 }

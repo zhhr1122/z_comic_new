@@ -4,10 +4,8 @@ import android.content.Context;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.Comic;
-import com.android.zhhr.data.entity.SearchBean;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.adapter.base.BaseRecyclerHolder;
-import com.android.zhhr.utils.TextUtils;
 
 /**
  * Created by 张皓然 on 2018/2/1.

@@ -15,7 +15,7 @@ import android.view.WindowManager;
 import com.android.zhhr.R;
 import com.android.zhhr.data.commons.Constants;
 import com.android.zhhr.presenter.BasePresenter;
-import com.android.zhhr.utils.ToastUtils;
+import com.android.zhhr.utils.ZToast;
 import com.orhanobut.hawk.Hawk;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -43,7 +43,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
     //初始化布局
     protected abstract void initView();
 
-    protected ToastUtils toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         ButterKnife.bind(this);
         initPresenter(getIntent());
         checkPresenterIsNull();
-        toast = new ToastUtils(this);
         initView();
     }
 
@@ -113,7 +111,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
 
     //设置打印方法
     public void showToast(String text){
-        toast.showToast(text);
+        ZToast.makeText(this, text,1000).show();
         //Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 

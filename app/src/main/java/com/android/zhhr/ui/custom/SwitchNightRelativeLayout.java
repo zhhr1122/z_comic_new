@@ -12,11 +12,10 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.zhhr.R;
 import com.android.zhhr.utils.DisplayUtil;
-import com.android.zhhr.utils.ToastUtils;
+import com.android.zhhr.utils.ZToast;
 
 /**
  * Created by zhhr on 2018/3/14.
@@ -85,8 +84,7 @@ public class SwitchNightRelativeLayout extends RelativeLayout{
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         SwitchNightRelativeLayout.super.setVisibility(View.GONE);
-                        new ToastUtils((ViewGroup) getParent()).showToast("切换成功");
-                        //Toast.makeText(mContext, "切换成功", Toast.LENGTH_SHORT).show();
+                        ZToast.makeText((ViewGroup) getParent(),"切换成功",1000).show();
                     }
                 });
                 mImageView.startAnimation(animationSet1);
