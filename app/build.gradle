@@ -14,8 +14,8 @@ android {
         applicationId "com.android.zhhr"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.4."
+        versionCode 5
+        versionName "1.5.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。

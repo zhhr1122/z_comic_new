@@ -57,8 +57,11 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements I
 
     @Override
     protected void onDestroy() {
-        mPresenter.onDestory();
         super.onDestroy();
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            return;
+        }
+        mPresenter.onDestory();
     }
 
     @Override
