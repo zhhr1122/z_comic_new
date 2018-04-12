@@ -35,7 +35,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         return mActivity;
     }
 
-    protected ZToast toast;
 
     @Override
     public void onAttach(Activity activity) {
@@ -61,7 +60,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     }
 
     public void showToast(String text){
-        toast.makeText(mActivity, text,1000).show();
+        ZToast.makeText(mActivity, text,1000).show();
         //Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
     }
 }

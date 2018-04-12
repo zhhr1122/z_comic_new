@@ -509,13 +509,13 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
     @Override
     protected void onDestroy() {
+        mPresenter.interruptThread();
         super.onDestroy();
     }
 
 
     @Override
     protected void onPause() {
-        mPresenter.interruptThread();
         super.onPause();
     }
 
