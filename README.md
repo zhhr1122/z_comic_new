@@ -14,7 +14,8 @@
 ![image](https://img-blog.csdn.net/20180412181519181)
 
 
-
+## 应用更新日志（2018/06/05）
+- 更新卷轴阅读模式下的手势操作，支持双击放大和手势放大，感谢开源作者PortgasAce，参考自[ZoomRecyclerView](https://github.com/PortgasAce/ZoomRecyclerView)
 ## 功能简介
 - 主页
    -  排行榜
@@ -71,6 +72,7 @@
  完成以下UI控件的开源
  - ~~Toast控件~~ [ZToast](https://github.com/zhhr1122/ZToastDemo)
  - 高仿IOS弹性VIEW
+ - 卷轴模式手势翻页
 
 ## 免责申明
 
