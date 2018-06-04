@@ -22,13 +22,13 @@ import com.android.zhhr.presenter.ComicChapterPresenter;
 import com.android.zhhr.ui.activity.base.BaseActivity;
 import com.android.zhhr.ui.adapter.ChapterRecycleAdapter;
 import com.android.zhhr.ui.adapter.ChapterViewpagerAdapter;
-import com.android.zhhr.ui.adapter.base.BaseRecyclerAdapter;
 import com.android.zhhr.ui.custom.ComicReaderViewpager;
 import com.android.zhhr.ui.custom.IndexLayout;
 import com.android.zhhr.ui.custom.ReaderMenuLayout;
 import com.android.zhhr.ui.custom.SwitchNightRelativeLayout;
 import com.android.zhhr.ui.custom.SwitchRelativeLayout;
 import com.android.zhhr.ui.custom.ZBubbleSeekBar;
+import com.android.zhhr.ui.custom.ZoomRecyclerView;
 import com.android.zhhr.ui.view.IChapterView;
 import com.android.zhhr.utils.IntentUtil;
 import com.android.zhhr.utils.LogUtil;
@@ -88,7 +88,7 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
 
 
     @Bind(R.id.rv_chapters)
-    RecyclerView mRecycleView;
+    ZoomRecyclerView mRecycleView;
 
     private ChapterRecycleAdapter mVerticalAdapter;
     private LinearLayoutManager manager;
@@ -186,12 +186,20 @@ public class ComicChapterActivity extends BaseActivity<ComicChapterPresenter> im
         manager.setOrientation(LinearLayout.VERTICAL);
         mRecycleView.setLayoutManager(manager);
         mRecycleView.setAdapter(mVerticalAdapter);
-        mVerticalAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+       /* mVerticalAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
                 mPresenter.clickScreen(0.5f,0.5f);
             }
+        });*/
+        mRecycleView.setTouchListener(new ZoomRecyclerView.OnTouchListener() {
+            @Override
+            public void clickScreen(float x, float y) {
+                //暂时先只开放点击屏幕中心出现状态栏，今后做上下滚动翻页
+                mPresenter.clickScreen(0.5f,0.5f);
+            }
         });
+        mRecycleView.setEnableScale(true);
         mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

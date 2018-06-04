@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBlack"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,12 +15,13 @@
             android:layout_height="match_parent"
             >
         </com.android.zhhr.ui.custom.ComicReaderViewpager>
-        <android.support.v7.widget.RecyclerView
+        <com.android.zhhr.ui.custom.ZoomRecyclerView
+            app:max_scale="3"
             android:id="@+id/rv_chapters"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+        </com.android.zhhr.ui.custom.ZoomRecyclerView>
         <include layout="@layout/layout_reader_top"></include>
         <include layout="@layout/layout_reader_bottom"></include>
     </com.android.zhhr.ui.custom.ReaderMenuLayout>
