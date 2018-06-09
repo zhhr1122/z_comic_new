@@ -2,6 +2,8 @@
   一款高仿腾讯漫画的漫画阅读类APP
 
 ## 应用截图
+### 首页:
+![image](https://github.com/zhhr1122/ZElasticRefreshScrollView/blob/master/image/image1.gif?raw=true?raw=true)
 ### 主页：
 ![image](https://img-blog.csdn.net/20180412181454255)
 ### 分类/排行/最新：
@@ -12,7 +14,6 @@
 ![image](https://img-blog.csdn.net/2018041218151119)
 ### 漫画下载：
 ![image](https://img-blog.csdn.net/20180412181519181)
-
 
 ## 应用更新日志（2018/06/05）
 - 更新卷轴阅读模式下的手势操作，支持双击放大和手势放大，感谢开源作者PortgasAce，参考自[ZoomRecyclerView](https://github.com/PortgasAce/ZoomRecyclerView)
@@ -71,7 +72,7 @@
 
  完成以下UI控件的开源
  - ~~Toast控件~~ [ZToast](https://github.com/zhhr1122/ZToastDemo)
- - 高仿IOS弹性VIEW
+ - ~~高仿IOS弹性VIEW~~[ZElasticRefreshScrollView](https://github.com/zhhr1122/ZElasticRefreshScrollView)
  - 卷轴模式手势翻页
 
 ## 免责申明
