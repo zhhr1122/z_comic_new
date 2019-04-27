@@ -61,4 +61,8 @@ public class GlideImageLoader extends ImageLoader {
     public static void loadRoundImage(Context context, String url, ImageView mCover) {
         Glide.with(context).load(url).centerCrop().transform(new GlideCircleTransform(context)).into(mCover);
     }
+
+    public static void loadRoundImage(Context context, int ResId, ImageView mCover) {
+        Glide.with(context).load(ResId).centerCrop().transform(new GlideCircleTransform(context)).into(mCover);
+    }
 }

@@ -30,6 +30,7 @@ import com.android.zhhr.utils.KukuComicAnalysis;
 import com.android.zhhr.utils.LogUtil;
 import com.android.zhhr.utils.NetworkUtils;
 import com.android.zhhr.utils.TencentComicAnalysis;
+import com.orhanobut.hawk.Hawk;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -1269,6 +1270,64 @@ public class ComicModule {
                     e.printStackTrace();
                 }finally {
                     observableEmitter.onComplete();
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void register(final String usernameText, final String passwordText, final String describeText, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> observableEmitter) throws Exception {
+                try {
+                    Thread.sleep(2000);
+                    if(Hawk.get(usernameText,null) != null){
+                        observableEmitter.onError(new IllegalArgumentException());
+                        return;
+                    }
+                    Hawk.put(usernameText,passwordText);
+                    Hawk.put(usernameText + "des",describeText);
+                    observableEmitter.onNext(true);
+                    Thread.sleep(1000);
+                    observableEmitter.onComplete();
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+
+                }
+            }
+        }) .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(observer);
+    }
+
+    public void login(final String usernameText, final String passwordText, Observer observer) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> observableEmitter) throws Exception {
+                try {
+                    Thread.sleep(2000);
+                    String password = Hawk.get(usernameText);
+                    if(password.equals(passwordText)){
+                        Hawk.put("isLogin",usernameText);
+                        observableEmitter.onNext(true);
+                    }else{
+                        observableEmitter.onNext(false);
+                    }
+                    Thread.sleep(1000);
+                    observableEmitter.onComplete();
+                }catch (Exception e){
+                    observableEmitter.onError(e);
+                    e.printStackTrace();
+                }finally {
+
                 }
             }
         }) .subscribeOn(Schedulers.io())

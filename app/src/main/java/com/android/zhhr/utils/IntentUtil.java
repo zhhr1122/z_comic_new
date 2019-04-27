@@ -12,9 +12,11 @@ import com.android.zhhr.ui.activity.ComicChapterActivity;
 import com.android.zhhr.ui.activity.ComicDetaiActivity;
 import com.android.zhhr.ui.activity.DownloadChapterlistActivity;
 import com.android.zhhr.ui.activity.IndexActivity;
+import com.android.zhhr.ui.activity.LoginActivity;
 import com.android.zhhr.ui.activity.MainActivity;
 import com.android.zhhr.ui.activity.NewListActivity;
 import com.android.zhhr.ui.activity.RankActivity;
+import com.android.zhhr.ui.activity.RegisterActivity;
 import com.android.zhhr.ui.activity.SearchActivity;
 import com.android.zhhr.ui.activity.SelectDownloadActivity;
 
@@ -137,6 +139,16 @@ public class IntentUtil {
 
     public static void toNewActivity(Activity context) {
         Intent intent = new Intent(context, NewListActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void toLoginActivity(Activity context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void toRegisterActivity(Activity context) {
+        Intent intent = new Intent(context, RegisterActivity.class);
         context.startActivity(intent);
     }
 }

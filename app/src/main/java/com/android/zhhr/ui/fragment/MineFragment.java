@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.zhhr.R;
 import com.android.zhhr.data.entity.MineTitle;
@@ -19,6 +20,7 @@ import com.android.zhhr.ui.fragment.base.BaseFragment;
 import com.android.zhhr.ui.view.IMineView;
 import com.android.zhhr.utils.GlideImageLoader;
 import com.android.zhhr.utils.IntentUtil;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.List;
 
@@ -34,6 +36,12 @@ public class MineFragment  extends BaseFragment<MinePresenter> implements IMineV
     RecyclerView mRecycle;
     @Bind(R.id.iv_cover)
     ImageView mCover;
+    @Bind(R.id.tv_username)
+    TextView mUsername;
+    @Bind(R.id.tv_describe)
+    TextView mDescribe;
+    @Bind(R.id.tv_logout)
+    TextView mLogout;
 
     private MineAdapter mineAdapter;
 
@@ -48,7 +56,7 @@ public class MineFragment  extends BaseFragment<MinePresenter> implements IMineV
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),1);
         mRecycle.setLayoutManager(layoutManager);
         mRecycle.setAdapter(mineAdapter);
-        GlideImageLoader.loadRoundImage(getActivity().getApplicationContext(),"https://avatars3.githubusercontent.com/u/21301998?s=460&v=4",mCover);
+        GlideImageLoader.loadRoundImage(getActivity().getApplicationContext(),R.mipmap.icon_avatar,mCover);
         mineAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position) {
@@ -61,6 +69,24 @@ public class MineFragment  extends BaseFragment<MinePresenter> implements IMineV
     public void onResume() {
         super.onResume();
         mPresenter.loadData();
+        String username = Hawk.get("isLogin","none");
+        if(!username.equals("none")){
+            mUsername.setText(Hawk.get("isLogin","none"));
+            mDescribe.setText(Hawk.get(username + "des",""));
+            mLogout.setVisibility(View.VISIBLE);
+        }else{
+            mUsername.setText("点击登录");
+            mDescribe.setText("");
+            mLogout.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.tv_logout)
+    public void LoginOut(){
+        Hawk.put("isLogin","none");
+        mUsername.setText("点击登录");
+        mDescribe.setText("");
+        mLogout.setVisibility(View.GONE);
     }
 
     @Override
@@ -89,7 +115,12 @@ public class MineFragment  extends BaseFragment<MinePresenter> implements IMineV
     }
     @OnClick(R.id.rl_information)
     public void toGithub(){
-        IntentUtil.toUrl(getActivity(),"https://github.com/zhhr1122/z_comic_new");
+        String username = Hawk.get("isLogin","none");
+        if(!username.equals("none")){
+
+        }else{
+            IntentUtil.toLoginActivity(getActivity());
+        }
     }
 
     @Override

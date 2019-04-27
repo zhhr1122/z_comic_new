@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/iv_back_color"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:padding="12.5dp"
+            android:src="@mipmap/btn_back_color" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"
+            android:text="注册"
+            android:textColor="@color/colorTextColorDark"
+            android:textSize="36dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:hint="用户名/手机号"
+                android:lines="1"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/colorTextColorDark"
+                android:textColorHint="@color/colorHintTextColorLight"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:hint="请输入密码"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/colorTextColorDark"
+                android:textColorHint="@color/colorHintTextColorLight"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/et_password_re"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:hint="请再次输入密码"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/colorTextColorDark"
+                android:textColorHint="@color/colorHintTextColorLight"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/et_describe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="个人简介"
+                android:lines="5"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/colorTextColorDark"
+                android:textColorHint="@color/colorHintTextColorLight"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/tv_to_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:text="已有账号?去登录"
+                android:textColor="@color/colorPrimary" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/btn_start_read"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="注册"
+            android:textColor="@color/colorWhite"
+            android:textSize="22dp" />
+    </RelativeLayout>
+
+
+    <include layout="@layout/layout_night_cover"></include>
+
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+
+</RelativeLayout>
